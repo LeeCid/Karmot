@@ -1,0 +1,594 @@
+---
+import Base from '../layouts/Base.astro';
+import karmotLogo from '../assets/karmot-logo.svg';
+
+const palette = [
+  { name: 'Lacivert 950', hex: '#0b1122', varName: '--navy-950', dark: true },
+  { name: 'Lacivert 850 · Logo', hex: '#172546', varName: '--navy-850', dark: true },
+  { name: 'Elektrik 500 · Logo', hex: '#0069a9', varName: '--blue-500', dark: true },
+  { name: 'Elektrik 400', hex: '#1e88c7', varName: '--blue-400', dark: true },
+  { name: 'Çelik 300', hex: '#c6c6c6', varName: '--steel-300', dark: false },
+  { name: 'Çelik 700', hex: '#706f6f', varName: '--steel-700', dark: true },
+  { name: 'Kağıt', hex: '#f2f4f7', varName: '--paper', dark: false },
+  { name: 'Mürekkep', hex: '#10182f', varName: '--ink', dark: true },
+];
+
+const gradients = [
+  { name: 'Güç', css: 'var(--grad-power)' },
+  { name: 'Metal', css: 'var(--grad-metal)' },
+  { name: 'Enerji', css: 'var(--grad-energy)' },
+];
+
+// RPM kadranı: -120°…+120° arası 13 çizgi
+const R = 46;
+const ticks = Array.from({ length: 13 }, (_, i) => {
+  const a = ((-120 + i * 20) * Math.PI) / 180;
+  const r2 = i % 3 === 0 ? 36 : 40;
+  return {
+    x1: 60 + Math.sin(a) * R,
+    y1: 60 - Math.cos(a) * R,
+    x2: 60 + Math.sin(a) * r2,
+    y2: 60 - Math.cos(a) * r2,
+    major: i % 3 === 0,
+  };
+});
+
+const specs = [
+  { k: 'ÜRÜN', v: 'AGM2E 90L 4a' },
+  { k: 'GÜÇ', v: '1.5 kW' },
+  { k: 'DEVİR', v: '1420 dev/dk' },
+  { k: 'GÖVDE', v: 'Alüminyum · IE3' },
+];
+---
+
+<Base title="Karmot — Style Tile (Faz 0)">
+  <header class="bar">
+    <img class="bar__logo" src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="178" height="42" />
+    <p class="mono-label">Style Tile — Faz 0 · v0.1</p>
+  </header>
+
+  <!-- 00 / YÖN -->
+  <section class="section blueprint-bg hero">
+    <div class="container">
+      <p class="mono-label reveal">00 / Yön — Karmot Güç Aktarım Sistemleri</p>
+      <h1 class="display hero__title" aria-label="Her şey durur… ta ki güç aktarılana kadar.">
+        <span class="kin"><span class="kin-line">Her şey durur…</span></span>
+        <span class="kin"><span class="kin-line display-italic">ta ki <em class="metal-text">güç</em></span></span>
+        <span class="kin"><span class="kin-line display-italic"><em class="metal-text">aktarılana</em> kadar.</span></span>
+      </h1>
+      <div class="hero__foot reveal">
+        <span class="slashes" aria-hidden="true"><i></i><i></i><i></i></span>
+        <p class="hero__lede text-dim">
+          Motor değil, <strong>hareket</strong> satıyoruz. Bantları, vinçleri, karıştırıcıları döndüren güç —
+          yedi markanın gücü tek tedarik hattında.
+        </p>
+      </div>
+      <div class="hero__cta reveal">
+        <a class="btn" href="#bilesenler">Teklif Alın</a>
+        <a class="btn btn--ghost" href="#bilesenler">Markaları Keşfedin</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- dalga ayracı -->
+  <div class="wave-wrap" aria-hidden="true">
+    <svg class="wave-draw" viewBox="0 0 1440 110" fill="none" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="wmetal" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#706f6f" />
+          <stop offset="0.5" stop-color="#e6e6e6" />
+          <stop offset="1" stop-color="#706f6f" />
+        </linearGradient>
+      </defs>
+      <path d="M-20,78 C240,132 470,8 730,54 C980,98 1210,18 1460,64" stroke="url(#wmetal)" stroke-width="2.5" />
+      <path d="M-20,92 C250,146 480,26 740,70 C990,112 1220,34 1460,80" stroke="#0069a9" stroke-width="1.5" opacity="0.8" />
+    </svg>
+  </div>
+
+  <!-- 01 / RENK -->
+  <section class="section">
+    <div class="container">
+      <p class="mono-label reveal">01 / Renk — Logodan türetilmiş sistem</p>
+      <h2 class="display h2 reveal">Lacivert zemin, <em class="display-italic">elektrik</em> aksan, çelik detay</h2>
+      <div class="swatches">
+        {palette.map((c) => (
+          <div class="swatch reveal" style={`background:${c.hex}; color:${c.dark ? '#f5f7fa' : '#10182f'}`}>
+            <span class="swatch__name">{c.name}</span>
+            <span class="swatch__hex">{c.hex}</span>
+          </div>
+        ))}
+      </div>
+      <div class="gradbars">
+        {gradients.map((g) => (
+          <div class="gradbar reveal">
+            <div class="gradbar__fill" style={`background:${g.css}`}></div>
+            <span class="mono-label">{g.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 / TİPOGRAFİ -->
+  <section class="section">
+    <div class="container">
+      <p class="mono-label reveal">02 / Tipografi — Archivo (wdth 122) · Manrope · JetBrains Mono</p>
+      <div class="type-grid">
+        <div class="type-card reveal">
+          <p class="display type-xl">Ağır yük.<br /><span class="display-italic metal-text">Hafif iş.</span></p>
+          <p class="mono-label">Display — Archivo Variable · genişletilmiş & italik (logo yankısı)</p>
+        </div>
+        <div class="type-card reveal">
+          <p class="type-body">
+            Doğru motor, doğru redüktör, doğru fren. Projenizin tork ihtiyacını birlikte hesaplar,
+            stoktan aynı gün sevk ederiz. Manrope; teknik içeriği yormadan taşıyan, açık ve modern bir gövde yazısı.
+          </p>
+          <div class="spec">
+            {specs.map((s) => (
+              <div class="spec__row">
+                <span class="spec__k">{s.k}</span>
+                <span class="spec__v">{s.v}</span>
+              </div>
+            ))}
+          </div>
+          <p class="mono-label">Body — Manrope · Spec — JetBrains Mono</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 / MOTİFLER -->
+  <section class="section">
+    <div class="container">
+      <p class="mono-label reveal">03 / Motifler — Logonun hareket DNA'sı</p>
+      <div class="motif-grid">
+        <div class="motif-card reveal">
+          <span class="slashes slashes--big" aria-hidden="true"><i></i><i></i><i></i></span>
+          <h3 class="display h3">/// Devir</h3>
+          <p class="text-dim">Logodaki üç eğik çizgi: bölüm geçişlerinde diagonal wipe, listelerde madde imi, butonlarda kesik köşe olarak yaşar.</p>
+        </div>
+        <div class="motif-card reveal">
+          <svg class="motif-wave wave-draw" viewBox="0 0 300 70" fill="none" aria-hidden="true">
+            <path d="M6,44 C60,70 110,12 160,34 C210,55 255,20 294,38" stroke="url(#wmetal)" stroke-width="2.5" />
+            <path d="M6,56 C64,80 114,26 164,46 C212,64 258,34 294,50" stroke="#1e88c7" stroke-width="1.5" opacity="0.85" />
+          </svg>
+          <h3 class="display h3">Akış</h3>
+          <p class="text-dim">Gümüş dalga: güç akışının izi. Bölüm ayracı ve footer geçişi olarak, scroll ile çizilerek belirir.</p>
+        </div>
+        <div class="motif-card motif-card--blueprint reveal">
+          <h3 class="display h3">Şebeke</h3>
+          <p class="text-dim">Teknik çizim ızgarası + zımpara dokusu: fotoğrafsız sahnelere mühendislik derinliği katan zemin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 / BİLEŞENLER -->
+  <section class="section" id="bilesenler">
+    <div class="container">
+      <p class="mono-label reveal">04 / Bileşenler</p>
+      <div class="comp-row reveal">
+        <a class="btn" href="#">Teklif Alın</a>
+        <a class="btn btn--ghost" href="#">Katalog İndirin</a>
+        <span class="mono-label">← kesik köşe = slash açısı · hover'da mıknatıs</span>
+      </div>
+      <div class="brand-cards">
+        <article class="brand-card reveal">
+          <p class="mono-label">02 / Aktarma</p>
+          <h3 class="display brand-card__name">Dinamik</h3>
+          <p class="text-dim">Sonsuz vidalı, helisel ve planet redüktörler — 30 yıllık yerli üretim gücü.</p>
+          <a class="brand-card__link mono-label" href="#">Ürünleri Gör ///</a>
+        </article>
+        <article class="brand-card reveal">
+          <p class="mono-label">01 / Motor</p>
+          <h3 class="display brand-card__name">Gamak</h3>
+          <p class="text-dim">IE2–IE4 verimlilikte, stoktan teslim üç fazlı asenkron motorlar.</p>
+          <a class="brand-card__link mono-label" href="#">Ürünleri Gör ///</a>
+        </article>
+        <article class="brand-card reveal">
+          <p class="mono-label">04 / Kontrol</p>
+          <h3 class="display brand-card__name">Enarc</h3>
+          <p class="text-dim">Elektromanyetik fren sistemleri: güç kadar durdurma da bizim işimiz.</p>
+          <a class="brand-card__link mono-label" href="#">Ürünleri Gör ///</a>
+        </article>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        {[0, 1].map(() => (
+          <span class="marquee__seg display display-italic">
+            Dinamik /// Gamak /// WEG /// WAT /// Pro-Ex /// Avibro /// Enarc ///&nbsp;
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 / IŞIK RİTMİ -->
+  <section class="section section--light">
+    <div class="container">
+      <p class="mono-label reveal">05 / Işık ritmi — Güven bölümü örneği</p>
+      <h2 class="display h2 reveal">Karanlık sahneden <em class="display-italic">aydınlık</em> kanıta</h2>
+      <p class="reveal light-lede">Hikaye koyu zeminde kurulur; güven rakamları ışıkta okunur. (Rakamlar temsilidir, müşteriden gelecek.)</p>
+      <div class="counters">
+        <div class="counter-box reveal">
+          <span class="display counter" data-count="7">0</span>
+          <span class="mono-label">Distribütör Marka</span>
+        </div>
+        <div class="counter-box reveal">
+          <span class="display counter" data-count="6">0</span>
+          <span class="mono-label">Ürün Ailesi</span>
+        </div>
+        <div class="counter-box reveal">
+          <span class="display"><span class="counter" data-count="24">0</span>s</span>
+          <span class="mono-label">Teklif Dönüş Hedefi</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p class="mono-label">© 2026 Karmot Güç Aktarım Sistemleri — Style Tile</p>
+  </footer>
+
+  <!-- RPM göstergesi -->
+  <div class="rpm" aria-hidden="true">
+    <svg viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="52" fill="rgba(11,17,34,0.82)" stroke="rgba(159,176,201,0.25)" stroke-width="1" />
+      {ticks.map((t) => (
+        <line
+          x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
+          stroke={t.major ? '#56aede' : 'rgba(159,176,201,0.55)'}
+          stroke-width={t.major ? 2.4 : 1.2}
+        />
+      ))}
+      <g id="rpmNeedle" style="transform-origin:60px 60px; transform:rotate(-120deg)">
+        <line x1="60" y1="60" x2="60" y2="22" stroke="#1e88c7" stroke-width="2.6" stroke-linecap="round" />
+        <circle cx="60" cy="60" r="4.5" fill="#0069a9" />
+      </g>
+    </svg>
+    <div class="rpm__text">
+      <span class="rpm__value" id="rpmReadout">0000</span>
+      <span class="rpm__unit">dev/dk</span>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem var(--gutter);
+    background: color-mix(in srgb, var(--navy-950) 78%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar__logo {
+    height: 40px;
+    width: auto;
+    filter: brightness(0) invert(1); /* renkli logoyu koyu zeminde beyaza çevir */
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 88svh;
+    display: grid;
+    align-items: center;
+  }
+  .hero__title {
+    font-size: var(--fs-hero);
+    margin-block: 1.1rem 2rem;
+  }
+  .kin {
+    display: block;
+    overflow: clip;
+    padding-block: 0.06em;
+  }
+  .kin-line {
+    display: inline-block;
+    will-change: transform;
+  }
+  .hero__foot {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.4rem;
+    max-width: 46rem;
+  }
+  .hero__foot .slashes {
+    margin-top: 0.45rem;
+    font-size: 1.05rem;
+    flex: none;
+  }
+  .hero__lede strong { color: var(--blue-300); }
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.2rem;
+  }
+
+  /* dalga */
+  .wave-wrap {
+    margin-top: -1px;
+    background: var(--bg);
+  }
+  .wave-wrap > svg {
+    display: block;
+    width: 100%;
+    height: clamp(60px, 8vw, 110px);
+  }
+
+  .h2 { font-size: var(--fs-h2); margin-block: 0.8rem 2.4rem; }
+  .h3 { font-size: var(--fs-h3); margin-block: 1rem 0.5rem; }
+
+  /* RENK */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .swatch {
+    aspect-ratio: 1 / 0.72;
+    padding: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid var(--line);
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  .swatch__name { font-weight: 700; font-size: var(--fs-small); }
+  .swatch__hex { font-family: var(--font-mono); font-size: var(--fs-label); opacity: 0.8; text-transform: uppercase; }
+  .gradbars { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px; }
+  .gradbar__fill { height: 56px; clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%); }
+  .gradbar .mono-label { display: block; margin-top: 0.5rem; }
+
+  /* TİPOGRAFİ */
+  .type-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .type-xl { font-size: var(--fs-display); margin-bottom: 1.2rem; }
+  .type-body { max-width: 42ch; margin-bottom: 1.6rem; }
+  .spec {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    border: 1px solid var(--line);
+    margin-bottom: 1rem;
+  }
+  .spec__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.55rem 0.9rem;
+  }
+  .spec__row + .spec__row { border-top: 1px dashed var(--line); }
+  .spec__k { color: var(--blue-300); letter-spacing: 0.12em; }
+  .spec__v { color: var(--steel-300); }
+
+  /* MOTİFLER */
+  .motif-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .motif-card {
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    padding: 1.6rem;
+    min-height: 230px;
+  }
+  .motif-card--blueprint {
+    background-image:
+      linear-gradient(rgba(86, 174, 222, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(86, 174, 222, 0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .slashes--big { font-size: 1.8rem; }
+  .motif-wave { width: 100%; height: 64px; }
+
+  /* BİLEŞENLER */
+  .comp-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin: 1.6rem 0 2.4rem;
+  }
+  .brand-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+  }
+  .brand-card {
+    border: 1px solid var(--line);
+    background: linear-gradient(160deg, var(--navy-900), var(--navy-950));
+    padding: 1.7rem;
+    transition: transform var(--dur-fast) var(--ease-torque), border-color var(--dur-fast) ease;
+  }
+  .brand-card:hover {
+    transform: translateY(-6px) rotate(-0.5deg);
+    border-color: var(--blue-500);
+  }
+  .brand-card__name { font-size: 1.9rem; margin-block: 0.7rem 0.5rem; }
+  .brand-card__link {
+    display: inline-block;
+    margin-top: 1.1rem;
+    color: var(--blue-300);
+  }
+  .marquee {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    border-block: 1px solid var(--line);
+    overflow: clip;
+    padding-block: 0.7rem;
+  }
+  .marquee__track {
+    display: flex;
+    white-space: nowrap;
+    width: max-content;
+    animation: marq 26s linear infinite;
+  }
+  .marquee__seg {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(159, 176, 201, 0.5);
+  }
+  @keyframes marq {
+    to { transform: translateX(-50%); }
+  }
+
+  /* IŞIK */
+  .light-lede { max-width: 52ch; color: #4c5a72; }
+  .counters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 2.4rem;
+  }
+  .counter-box {
+    border: 1px solid rgba(16, 24, 47, 0.14);
+    background: #fff;
+    padding: 1.5rem 1.7rem;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  .counter-box .display { font-size: clamp(2.4rem, 5vw, 3.6rem); color: var(--navy-850); }
+  .counter-box .mono-label { display: block; margin-top: 0.4rem; }
+
+  .foot {
+    padding: 2.2rem var(--gutter) 6rem;
+    border-top: 1px solid var(--line);
+  }
+
+  /* RPM */
+  .rpm {
+    position: fixed;
+    right: clamp(0.8rem, 2vw, 1.6rem);
+    bottom: clamp(0.8rem, 2vw, 1.6rem);
+    z-index: 500;
+    width: clamp(86px, 9vw, 116px);
+    text-align: center;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
+  }
+  .rpm__text {
+    margin-top: -0.4rem;
+    font-family: var(--font-mono);
+  }
+  .rpm__value { color: var(--blue-300); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; }
+  .rpm__unit { color: var(--text-dim); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; margin-left: 0.25rem; }
+
+  @media (max-width: 760px) {
+    .type-grid { grid-template-columns: 1fr; }
+    .hero__foot { flex-direction: column; gap: 0.8rem; }
+  }
+</style>
+
+<script>
+  import Lenis from 'lenis';
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // — Lenis + GSAP senkronu (2026 standart kurulum) —
+  let velocity = 0;
+  if (!reduced) {
+    const lenis = new Lenis({ autoRaf: false });
+    lenis.on('scroll', (e: { velocity: number }) => {
+      velocity = e.velocity;
+      ScrollTrigger.update();
+    });
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  // — RPM göstergesi: scroll hızı → devir —
+  const needle = document.getElementById('rpmNeedle');
+  const readout = document.getElementById('rpmReadout');
+  let shown = 0;
+  gsap.ticker.add(() => {
+    const target = Math.min(Math.abs(velocity) / 28, 1);
+    shown += (target - shown) * (target > shown ? 0.16 : 0.05);
+    velocity *= 0.9;
+    if (needle) needle.style.transform = `rotate(${-120 + shown * 240}deg)`;
+    if (readout) readout.textContent = String(Math.round(shown * 1450)).padStart(4, '0');
+  });
+
+  if (!reduced) {
+    // — Hero kinetik giriş —
+    gsap.from('.kin-line', {
+      yPercent: 115,
+      skewY: 5,
+      duration: 1.25,
+      ease: 'power4.out',
+      stagger: 0.14,
+      delay: 0.15,
+    });
+
+    // — Tork hissiyle reveal —
+    gsap.utils.toArray<HTMLElement>('.reveal').forEach((el) => {
+      gsap.from(el, {
+        y: 44,
+        rotate: 1.6,
+        transformOrigin: '0% 100%',
+        autoAlpha: 0,
+        duration: 1.05,
+        ease: 'power4.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' },
+      });
+    });
+
+    // — Dalga çizimi —
+    document.querySelectorAll<SVGPathElement>('.wave-draw path').forEach((p) => {
+      const len = p.getTotalLength();
+      gsap.fromTo(
+        p,
+        { strokeDasharray: len, strokeDashoffset: len },
+        {
+          strokeDashoffset: 0,
+          duration: 1.7,
+          ease: 'power2.inOut',
+          scrollTrigger: { trigger: p.closest('svg'), start: 'top 82%' },
+        }
+      );
+    });
+
+    // — Sayaçlar —
+    gsap.utils.toArray<HTMLElement>('.counter').forEach((c) => {
+      gsap.fromTo(
+        c,
+        { innerText: 0 },
+        {
+          innerText: Number(c.dataset.count ?? 0),
+          duration: 1.6,
+          snap: { innerText: 1 },
+          ease: 'power2.out',
+          scrollTrigger: { trigger: c, start: 'top 88%' },
+        }
+      );
+    });
+
+    // — Mıknatıs butonlar —
+    document.querySelectorAll<HTMLElement>('.btn').forEach((b) => {
+      b.addEventListener('mousemove', (e) => {
+        const r = b.getBoundingClientRect();
+        gsap.to(b, {
+          x: (e.clientX - r.left - r.width / 2) * 0.22,
+          y: (e.clientY - r.top - r.height / 2) * 0.3,
+          duration: 0.4,
+          ease: 'power3.out',
+        });
+      });
+      b.addEventListener('mouseleave', () =>
+        gsap.to(b, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1,0.45)' })
+      );
+    });
+  }
+</script>

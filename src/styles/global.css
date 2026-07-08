@@ -1,0 +1,301 @@
+/* ==========================================================================
+   KARMOT — Design Tokens & Global Styles
+   Kaynak: karmot-logo.svg (lacivert #172546, mavi #0069a9, çelik gradyan)
+   ========================================================================== */
+
+:root {
+  /* Renkler — zemin */
+  --navy-950: #0b1122;
+  --navy-900: #10182f;
+  --navy-850: #172546; /* logo laciverti */
+  --navy-800: #1c2d54;
+  --navy-700: #24396a;
+
+  /* Renkler — enerji */
+  --blue-600: #005c95;
+  --blue-500: #0069a9; /* logo mavisi */
+  --blue-400: #1e88c7;
+  --blue-300: #56aede;
+
+  /* Renkler — çelik */
+  --steel-200: #e3e3e3;
+  --steel-300: #c6c6c6;
+  --steel-500: #9b9b9b;
+  --steel-700: #706f6f;
+
+  /* Renkler — açık zemin */
+  --paper: #f2f4f7;
+  --paper-2: #e8ebf0;
+  --ink: #10182f;
+
+  /* Anlamsal */
+  --bg: var(--navy-950);
+  --bg-raised: var(--navy-900);
+  --text: #f5f7fa;
+  --text-dim: #9fb0c9;
+  --line: rgba(159, 176, 201, 0.16);
+
+  /* Gradyanlar */
+  --grad-power: linear-gradient(200deg, var(--blue-500) 0%, var(--navy-850) 100%);
+  --grad-energy: linear-gradient(90deg, var(--blue-400), var(--blue-500) 45%, var(--navy-700));
+  --grad-metal: linear-gradient(100deg, #706f6f 0%, #d8d8d8 28%, #8f8f8f 52%, #e6e6e6 78%, #706f6f 100%);
+
+  /* Tipografi */
+  --font-display: 'Archivo Variable', 'Arial Black', sans-serif;
+  --font-body: 'Manrope Variable', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+  /* Akışkan punto ölçeği */
+  --fs-hero: clamp(2.6rem, 1.2rem + 7.2vw, 7.5rem);
+  --fs-display: clamp(2rem, 1rem + 4.4vw, 4.75rem);
+  --fs-h2: clamp(1.5rem, 1rem + 2.2vw, 2.75rem);
+  --fs-h3: clamp(1.15rem, 0.95rem + 0.9vw, 1.6rem);
+  --fs-body: clamp(0.98rem, 0.92rem + 0.25vw, 1.125rem);
+  --fs-small: 0.875rem;
+  --fs-label: 0.72rem;
+
+  /* Ritim */
+  --space-section: clamp(4.5rem, 10vw, 9rem);
+  --container: 1240px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+
+  /* Kesik köşe (logo /// açısı ≈ 27°) */
+  --slash-skew: -27deg;
+  --cut: 14px;
+
+  /* Hareket */
+  --ease-torque: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-snap: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.35s;
+  --dur-slow: 0.9s;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & taban
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: no-preference;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  min-height: 100svh;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+::selection {
+  background: var(--blue-500);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue-400);
+  outline-offset: 3px;
+}
+
+/* İnce koyu kaydırma çubuğu */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy-700) var(--navy-950);
+}
+
+/* --------------------------------------------------------------------------
+   Tipografi yardımcıları
+   -------------------------------------------------------------------------- */
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' 122;
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.display-italic {
+  font-style: italic; /* logodaki italik grotesk yankısı */
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue-300);
+}
+
+.text-dim {
+  color: var(--text-dim);
+}
+
+/* Metal parlaması — büyük başlıklarda vurgu kelimesi */
+.metal-text {
+  background: var(--grad-metal);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Yerleşim
+   -------------------------------------------------------------------------- */
+.container {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--space-section);
+  position: relative;
+}
+
+.section--light {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.section--light .text-dim {
+  color: #4c5a72;
+}
+
+.section--light .mono-label {
+  color: var(--blue-500);
+}
+
+/* --------------------------------------------------------------------------
+   Bileşen temelleri
+   -------------------------------------------------------------------------- */
+
+/* Kesik köşe buton — logo slash açısıyla */
+.btn {
+  --btn-bg: var(--blue-500);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.95em 1.9em;
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' 110;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--btn-bg);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  transition: transform var(--dur-fast) var(--ease-torque), background var(--dur-fast) ease;
+  will-change: transform;
+}
+
+.btn:hover {
+  background: var(--blue-400);
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--line);
+  color: var(--text);
+}
+
+.btn--ghost:hover {
+  background: rgba(30, 136, 199, 0.12);
+  box-shadow: inset 0 0 0 1.5px var(--blue-400);
+}
+
+.section--light .btn--ghost {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px rgba(16, 24, 47, 0.25);
+}
+
+/* /// motifi — logodan */
+.slashes {
+  display: inline-flex;
+  gap: 0.34em;
+  transform: skewX(var(--slash-skew));
+}
+
+.slashes i {
+  width: 0.34em;
+  height: 1.6em;
+  background: var(--grad-power);
+}
+
+.slashes--metal i {
+  background: var(--grad-metal);
+}
+
+/* Zımpara/grain dokusu */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  pointer-events: none;
+  z-index: 2000;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Teknik çizim ızgarası — koyu bölümlerde zemin detayı */
+.blueprint-bg {
+  background-image:
+    linear-gradient(rgba(86, 174, 222, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(86, 174, 222, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* --------------------------------------------------------------------------
+   Hareket azaltma
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import karmotLogo from '../assets/karmot-logo.svg';
+---
+
+<Base title="Karmot Güç Aktarım Sistemleri">
+  <main class="hold">
+    <img class="hold__logo" src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="280" />
+    <p class="mono-label">Ana sayfa yapım aşamasında — Faz 0: <a href="/styletile">Style Tile →</a></p>
+  </main>
+</Base>
+
+<style>
+  .hold {
+    min-height: 100svh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1.6rem;
+    text-align: center;
+  }
+  .hold__logo {
+    filter: brightness(0) invert(1);
+  }
+  .hold a {
+    color: var(--blue-300);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>
