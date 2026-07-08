@@ -2,8 +2,10 @@
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { initCursor } from './cursor';
 
 gsap.registerPlugin(ScrollTrigger);
+initCursor();
 
 const q = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s);
 const qa = <T extends Element = HTMLElement>(s: string) => Array.from(document.querySelectorAll<T>(s));
@@ -37,6 +39,8 @@ if (!reduced) {
 /* ------------------------------------------------------- RPM göstergesi */
 const needle = q('#rpmNeedle');
 const readout = q('#rpmReadout');
+/* SVG attribute ile döndür: CSS transform-origin DPI/GSAP etkileşiminde ibreyi kaydırıyor */
+const setNeedle = (deg: number) => needle?.setAttribute('transform', `rotate(${deg} 60 60)`);
 let rpmShown = 0;
 let rpmLive = false; // preloader marş süiti bitene dek ticker dokunmasın
 
@@ -45,18 +49,19 @@ gsap.ticker.add(() => {
   const target = Math.min(Math.abs(velocity) / 28, 1);
   rpmShown += (target - rpmShown) * (target > rpmShown ? 0.16 : 0.05);
   velocity *= 0.9;
-  needle.style.transform = `rotate(${-120 + rpmShown * 240}deg)`;
+  setNeedle(-120 + rpmShown * 240);
   if (readout) readout.textContent = String(Math.round(rpmShown * 1450)).padStart(4, '0');
 });
 
 /* ------------------------------------------------------- Volan (rotor) */
-const rotor = q('#rotor');
+const rotorOuter = q('#rotorOuter');
+const rotorInner = q('#rotorInner');
 let rotorAngle = 0;
-if (rotor && !reduced) {
-  gsap.set(rotor, { transformOrigin: '50% 50%' });
+if ((rotorOuter || rotorInner) && !reduced) {
   gsap.ticker.add(() => {
     rotorAngle += 0.05 + Math.min(Math.abs(velocity) * 0.1, 2.2);
-    gsap.set(rotor, { rotation: rotorAngle });
+    if (rotorOuter) gsap.set(rotorOuter, { rotation: rotorAngle, svgOrigin: '450 450' });
+    if (rotorInner) gsap.set(rotorInner, { rotation: rotorAngle * -0.6, svgOrigin: '450 450' });
   });
 }
 
@@ -112,6 +117,7 @@ if (!pre || reduced) {
 } else {
   lenis?.stop();
   const pct = { v: 0 };
+  const sweep = { v: -120 };
   const blades = ['#blade1', '#blade2', '#blade3'];
   gsap.set(blades, { xPercent: -260, skewX: -27 });
 
@@ -124,10 +130,10 @@ if (!pre || reduced) {
         heroIntro();
       },
     })
-    .from('#preKicker, #preTitle', { autoAlpha: 0, y: 16, stagger: 0.14, duration: 0.5 })
+    .from('#preKicker, #preTitle, #preSpec', { autoAlpha: 0, y: 16, stagger: 0.14, duration: 0.5 })
     // kontak marşı: ibre tavana vurur, geri düşer
-    .to('#rpmNeedle', { rotation: 120, duration: 0.6, ease: 'power2.in' }, 0.1)
-    .to('#rpmNeedle', { rotation: -120, duration: 0.7, ease: 'power3.out' }, '>')
+    .to(sweep, { v: 120, duration: 0.6, ease: 'power2.in', onUpdate: () => setNeedle(sweep.v) }, 0.1)
+    .to(sweep, { v: -120, duration: 0.7, ease: 'power3.out', onUpdate: () => setNeedle(sweep.v) }, '>')
     .to('#preBar', { scaleX: 1, duration: 1.15, ease: 'power2.inOut' }, 0.15)
     .to(
       pct,
@@ -180,7 +186,9 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
       { y: 36 },
       { autoAlpha: 1, y: 0, duration: 0.45 },
       '>-0.2'
-    );
+    )
+    .to('.hero__corner', { autoAlpha: 0, duration: 0.25 }, 0)
+    .to('.hero__ghost', { yPercent: 30, ease: 'none', duration: 1.35 }, 0);
 
   /* Sahne 02 — yatay tahrik hattı */
   const track = q('#chainTrack');

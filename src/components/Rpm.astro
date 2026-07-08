@@ -1,5 +1,7 @@
 ---
 // Devir saati: scroll hızı → dev/dk (imza etkileşim)
+// İbre dönüşü SVG transform ATTRIBUTE'u ile yapılır: rotate(a 60 60).
+// CSS transform-origin kullanma — GSAP/DPI etkileşiminde ibre kayıyor.
 const R = 46;
 const ticks = Array.from({ length: 13 }, (_, i) => {
   const a = ((-120 + i * 20) * Math.PI) / 180;
@@ -12,11 +14,21 @@ const ticks = Array.from({ length: 13 }, (_, i) => {
     major: i % 3 === 0,
   };
 });
+
+// "yüksek devir" yayı: 72°…120° arası
+const arc = (() => {
+  const a1 = (72 * Math.PI) / 180;
+  const a2 = (120 * Math.PI) / 180;
+  const r = 50;
+  const p = (a: number) => `${60 + Math.sin(a) * r} ${60 - Math.cos(a) * r}`;
+  return `M ${p(a1)} A ${r} ${r} 0 0 1 ${p(a2)}`;
+})();
 ---
 
 <div class="rpm" id="rpm" aria-hidden="true">
   <svg viewBox="0 0 120 120">
     <circle cx="60" cy="60" r="52" fill="rgba(11,17,34,0.82)" stroke="rgba(159,176,201,0.25)" stroke-width="1" />
+    <path d={arc} fill="none" stroke="#1e88c7" stroke-width="2.5" opacity="0.85" />
     {ticks.map((t) => (
       <line
         x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
@@ -24,8 +36,9 @@ const ticks = Array.from({ length: 13 }, (_, i) => {
         stroke-width={t.major ? 2.4 : 1.2}
       />
     ))}
-    <g id="rpmNeedle" style="transform-origin:60px 60px; transform:rotate(-120deg)">
+    <g id="rpmNeedle" transform="rotate(-120 60 60)">
       <line x1="60" y1="60" x2="60" y2="22" stroke="#1e88c7" stroke-width="2.6" stroke-linecap="round" />
+      <line x1="60" y1="60" x2="60" y2="69" stroke="#1e88c7" stroke-width="3.4" stroke-linecap="round" opacity="0.7" />
       <circle cx="60" cy="60" r="4.5" fill="#0069a9" />
     </g>
   </svg>
@@ -40,7 +53,7 @@ const ticks = Array.from({ length: 13 }, (_, i) => {
     position: fixed;
     right: clamp(0.8rem, 2vw, 1.6rem);
     bottom: clamp(0.8rem, 2vw, 1.6rem);
-    z-index: 600;
+    z-index: 1010; /* letterbox ve klaketin üstünde: gösterge paneli her zaman görünür */
     width: clamp(80px, 8.5vw, 112px);
     text-align: center;
     filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));

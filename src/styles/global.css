@@ -287,6 +287,82 @@ html {
 }
 
 /* --------------------------------------------------------------------------
+   Sinema atmosferi: vinyet + metal parlama süpürmesi
+   -------------------------------------------------------------------------- */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1900;
+  background: radial-gradient(120% 90% at 50% 42%, transparent 55%, rgba(4, 7, 14, 0.42) 100%);
+}
+
+.sheen {
+  animation: sheen-sweep 7s var(--ease-snap) infinite;
+}
+@keyframes sheen-sweep {
+  0%, 55% { background-position: 0% 0; }
+  75%, 100% { background-position: 200% 0; }
+}
+
+/* Buton parlaması: hover'da çelik yansıması geçer */
+.btn {
+  position: relative;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.33) 50%, transparent 58%);
+  transform: translateX(-130%) skewX(-8deg);
+  pointer-events: none;
+}
+.btn:hover::after {
+  transition: transform 0.65s var(--ease-snap);
+  transform: translateX(130%) skewX(-8deg);
+}
+
+/* --------------------------------------------------------------------------
+   Teknik imleç (pointer: fine)
+   -------------------------------------------------------------------------- */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+.cur-dot,
+.cur-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 3000;
+  border-radius: 50%;
+}
+.cur-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--blue-400);
+}
+.cur-ring {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(198, 198, 198, 0.55);
+  transition: width 0.28s var(--ease-torque), height 0.28s var(--ease-torque),
+    border-color 0.28s ease, transform 0.28s var(--ease-torque);
+}
+html.cur-hover .cur-ring {
+  width: 54px;
+  height: 54px;
+  border-color: var(--blue-400);
+}
+html.cur-down .cur-ring {
+  width: 24px;
+  height: 24px;
+  border-color: var(--blue-300);
+}
+
+/* --------------------------------------------------------------------------
    Hareket azaltma
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {

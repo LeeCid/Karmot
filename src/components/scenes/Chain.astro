@@ -22,11 +22,12 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
 
   <div class="chain__track" id="chainTrack">
     <div class="chain__shaft" aria-hidden="true"></div>
+    <div class="chain__ruler" aria-hidden="true"></div>
 
     <article class="panel panel--intro">
       <div class="panel__body">
         <p class="mono-label">Sahne 02 · Perde açılıyor</p>
-        <h2 class="display panel__title">Güç <em class="display-italic metal-text">Zinciri</em></h2>
+        <h2 class="display panel__title">Güç <em class="display-italic metal-text sheen">Zinciri</em></h2>
         <p class="text-dim panel__lede">
           Enerjiden harekete yedi halka. Her halka bir marka, her marka işinin ustası.
           Hat ilerledikçe tork sağa aktarılır — kaydırmaya devam edin.
@@ -61,7 +62,13 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
             <p class="display-italic panel__tag">{b.data.tagline}</p>
             {img && (
               <figure class="film-frame">
-                <Image src={img} alt={`${b.data.name} ürün ailesi`} height={230} quality={82} />
+                <div class="film-frame__window">
+                  <Image src={img} alt={`${b.data.name} ürün ailesi`} height={230} quality={82} />
+                </div>
+                <figcaption class="film-frame__meta" aria-hidden="true">
+                  <span>Kare {String(b.data.order).padStart(2, '0')} / 07 — {b.data.name}</span>
+                  <span>Karmot /// 35mm</span>
+                </figcaption>
               </figure>
             )}
             <p class="text-dim panel__desc">{b.data.description}</p>
@@ -81,7 +88,7 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
     <article class="panel panel--outro">
       <div class="panel__body">
         <p class="mono-label">Zincir tamam</p>
-        <h2 class="display panel__title">Tork <em class="display-italic metal-text">yerine ulaştı.</em></h2>
+        <h2 class="display panel__title">Tork <em class="display-italic metal-text sheen">yerine ulaştı.</em></h2>
         <p class="text-dim panel__lede">Sırada kanıt var — ışıkları açıyoruz.</p>
       </div>
     </article>
@@ -148,6 +155,21 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
     background-size: 52px 2px;
     opacity: 0.65;
   }
+  /* şaft altı ölçü cetveli: teknik çizim ekseni hissi */
+  .chain__ruler {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% + 10px);
+    height: 12px;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(86, 174, 222, 0.45) 0 1.5px, transparent 1.5px 130px),
+      repeating-linear-gradient(90deg, rgba(159, 176, 201, 0.22) 0 1px, transparent 1px 26px);
+    background-size: auto 12px, auto 6px;
+    background-repeat: repeat-x;
+    background-position: 0 0, 0 0;
+    opacity: 0.8;
+  }
 
   .panel {
     width: 74vw;
@@ -172,6 +194,7 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
     line-height: 1;
     color: transparent;
     -webkit-text-stroke: 1.5px rgba(86, 174, 222, 0.16);
+    filter: drop-shadow(0 0 22px rgba(86, 174, 222, 0.1));
     z-index: 1;
     pointer-events: none;
   }
@@ -199,27 +222,45 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
   }
 
   .film-frame {
-    background: #fff;
-    padding: 1.5rem 1.1rem;
     position: relative;
     margin-bottom: 1.3rem;
+    padding: 16px 12px 8px;
+    background: linear-gradient(165deg, #202c4e, #0d1526 70%);
+    border: 1px solid rgba(159, 176, 201, 0.28);
+    box-shadow: 0 18px 44px rgba(4, 7, 14, 0.5);
     clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
   }
   .film-frame::before,
   .film-frame::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    height: 9px;
-    background-image: repeating-linear-gradient(90deg, var(--navy-950) 0 14px, transparent 14px 30px);
-    opacity: 0.9;
+    left: 14px;
+    right: 14px;
+    height: 6px;
+    background-image: repeating-linear-gradient(90deg, rgba(198, 198, 198, 0.55) 0 9px, transparent 9px 22px);
   }
   .film-frame::before { top: 5px; }
-  .film-frame::after { bottom: 5px; }
+  .film-frame::after { bottom: 26px; }
+  .film-frame__window {
+    background: #fff;
+    padding: 1.1rem 0.9rem;
+    box-shadow: inset 0 0 0 1px rgba(16, 24, 47, 0.14), inset 0 6px 22px rgba(16, 24, 47, 0.12);
+  }
+  .film-frame__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 8px 2px 2px;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-500);
+  }
   .film-frame :global(img) {
     width: 100%;
-    height: clamp(120px, 21vh, 190px);
+    height: clamp(110px, 19vh, 175px);
     object-fit: contain;
   }
 
@@ -250,6 +291,7 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
   /* Mobil: dikey akış */
   @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
     .chain__hud { display: none; }
+    .chain__ruler { display: none; }
     .chain__track { display: block; width: auto; }
     .chain__shaft {
       left: calc(var(--gutter) - 1px);

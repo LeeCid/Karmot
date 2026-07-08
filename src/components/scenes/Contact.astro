@@ -50,7 +50,7 @@ const credits = [
       <p class="display display-italic credits__fin">— Son —</p>
       <p class="mono-label credits__legal">
         © 2026 Karmot Güç Aktarım Sistemleri · Hareket burada başlar ·
-        <a href="/styletile">Style Tile</a>
+        <a href="#hero">⟲ Başa Sar</a>
       </p>
     </div>
   </div>
@@ -97,7 +97,16 @@ const credits = [
     text-align: center;
   }
   .credits__logo { filter: brightness(0) invert(1); opacity: 0.95; height: 46px; width: auto; }
-  .credits__fin { font-size: 1.3rem; color: var(--steel-300); }
+  .credits__fin {
+    font-size: 1.3rem;
+    color: var(--steel-300);
+    animation: fin-flicker 4.5s steps(1) infinite;
+  }
+  @keyframes fin-flicker {
+    0%, 92%, 96% { opacity: 1; }
+    93%, 97% { opacity: 0.45; }
+    94% { opacity: 0.8; }
+  }
   .credits__legal { color: var(--text-dim); }
   .credits__legal a { color: var(--blue-300); }
 </style>

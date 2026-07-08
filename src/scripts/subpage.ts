@@ -2,8 +2,10 @@
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { initCursor } from './cursor';
 
 gsap.registerPlugin(ScrollTrigger);
+initCursor();
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let velocity = 0;
@@ -18,7 +20,7 @@ if (!reduced) {
   gsap.ticker.lagSmoothing(0);
 }
 
-/* RPM göstergesi */
+/* RPM göstergesi — ibre SVG attribute ile döner (CSS origin sorunlarına karşı) */
 const needle = document.getElementById('rpmNeedle');
 const readout = document.getElementById('rpmReadout');
 let shown = 0;
@@ -27,7 +29,7 @@ gsap.ticker.add(() => {
   const target = Math.min(Math.abs(velocity) / 28, 1);
   shown += (target - shown) * (target > shown ? 0.16 : 0.05);
   velocity *= 0.9;
-  needle.style.transform = `rotate(${-120 + shown * 240}deg)`;
+  needle.setAttribute('transform', `rotate(${-120 + shown * 240} 60 60)`);
   if (readout) readout.textContent = String(Math.round(shown * 1450)).padStart(4, '0');
 });
 
