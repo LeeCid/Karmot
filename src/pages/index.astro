@@ -1,30 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
-import karmotLogo from '../assets/karmot-logo.svg';
+import Nav from '../components/Nav.astro';
+import Preloader from '../components/Preloader.astro';
+import Hud from '../components/Hud.astro';
+import Rpm from '../components/Rpm.astro';
+import Hero from '../components/scenes/Hero.astro';
+import Chain from '../components/scenes/Chain.astro';
+import Trust from '../components/scenes/Trust.astro';
+import Contact from '../components/scenes/Contact.astro';
 ---
 
-<Base title="Karmot Güç Aktarım Sistemleri">
-  <main class="hold">
-    <img class="hold__logo" src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="280" />
-    <p class="mono-label">Ana sayfa yapım aşamasında — Faz 0: <a href="/styletile">Style Tile →</a></p>
+<Base
+  title="Karmot Güç Aktarım Sistemleri — Gücü Aktarıyoruz"
+  description="Elektrik motorları, redüktörler, fren sistemleri ve vibrasyon motorları: Gamak, WEG, WAT, Dinamik, Enarc, Pro-Ex ve Avibro tek tedarik hattında. Her şey durur — ta ki güç aktarılana kadar."
+>
+  <Preloader />
+  <Nav />
+  <Hud />
+
+  <main>
+    <Hero />
+    <Chain />
+    <Trust />
+    <Contact />
   </main>
+
+  <Rpm />
 </Base>
 
-<style>
-  .hold {
-    min-height: 100svh;
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    gap: 1.6rem;
-    text-align: center;
-  }
-  .hold__logo {
-    filter: brightness(0) invert(1);
-  }
-  .hold a {
-    color: var(--blue-300);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-</style>
+<script>
+  import '../scripts/home';
+</script>

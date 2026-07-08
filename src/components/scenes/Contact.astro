@@ -1,0 +1,103 @@
+---
+import karmotLogo from '../../assets/karmot-logo.svg';
+
+// Sahne 04 — Temas + kapanış jeneriği
+const credits = [
+  { r: 'Yapım', n: 'Karmot Güç Aktarım Sistemleri' },
+  { r: 'Motor', n: 'Gamak · WEG · WAT' },
+  { r: 'Aktarma', n: 'Dinamik Motor Redüktör' },
+  { r: 'Kontrol', n: 'Enarc Fren Sistemleri' },
+  { r: 'Zorlu Sahneler', n: 'Pro-Ex Exproof' },
+  { r: 'Hareket', n: 'Avibro Vibrasyon' },
+  { r: 'Senaryo', n: 'Tork' },
+  { r: 'Yönetmen', n: 'Güç' },
+];
+---
+
+<section class="contact" id="iletisim">
+  <div class="container contact__inner">
+    <p class="mono-label reveal">Sahne 04 · Temas — final</p>
+    <h2 class="display contact__title">
+      <span class="kin"><span class="kin-line">Projeniz için</span></span>
+      <span class="kin"><span class="kin-line display-italic"><em class="metal-text">doğru gücü</em></span></span>
+      <span class="kin"><span class="kin-line">bulalım.</span></span>
+    </h2>
+    <p class="contact__lede text-dim reveal">
+      Uygulamanızı anlatın; tork ve devri biz hesaplayalım, teklifi aynı gün önünüze koyalım.
+    </p>
+    <div class="contact__cta reveal">
+      <a class="btn contact__btn" href="mailto:info@karmot.com.tr?subject=Teklif%20Talebi%20—%20karmot.com.tr">Teklif Alın ///</a>
+      <a class="btn btn--ghost" href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşür (PDF)</a>
+    </div>
+    <p class="mono-label contact__note reveal">
+      [Prodüksiyon notu] Telefon, adres ve e-posta yayına girerken güncellenecek.
+    </p>
+  </div>
+</section>
+
+<footer class="credits">
+  <div class="container">
+    <div class="credits__roll" id="creditsRoll">
+      {credits.map((c) => (
+        <p class="credits__row">
+          <span class="mono-label credits__role">{c.r}</span>
+          <span class="display credits__name">{c.n}</span>
+        </p>
+      ))}
+    </div>
+    <div class="credits__end reveal">
+      <img class="credits__logo" src={karmotLogo.src} alt="Karmot" width="200" height="47" />
+      <p class="display display-italic credits__fin">— Son —</p>
+      <p class="mono-label credits__legal">
+        © 2026 Karmot Güç Aktarım Sistemleri · Hareket burada başlar ·
+        <a href="/styletile">Style Tile</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .contact {
+    padding-block: calc(var(--space-section) * 1.2) var(--space-section);
+    background:
+      radial-gradient(90vmin 60vmin at 30% 80%, rgba(0, 105, 169, 0.14), transparent 60%),
+      var(--navy-950);
+    overflow: clip;
+  }
+  .contact__title {
+    font-size: var(--fs-hero);
+    margin-block: 1rem 1.6rem;
+  }
+  .kin { display: block; overflow: clip; padding-block: 0.05em; }
+  .kin-line { display: inline-block; will-change: transform; }
+  .contact__lede { max-width: 46ch; margin-bottom: 2.2rem; }
+  .contact__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .contact__btn { font-size: 1.05rem; padding: 1.05em 2.2em; }
+  .contact__note { margin-top: 2.6rem; opacity: 0.55; }
+
+  .credits {
+    background: #05080f;
+    padding-block: clamp(4rem, 9vh, 7rem) 7rem;
+    border-top: 1px solid var(--line);
+  }
+  .credits__roll {
+    display: grid;
+    gap: clamp(1.1rem, 2.6vh, 1.8rem);
+    justify-items: center;
+    text-align: center;
+    margin-bottom: clamp(3.5rem, 8vh, 6rem);
+  }
+  .credits__row { display: grid; gap: 0.25rem; }
+  .credits__role { color: var(--text-dim); }
+  .credits__name { font-size: clamp(1.15rem, 2.6vw, 1.9rem); color: var(--steel-200); }
+  .credits__end {
+    display: grid;
+    justify-items: center;
+    gap: 1.1rem;
+    text-align: center;
+  }
+  .credits__logo { filter: brightness(0) invert(1); opacity: 0.95; height: 46px; width: auto; }
+  .credits__fin { font-size: 1.3rem; color: var(--steel-300); }
+  .credits__legal { color: var(--text-dim); }
+  .credits__legal a { color: var(--blue-300); }
+</style>

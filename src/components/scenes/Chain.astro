@@ -1,0 +1,278 @@
+---
+// Sahne 02 — Güç Zinciri: yatay pinlenmiş tahrik hattı
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+const brands = (await getCollection('brands')).sort((a, b) => a.data.order - b.data.order);
+const imgs = import.meta.glob<{ default: ImageMetadata }>('../../assets/products/*.png', { eager: true });
+const imgFor = (id: string) => imgs[`../../assets/products/${id}-lineup.png`]?.default;
+
+// kaplin (shaft bağlantısı) çubukları
+const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
+---
+
+<section class="chain" id="zincir">
+  <div class="chain__hud">
+    <p class="mono-label chain__hudlabel">
+      Güç Aktarımı <span class="chain__meter"><i id="chainBar"></i></span>
+      <span id="chainPct">%0</span> · <span id="chainCount">Halka 0 / {brands.length}</span>
+    </p>
+  </div>
+
+  <div class="chain__track" id="chainTrack">
+    <div class="chain__shaft" aria-hidden="true"></div>
+
+    <article class="panel panel--intro">
+      <div class="panel__body">
+        <p class="mono-label">Sahne 02 · Perde açılıyor</p>
+        <h2 class="display panel__title">Güç <em class="display-italic metal-text">Zinciri</em></h2>
+        <p class="text-dim panel__lede">
+          Enerjiden harekete yedi halka. Her halka bir marka, her marka işinin ustası.
+          Hat ilerledikçe tork sağa aktarılır — kaydırmaya devam edin.
+        </p>
+        <span class="slashes" aria-hidden="true"><i></i><i></i><i></i></span>
+      </div>
+    </article>
+
+    {brands.map((b) => {
+      const img = imgFor(b.id);
+      return (
+        <article class="panel" data-brand={b.id}>
+          <span class="panel__ghost display" aria-hidden="true">{String(b.data.order).padStart(2, '0')}</span>
+          <svg class="coupling" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <circle cx="100" cy="100" r="64" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 9" />
+            {spokes.map((a) => (
+              <line
+                x1={100 + Math.sin((a * Math.PI) / 180) * 22}
+                y1={100 - Math.cos((a * Math.PI) / 180) * 22}
+                x2={100 + Math.sin((a * Math.PI) / 180) * 88}
+                y2={100 - Math.cos((a * Math.PI) / 180) * 88}
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            ))}
+            <circle cx="100" cy="100" r="14" fill="none" stroke="currentColor" stroke-width="3" />
+          </svg>
+          <div class="panel__body">
+            <p class="mono-label panel__role">Görev {b.data.roleNo} — {b.data.role}</p>
+            <h3 class="display panel__name">{b.data.name}</h3>
+            <p class="display-italic panel__tag">{b.data.tagline}</p>
+            {img && (
+              <figure class="film-frame">
+                <Image src={img} alt={`${b.data.name} ürün ailesi`} height={230} quality={82} />
+              </figure>
+            )}
+            <p class="text-dim panel__desc">{b.data.description}</p>
+            <div class="panel__specs" role="list">
+              {b.data.specs.slice(0, 3).map((s) => (
+                <span class="panel__chip" role="listitem">
+                  <b>{s.k}</b> {s.v}
+                </span>
+              ))}
+            </div>
+            <a class="panel__link mono-label" href={`/markalar/${b.id}`}>Ürünleri Gör ///</a>
+          </div>
+        </article>
+      );
+    })}
+
+    <article class="panel panel--outro">
+      <div class="panel__body">
+        <p class="mono-label">Zincir tamam</p>
+        <h2 class="display panel__title">Tork <em class="display-italic metal-text">yerine ulaştı.</em></h2>
+        <p class="text-dim panel__lede">Sırada kanıt var — ışıkları açıyoruz.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .chain {
+    position: relative;
+    overflow: clip;
+    background:
+      radial-gradient(120vmin 80vmin at 70% 20%, rgba(0, 105, 169, 0.12), transparent 60%),
+      var(--navy-950);
+  }
+  .chain__hud {
+    position: absolute;
+    top: 4.6rem;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .chain__hudlabel {
+    display: flex;
+    align-items: center;
+    gap: 0.9em;
+    color: var(--text-dim);
+  }
+  .chain__meter {
+    width: clamp(120px, 22vw, 300px);
+    height: 2px;
+    background: var(--line);
+    display: inline-block;
+    overflow: hidden;
+  }
+  .chain__meter i {
+    display: block;
+    height: 100%;
+    background: var(--grad-energy);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .chain__track {
+    display: flex;
+    align-items: stretch;
+    width: max-content;
+    position: relative;
+    will-change: transform;
+  }
+  .chain__shaft {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--blue-500) 0 26px,
+      rgba(86, 174, 222, 0.25) 26px 52px
+    );
+    background-size: 52px 2px;
+    opacity: 0.65;
+  }
+
+  .panel {
+    width: 74vw;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    position: relative;
+    padding: clamp(8rem, 14vh, 9.5rem) clamp(2rem, 6vw, 6rem) clamp(4rem, 7vh, 5.5rem);
+    border-right: 1px solid rgba(159, 176, 201, 0.09);
+  }
+  .panel--intro, .panel--outro { width: 62vw; }
+  .panel__body {
+    position: relative;
+    z-index: 3;
+    max-width: 34rem;
+  }
+  .panel__ghost {
+    position: absolute;
+    right: 2vw;
+    bottom: -4vh;
+    font-size: 36vh;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(86, 174, 222, 0.16);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .coupling {
+    --cs: clamp(220px, 30vh, 340px);
+    position: absolute;
+    top: calc(50% - var(--cs) / 2);
+    left: calc(50% - var(--cs) / 2);
+    width: var(--cs);
+    height: var(--cs);
+    color: rgba(86, 174, 222, 0.14);
+    z-index: 0;
+    will-change: transform;
+  }
+  .panel__title { font-size: var(--fs-display); margin-block: 0.6rem 1rem; }
+  .panel__lede { max-width: 30rem; margin-bottom: 1.4rem; }
+  .panel__role { color: var(--blue-300); }
+  .panel__name { font-size: clamp(2.6rem, 6vw, 5rem); margin-block: 0.35em 0.15em; }
+  .panel__tag {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 112;
+    font-weight: 600;
+    color: var(--steel-300);
+    margin-bottom: 1.3rem;
+  }
+
+  .film-frame {
+    background: #fff;
+    padding: 1.5rem 1.1rem;
+    position: relative;
+    margin-bottom: 1.3rem;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  }
+  .film-frame::before,
+  .film-frame::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 9px;
+    background-image: repeating-linear-gradient(90deg, var(--navy-950) 0 14px, transparent 14px 30px);
+    opacity: 0.9;
+  }
+  .film-frame::before { top: 5px; }
+  .film-frame::after { bottom: 5px; }
+  .film-frame :global(img) {
+    width: 100%;
+    height: clamp(120px, 21vh, 190px);
+    object-fit: contain;
+  }
+
+  .panel__desc {
+    font-size: 0.95rem;
+    max-width: 44ch;
+    margin-bottom: 1.2rem;
+  }
+  .panel__specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.4rem;
+  }
+  .panel__chip {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    padding: 0.5em 0.9em;
+    border: 1px solid var(--line);
+    color: var(--steel-300);
+    white-space: nowrap;
+  }
+  .panel__chip b { color: var(--blue-300); font-weight: 700; margin-right: 0.5em; }
+  .panel__link { color: var(--blue-300); }
+  .panel__link:hover { color: #fff; }
+
+  /* Mobil: dikey akış */
+  @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
+    .chain__hud { display: none; }
+    .chain__track { display: block; width: auto; }
+    .chain__shaft {
+      left: calc(var(--gutter) - 1px);
+      right: auto;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      height: auto;
+      background-image: repeating-linear-gradient(
+        180deg,
+        var(--blue-500) 0 26px,
+        rgba(86, 174, 222, 0.25) 26px 52px
+      );
+      background-size: 2px 52px;
+    }
+    .panel {
+      width: 100%;
+      min-height: 0;
+      border-right: 0;
+      padding: 3.6rem var(--gutter) 3.2rem calc(var(--gutter) + 1.6rem);
+    }
+    .panel--intro, .panel--outro { width: 100%; }
+    .panel__ghost { font-size: 8rem; right: 0.4rem; bottom: 0.4rem; }
+    .coupling { display: none; }
+  }
+</style>

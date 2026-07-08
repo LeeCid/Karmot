@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Rpm from '../../components/Rpm.astro';
+
+const brands = (await getCollection('brands')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="Markalar — Karmot Güç Aktarım Sistemleri"
+  description="Gamak, WEG, WAT, Dinamik, Enarc, Pro-Ex ve Avibro: güç zincirinin yedi halkası tek tedarik hattında."
+>
+  <Nav />
+
+  <main class="list blueprint-bg">
+    <div class="container">
+      <p class="mono-label"><a class="list__back" href="/#zincir">← Güç Zinciri</a> · Yedi halka</p>
+      <h1 class="display list__title">
+        <span class="kin"><span class="kin-line">Markalar<em class="metal-text display-italic">.</em></span></span>
+      </h1>
+      <div class="list__grid">
+        {brands.map((b) => (
+          <a class="card reveal" href={`/markalar/${b.id}`}>
+            <p class="mono-label">Görev {b.data.roleNo} — {b.data.role}</p>
+            <h2 class="display card__name">{b.data.name}</h2>
+            <p class="card__tag text-dim">{b.data.tagline}</p>
+            <span class="mono-label card__link">Ürünleri Gör ///</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+
+  <footer class="list__foot">
+    <p class="mono-label">© 2026 Karmot Güç Aktarım Sistemleri · <a href="/">Ana Sayfa</a></p>
+  </footer>
+
+  <Rpm />
+</Base>
+
+<style>
+  .list { padding-top: 8.5rem; min-height: 100svh; }
+  .list__back { color: var(--blue-300); }
+  .list__title { font-size: var(--fs-hero); margin-block: 0.5rem 2.4rem; }
+  .kin { display: block; overflow: clip; padding-block: 0.05em; }
+  .kin-line { display: inline-block; }
+  .list__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 12px;
+    padding-bottom: clamp(3rem, 8vh, 6rem);
+  }
+  .card {
+    border: 1px solid var(--line);
+    background: linear-gradient(160deg, var(--navy-900), var(--navy-950));
+    padding: 1.7rem;
+    transition: transform var(--dur-fast) var(--ease-torque), border-color var(--dur-fast) ease;
+  }
+  .card:hover {
+    transform: translateY(-6px) rotate(-0.5deg);
+    border-color: var(--blue-500);
+  }
+  .card__name { font-size: 2rem; margin-block: 0.7rem 0.4rem; }
+  .card__tag { font-size: 0.95rem; margin-bottom: 1.2rem; }
+  .card__link { color: var(--blue-300); }
+  .list__foot {
+    border-top: 1px solid var(--line);
+    padding: 1.6rem var(--gutter) 2.2rem;
+  }
+  .list__foot a { color: var(--blue-300); }
+</style>
+
+<script>
+  import '../../scripts/subpage';
+</script>

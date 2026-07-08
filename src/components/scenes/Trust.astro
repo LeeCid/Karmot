@@ -1,0 +1,164 @@
+---
+// Sahne 03 — Kanıt: koyudan aydınlığa, güven ve gerçek rakamlar
+const values = [
+  {
+    no: '01',
+    t: 'Stoktan teslim',
+    d: 'Yedi markanın kritik kalemleri rafta bekler. Duran hat para kaybettirir; biz motoru aynı gün yola çıkarmak için stok tutarız.',
+  },
+  {
+    no: '02',
+    t: 'Doğru seçim',
+    d: 'Tork, devir, verim, gövde... Uygulamanıza göre hesaplar, markadan bağımsız en doğru ürünü öneririz — çünkü yedisini de biz satıyoruz.',
+  },
+  {
+    no: '03',
+    t: 'Tek tedarik hattı',
+    d: 'Motor + redüktör + fren + vibrasyon: tek sipariş, tek irsaliye, tek muhatap. Projenizin güç aktarımı tek elden yürür.',
+  },
+];
+
+const plates = [
+  { v: '0.06 – 4.000', u: 'kW', k: 'Güç bandı (Gamak)' },
+  { v: '61 – 30.575', u: 'kg/F', k: 'Santrifüj kuvvet (Avibro)' },
+  { v: 'IE2 – IE4', u: '', k: 'Verimlilik sınıfları' },
+  { v: '7', u: 'marka', k: 'Tek tedarik hattında' },
+];
+---
+
+<section class="trust section--light" id="guven">
+  <div class="container trust__grid">
+    <div class="trust__left">
+      <div class="trust__sticky">
+        <p class="mono-label reveal">Sahne 03 · Kanıt — ışıklar açık</p>
+        <h2 class="display trust__title reveal">
+          Güç, güvenle<br />
+          <em class="display-italic trust__em">aktarılır.</em>
+        </h2>
+        <p class="trust__lede reveal">
+          Hikayenin bu sahnesi sade: doğru ürün, rafta duran stok ve telefonun
+          ucunda bir mühendis.
+        </p>
+      </div>
+    </div>
+
+    <div class="trust__right">
+      {values.map((v) => (
+        <article class="trust__block reveal">
+          <p class="mono-label">{v.no} ///</p>
+          <h3 class="display trust__bt">{v.t}</h3>
+          <p class="trust__bd">{v.d}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="plates">
+      {plates.map((p) => (
+        <div class="plate reveal">
+          <span class="plate__v display">{p.v}<small> {p.u}</small></span>
+          <span class="mono-label">{p.k}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      {[0, 1].map(() => (
+        <span class="marquee__seg display display-italic">
+          Dinamik /// Gamak /// WEG /// WAT /// Pro-Ex /// Avibro /// Enarc ///&nbsp;
+        </span>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust {
+    /* üst kenar slash açısıyla kesik */
+    clip-path: polygon(0 3.2vw, 100% 0, 100% 100%, 0 100%);
+    margin-top: -3.2vw;
+    padding-top: calc(var(--space-section) + 3.2vw);
+  }
+  .trust__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    margin-bottom: clamp(3rem, 7vw, 5.5rem);
+  }
+  .trust__sticky {
+    position: sticky;
+    top: 16vh;
+  }
+  .trust__title {
+    font-size: var(--fs-display);
+    color: var(--ink);
+    margin-block: 0.9rem 1.2rem;
+  }
+  .trust__em { color: var(--blue-500); }
+  .trust__lede { color: #4c5a72; max-width: 34ch; }
+
+  .trust__right {
+    display: grid;
+    gap: clamp(2rem, 5vh, 3.6rem);
+    padding-top: 2.2rem;
+  }
+  .trust__block {
+    border-top: 2px solid var(--navy-850);
+    padding-top: 1.2rem;
+    max-width: 44rem;
+  }
+  .trust__bt { font-size: var(--fs-h3); color: var(--ink); margin-block: 0.5rem; }
+  .trust__bd { color: #4c5a72; max-width: 56ch; }
+
+  .plates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+  }
+  .plate {
+    background: #fff;
+    border: 1px solid rgba(16, 24, 47, 0.12);
+    padding: 1.4rem 1.5rem;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  .plate__v {
+    display: block;
+    font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+    color: var(--navy-850);
+    margin-bottom: 0.35rem;
+  }
+  .plate__v small {
+    font-size: 0.5em;
+    color: var(--blue-500);
+    font-variation-settings: 'wdth' 100;
+  }
+
+  .marquee {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    border-top: 1px solid rgba(16, 24, 47, 0.14);
+    overflow: clip;
+    padding-block: 0.8rem;
+  }
+  .marquee__track {
+    display: flex;
+    white-space: nowrap;
+    width: max-content;
+    animation: marq 26s linear infinite;
+  }
+  .marquee__seg {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(16, 24, 47, 0.35);
+  }
+  @keyframes marq {
+    to { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 899.98px) {
+    .trust__grid { grid-template-columns: 1fr; }
+    .trust__sticky { position: static; }
+  }
+</style>
