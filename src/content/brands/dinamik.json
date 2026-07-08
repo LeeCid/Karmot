@@ -1,0 +1,24 @@
+{
+  "name": "Dinamik",
+  "order": 4,
+  "role": "Aktarma",
+  "roleNo": "02",
+  "tagline": "Torku işe çeviren yerli üretim gücü",
+  "description": "Redüktör-motor satış organizasyonundan üretime geçen ilk yerli firma olan Dinamik, 30 yılı aşkın tecrübesi ve İzmir'deki 25.000 m² fabrikasıyla Türkiye'nin redüktör markasıdır. 35'ten fazla ülkeye ihracat, 1 milyonu aşkın satılmış ürün.",
+  "productGroups": [
+    "Sonsuz vidalı redüktörler",
+    "Helisel dişli redüktörler",
+    "Konik dişli redüktörler",
+    "Planet redüktörler",
+    "Redüktörlü motorlar",
+    "Elektromanyetik frenler"
+  ],
+  "specs": [
+    { "k": "TECRÜBE", "v": "30+ yıl" },
+    { "k": "ÜRETİM", "v": "25.000 m² · İzmir (2024)" },
+    { "k": "İHRACAT", "v": "35+ ülke" },
+    { "k": "SATIŞ", "v": "1.000.000+ ürün" }
+  ],
+  "website": "https://www.dinamikmotor.com.tr",
+  "accent": "#1e88c7"
+}

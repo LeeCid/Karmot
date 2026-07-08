@@ -1,0 +1,23 @@
+{
+  "name": "Gamak",
+  "order": 1,
+  "role": "Motor",
+  "roleNo": "01",
+  "tagline": "Türkiye'nin entegre elektrik motoru üreticisi",
+  "description": "1961'den beri tek çatı altında entegre üretim yapan Gamak, 0.06 kW'tan 4.000 kW'a uzanan güç aralığında Türkiye'nin köklü elektrik motoru markasıdır. IE2'den IE4'e verimlilik sınıflarında, alüminyum ve pik döküm gövde seçenekleriyle stoktan teslim.",
+  "productGroups": [
+    "Üç fazlı asenkron motorlar",
+    "Tek fazlı asenkron motorlar",
+    "Ex-Proof (patlamaya dayanıklı) motorlar",
+    "Duman tahliye motorları",
+    "Orta gerilim motorları (150–4.000 kW)"
+  ],
+  "specs": [
+    { "k": "GÜÇ ARALIĞI", "v": "0.06 – 4.000 kW" },
+    { "k": "VERİMLİLİK", "v": "IE2 · IE3 · IE4" },
+    { "k": "GÖVDE", "v": "56 – 630 · Alüminyum / Pik döküm" },
+    { "k": "KURULUŞ", "v": "1961" }
+  ],
+  "website": "https://www.gamak.com",
+  "accent": "#1e88c7"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Pro-Ex",
+  "order": 6,
+  "role": "Zorlu Koşullar",
+  "roleNo": "04",
+  "tagline": "Patlayıcı ortamda bile durmayan güç",
+  "description": "Pro-Ex, ATEX sertifikalı Exd alev sızdırmaz motorlarıyla Zone 1 ve Zone 2 tehlikeli bölgelerin motorudur. Rafineriden değirmene, boyahaneden gaz tesisine — frekans konvertörüyle çalışmaya onaylı, standart ve premium verimlilik seçenekleri.",
+  "productGroups": [
+    "Exd alev sızdırmaz üç fazlı motorlar",
+    "Zone 1 / Zone 2 uygulamaları",
+    "Frekans konvertörü onaylı seriler",
+    "Standart ve premium verimlilik sınıfları"
+  ],
+  "specs": [
+    { "k": "KORUMA", "v": "Exd alev sızdırmaz" },
+    { "k": "SERTİFİKA", "v": "ATEX" },
+    { "k": "BÖLGE", "v": "Zone 1 · Zone 2" },
+    { "k": "SÜRÜCÜ", "v": "VFD ile çalışmaya onaylı" }
+  ],
+  "accent": "#e8c74a"
+}

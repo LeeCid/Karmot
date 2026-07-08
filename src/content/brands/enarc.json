@@ -1,0 +1,22 @@
+{
+  "name": "Enarc",
+  "order": 5,
+  "role": "Kontrol",
+  "roleNo": "03",
+  "tagline": "Güç kadar durdurmak da mühendisliktir",
+  "description": "Enarc elektromanyetik fren sistemleri, hareketli yüklerin kontrollü durdurulması ve güvenle tutulması için tasarlanır. Yay baskılı ve akım baskılı serileriyle vinçten asansöre, motor gövdesinde değişiklik gerektirmeden hızlı montaj.",
+  "productGroups": [
+    "ENA serisi — yay baskılı AC fren (220/380V)",
+    "ENR serisi — yay baskılı fren, hızlı montaj",
+    "ENC serisi — akım baskılı ince tip emniyet freni",
+    "Fren motorları ve aksesuarları"
+  ],
+  "specs": [
+    { "k": "ÇALIŞMA", "v": "Elektromanyetik · yay/akım baskılı" },
+    { "k": "MONTAJ", "v": "Gövde tadilatı gerektirmez" },
+    { "k": "GÖREV", "v": "Hassas duruş · yük tutma" },
+    { "k": "KULLANIM", "v": "Vinç · kaldırma · asansör" }
+  ],
+  "website": "https://enarc.com.tr",
+  "accent": "#4cc38a"
+}

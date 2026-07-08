@@ -1,0 +1,23 @@
+{
+  "name": "WAT",
+  "order": 3,
+  "role": "Motor",
+  "roleNo": "01",
+  "tagline": "Yarım asrı aşan mühendislik, geleceğin motorları",
+  "description": "1965'ten bugüne üreten WAT, 15.000'i aşkın ürün çeşidi ve 40'tan fazla ülkeye ihracatıyla Türkiye'nin en geniş motor portföylerinden birine sahip. Standart asenkron serilerden EC motorlara ve hareket kontrol teknolojilerine uzanan yelpaze.",
+  "productGroups": [
+    "Üç fazlı alüminyum gövdeli motorlar",
+    "Üç fazlı pik döküm gövdeli motorlar",
+    "Tek fazlı motorlar",
+    "Duman tahliye motorları",
+    "WAT EC motor serisi (yüksek verim)"
+  ],
+  "specs": [
+    { "k": "ÜRÜN ÇEŞİDİ", "v": "15.000+" },
+    { "k": "İHRACAT", "v": "40+ ülke" },
+    { "k": "TECRÜBE", "v": "1965'ten beri" },
+    { "k": "ODAK", "v": "Verimlilik · sürdürülebilirlik" }
+  ],
+  "website": "https://www.wat.com.tr",
+  "accent": "#9fb0c9"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "WEG",
+  "order": 2,
+  "role": "Motor",
+  "roleNo": "01",
+  "tagline": "Küresel ölçekte güç, yerel stokta hazır",
+  "description": "Dünyanın en büyük elektrik motoru üreticilerinden Brezilyalı WEG; W22 serisi başta olmak üzere yüksek verimli asenkron motorlarıyla ağır sanayinin küresel standardıdır. Karmot stoğunda, küresel ürünü yerel teslim hızıyla buluşturuyoruz.",
+  "productGroups": [
+    "W22 serisi üç fazlı asenkron motorlar",
+    "Yüksek verimli (IE3/IE4) seriler",
+    "Döküm ve alüminyum gövde seçenekleri",
+    "Özel uygulama ve proses motorları"
+  ],
+  "specs": [
+    { "k": "SERİ", "v": "W22 ve türevleri" },
+    { "k": "VERİMLİLİK", "v": "IE2 · IE3 · IE4" },
+    { "k": "ÖLÇEK", "v": "Küresel üretim ve servis ağı" },
+    { "k": "UYGULAMA", "v": "Ağır sanayi · proses" }
+  ],
+  "website": "https://www.weg.net",
+  "accent": "#56aede"
+}

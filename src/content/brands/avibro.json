@@ -1,0 +1,22 @@
+{
+  "name": "Avibro",
+  "order": 7,
+  "role": "Hareket",
+  "roleNo": "05",
+  "tagline": "Titreşimi üretim gücüne dönüştürür",
+  "description": "İzmir'de 30 yılı aşkın sektör tecrübesiyle kurulan Avibro, AVM serisi endüstriyel vibrasyon motorlarıyla eleme, taşıma, sıkıştırma ve dozajlama hatlarının kalbidir. 61 kg/F'den 30.000 kg/F'nin üzerine uzanan santrifüj kuvvet yelpazesi.",
+  "productGroups": [
+    "AVM endüstriyel vibrasyon motorları",
+    "AVM-P yüksek frekanslı briket makinesi motorları",
+    "2 / 4 / 6 / 8 kutuplu seçenekler (750–3000 d/dk)",
+    "Pnömatik vibratörler"
+  ],
+  "specs": [
+    { "k": "SANTRİFÜJ KUVVET", "v": "61 – 30.575 kg/F" },
+    { "k": "KORUMA", "v": "IP66 · H sınıfı izolasyon" },
+    { "k": "GÖVDE", "v": "Alüminyum enjeksiyon / GGG40 sfero" },
+    { "k": "MİL", "v": "Isıl işlemli NiCrMo çelik" }
+  ],
+  "website": "https://avibro.com",
+  "accent": "#e8c74a"
+}
