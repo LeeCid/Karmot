@@ -105,10 +105,6 @@ const badges = ['35mm', '2.39:1', 'IE4', 'IP66', 'ATEX'];
         </p>
       </div>
     </div>
-
-    <button class="mono-label credits__play" id="creditsPlay" type="button">
-      Jeneriği Oynat ▸
-    </button>
   </div>
 </footer>
 
@@ -287,20 +283,6 @@ const badges = ['35mm', '2.39:1', 'IE4', 'IP66', 'ATEX'];
   }
   .credits__legal { color: var(--text-dim); }
   .credits__legal a { color: var(--blue-300); }
-
-  .credits__play {
-    position: absolute;
-    bottom: clamp(4.6rem, 9vh, 6rem);
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--blue-300);
-    border: 1px solid rgba(86, 174, 222, 0.35);
-    padding: 0.7em 1.3em;
-    background: rgba(11, 17, 34, 0.6);
-    transition: border-color 0.25s ease, color 0.25s ease;
-    z-index: 5;
-  }
-  .credits__play:hover { border-color: var(--blue-400); color: #fff; }
 
   @media (max-width: 700px) {
     .crow { grid-template-columns: 1fr; gap: 0.15rem; padding-block: 0.7rem; }

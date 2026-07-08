@@ -92,6 +92,58 @@ function slate(text: string, name: string) {
     .call(() => (lastSlate = ''));
 }
 
+/* ----------------------------------------------- Başrolde: yıldız turu */
+/* Her markanın ürünleri spot altında teker teker sahne alır (starring). */
+function initStars(containerAnim?: gsap.core.Tween) {
+  const stops: Array<() => void> = [];
+  qa('.stars').forEach((el) => {
+    const items = Array.from(el.querySelectorAll<HTMLElement>('.stars__item'));
+    const counter = el.querySelector<HTMLElement>('.stars__counter');
+    if (items.length === 0) return;
+    gsap.set(items, { autoAlpha: 0 });
+    gsap.set(items[0], { autoAlpha: 1 });
+    if (items.length === 1) return;
+
+    let idx = 0;
+    let timer: number | undefined;
+    const show = (n: number) => {
+      const prev = items[idx];
+      idx = n % items.length;
+      const next = items[idx];
+      gsap.to(prev, { autoAlpha: 0, scale: 0.98, duration: 0.26, ease: 'power2.in' });
+      gsap.fromTo(
+        next,
+        { autoAlpha: 0, scale: 1.06, y: 12 },
+        { autoAlpha: 1, scale: 1, y: 0, duration: 0.55, ease: 'power3.out' }
+      );
+      if (counter) counter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+    };
+    const start = () => {
+      if (timer !== undefined) return;
+      timer = window.setInterval(() => show(idx + 1), 1500);
+    };
+    const stop = () => {
+      if (timer !== undefined) {
+        clearInterval(timer);
+        timer = undefined;
+      }
+    };
+    stops.push(stop);
+
+    ScrollTrigger.create({
+      trigger: el,
+      ...(containerAnim
+        ? { containerAnimation: containerAnim, start: 'left 99%', end: 'right 1%' }
+        : { start: 'top 96%', end: 'bottom 4%' }),
+      onToggle(self) {
+        if (self.isActive) start();
+        else stop();
+      },
+    });
+  });
+  return () => stops.forEach((f) => f());
+}
+
 /* -------------------------------------------------- Letterbox bantları */
 /* Zincir ve jenerik sahnelerinde anamorfik bantlar iner, sol HUD gizlenir */
 const lbIn = () => {
@@ -250,6 +302,9 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
       },
     });
 
+    /* başrol turları: panel görünürken ürünler sahne alır */
+    initStars(chainTween);
+
     /* panel içi paralaks */
     brandPanels.forEach((panel) => {
       const ghost = panel.querySelector('.panel__ghost');
@@ -304,6 +359,8 @@ mm.add('(max-width: 899.98px) and (prefers-reduced-motion: no-preference)', () =
       scrollTrigger: { trigger: panel, start: 'top 82%' },
     });
   });
+  const stopStars = initStars();
+  return () => stopStars();
 });
 
 /* Her genişlik + hareket serbest: ortak sinema dili */

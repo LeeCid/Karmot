@@ -5,8 +5,14 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 const brands = (await getCollection('brands')).sort((a, b) => a.data.order - b.data.order);
-const imgs = import.meta.glob<{ default: ImageMetadata }>('../../assets/products/*.png', { eager: true });
-const imgFor = (id: string) => imgs[`../../assets/products/${id}-lineup.png`]?.default;
+const starImgs = import.meta.glob<{ default: ImageMetadata }>('../../assets/products/stars/*.png', {
+  eager: true,
+});
+const starsFor = (id: string) =>
+  Object.keys(starImgs)
+    .filter((k) => k.includes(`/${id}-star-`))
+    .sort()
+    .map((k) => starImgs[k].default);
 
 // kaplin (shaft bağlantısı) çubukları
 const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
@@ -37,7 +43,7 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
     </article>
 
     {brands.map((b) => {
-      const img = imgFor(b.id);
+      const stars = starsFor(b.id);
       return (
         <article class="panel" data-brand={b.id}>
           <span class="panel__ghost display" aria-hidden="true">{String(b.data.order).padStart(2, '0')}</span>
@@ -60,14 +66,24 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
             <p class="mono-label panel__role">Görev {b.data.roleNo} — {b.data.role}</p>
             <h3 class="display panel__name">{b.data.name}</h3>
             <p class="display-italic panel__tag">{b.data.tagline}</p>
-            {img && (
-              <figure class="film-frame">
-                <div class="film-frame__window">
-                  <Image src={img} alt={`${b.data.name} ürün ailesi`} height={230} quality={82} />
+            {stars.length > 0 && (
+              <figure class="stars" data-stars>
+                <div class="stars__stage">
+                  <span class="stars__spot" aria-hidden="true"></span>
+                  {stars.map((s, i) => (
+                    <Image
+                      class="stars__item"
+                      src={s}
+                      alt={`${b.data.name} ürünü ${i + 1}`}
+                      height={300}
+                      quality={85}
+                      loading="eager"
+                    />
+                  ))}
                 </div>
-                <figcaption class="film-frame__meta" aria-hidden="true">
-                  <span>Kare {String(b.data.order).padStart(2, '0')} / 07 — {b.data.name}</span>
-                  <span>Karmot /// 35mm</span>
+                <figcaption class="stars__caption" aria-hidden="true">
+                  <span class="mono-label stars__lead">Başrolde — {b.data.name}</span>
+                  <span class="mono-label stars__counter">01 / {String(stars.length).padStart(2, '0')}</span>
                 </figcaption>
               </figure>
             )}
@@ -221,48 +237,65 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
     margin-bottom: 1.3rem;
   }
 
-  .film-frame {
-    position: relative;
-    margin-bottom: 1.3rem;
-    padding: 16px 12px 8px;
-    background: linear-gradient(165deg, #202c4e, #0d1526 70%);
-    border: 1px solid rgba(159, 176, 201, 0.28);
-    box-shadow: 0 18px 44px rgba(4, 7, 14, 0.5);
-    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  /* Başrolde: ürünler karanlık sahnede, spot altında teker teker */
+  .stars {
+    margin: 0 0 1.3rem;
   }
-  .film-frame::before,
-  .film-frame::after {
+  .stars__stage {
+    position: relative;
+    height: clamp(180px, 27vh, 250px);
+    display: grid;
+    place-items: center;
+    overflow: visible;
+  }
+  .stars__spot {
+    position: absolute;
+    inset: -14% -18%;
+    background: radial-gradient(
+      52% 64% at 50% 56%,
+      rgba(86, 174, 222, 0.17),
+      rgba(0, 105, 169, 0.05) 55%,
+      transparent 76%
+    );
+    pointer-events: none;
+  }
+  /* zemin gölgesi: yıldız sahneye basar, havada süzülmez */
+  .stars__stage::after {
     content: '';
     position: absolute;
-    left: 14px;
-    right: 14px;
-    height: 6px;
-    background-image: repeating-linear-gradient(90deg, rgba(198, 198, 198, 0.55) 0 9px, transparent 9px 22px);
+    bottom: 2px;
+    left: 50%;
+    width: 54%;
+    height: 16px;
+    transform: translateX(-50%);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(2, 5, 12, 0.55), transparent 72%);
+    filter: blur(4px);
   }
-  .film-frame::before { top: 5px; }
-  .film-frame::after { bottom: 26px; }
-  .film-frame__window {
-    background: #fff;
-    padding: 1.1rem 0.9rem;
-    box-shadow: inset 0 0 0 1px rgba(16, 24, 47, 0.14), inset 0 6px 22px rgba(16, 24, 47, 0.12);
+  .stars :global(.stars__item) {
+    position: absolute;
+    max-height: 86%;
+    max-width: 84%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    opacity: 0;
+    filter: drop-shadow(0 18px 30px rgba(2, 6, 14, 0.6));
+    will-change: transform, opacity;
+    z-index: 1;
   }
-  .film-frame__meta {
+  .stars :global(.stars__item:first-child) {
+    opacity: 1; /* JS yokken / reduced'da ilk yıldız sahnede */
+  }
+  .stars__caption {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    padding: 8px 2px 2px;
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--steel-500);
+    border-top: 1px solid var(--line);
+    padding-top: 0.55rem;
+    margin-top: 0.2rem;
   }
-  .film-frame :global(img) {
-    width: 100%;
-    height: clamp(110px, 19vh, 175px);
-    object-fit: contain;
-  }
+  .stars__lead { color: var(--blue-300); }
+  .stars__counter { color: var(--steel-500); }
 
   .panel__desc {
     font-size: 0.95rem;
