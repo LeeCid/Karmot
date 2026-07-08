@@ -1,17 +1,41 @@
 ---
 import karmotLogo from '../../assets/karmot-logo.svg';
 
-// Sahne 04 — Temas + kapanış jeneriği
-const credits = [
-  { r: 'Yapım', n: 'Karmot Güç Aktarım Sistemleri' },
-  { r: 'Motor', n: 'Gamak · WEG · WAT' },
-  { r: 'Aktarma', n: 'Dinamik Motor Redüktör' },
-  { r: 'Kontrol', n: 'Enarc Fren Sistemleri' },
-  { r: 'Zorlu Sahneler', n: 'Pro-Ex Exproof' },
-  { r: 'Hareket', n: 'Avibro Vibrasyon' },
-  { r: 'Senaryo', n: 'Tork' },
+// Sahne 04 — Temas + Hollywood usulü kapanış jeneriği
+// Kart fazı (tek tek beliren yönetmen kartları) → akan jenerik (crawl) → son kartı
+const cards = [
   { r: 'Yönetmen', n: 'Güç' },
+  { r: 'Senaryo', n: 'Tork' },
+  { r: 'Görüntü Yönetmeni', n: 'Hareket' },
+  { r: 'Yapım', n: 'Karmot', sub: 'Güç Aktarım Sistemleri' },
 ];
+
+const cast: Array<[string, string]> = [
+  ['Motor', 'Gamak'],
+  ['Motor', 'WEG'],
+  ['Motor', 'WAT'],
+  ['Aktarma', 'Dinamik Motor Redüktör'],
+  ['Kontrol', 'Enarc Fren Sistemleri'],
+  ['Patlayıcı Sahneler', 'Pro-Ex Exproof'],
+  ['Hareket Tasarımı', 'Avibro Vibrasyon'],
+];
+
+const crew: Array<[string, string]> = [
+  ['Işık', 'IE2 – IE4 Verimlilik'],
+  ['Ses Tasarımı', '1420 dev/dk'],
+  ['Özel Efektler', 'AVM Serisi Vibrasyon'],
+  ['Kaskadör', 'Elektromanyetik Frenler'],
+  ['Devamlılık', 'Stoktan Aynı Gün Sevk'],
+  ['Lokasyon', 'İnt. Tahrik Hattı — Gün'],
+];
+
+const prod: Array<[string, string]> = [
+  ['Yapım Şirketi', 'Karmot Güç Aktarım Sistemleri'],
+  ['Dağıtım', 'Yedi Marka · Tek Tedarik Hattı'],
+  ['Teşekkür', 'Türk Sanayisine'],
+];
+
+const badges = ['35mm', '2.39:1', 'IE4', 'IP66', 'ATEX'];
 ---
 
 <section class="contact" id="iletisim">
@@ -35,24 +59,56 @@ const credits = [
   </div>
 </section>
 
-<footer class="credits">
-  <div class="container">
-    <div class="credits__roll" id="creditsRoll">
-      {credits.map((c) => (
-        <p class="credits__row">
-          <span class="mono-label credits__role">{c.r}</span>
-          <span class="display credits__name">{c.n}</span>
+<footer class="credits" id="jenerik">
+  <div class="credits__stage">
+    <div class="credits__weave">
+      <!-- Faz 1: tek tek beliren yönetmen kartları -->
+      <div class="credits__cards" aria-hidden="true">
+        {cards.map((c) => (
+          <div class="ccard">
+            <p class="ccard__role">{c.r}</p>
+            <p class="display display-italic ccard__name">{c.n}</p>
+            {c.sub && <p class="ccard__sub">{c.sub}</p>}
+          </div>
+        ))}
+      </div>
+
+      <!-- Faz 2: akan jenerik -->
+      <div class="credits__roll" id="creditsRoll">
+        <p class="credits__dept">Oyuncular</p>
+        {cast.map(([r, n]) => (
+          <p class="crow"><span class="crow__r">{r}</span><span class="crow__n">{n}</span></p>
+        ))}
+        <p class="credits__dept">Teknik Ekip</p>
+        {crew.map(([r, n]) => (
+          <p class="crow"><span class="crow__r">{r}</span><span class="crow__n">{n}</span></p>
+        ))}
+        <p class="credits__dept">Yapım</p>
+        {prod.map(([r, n]) => (
+          <p class="crow"><span class="crow__r">{r}</span><span class="crow__n">{n}</span></p>
+        ))}
+        <p class="credits__note">Bu filmin çekimleri sırasında hiçbir motor zarar görmemiştir.</p>
+        <p class="credits__note">Tüm karakterler gerçektir; benzerlik tesadüf değildir — hepsi stokta.</p>
+        <div class="credits__badges" aria-hidden="true">
+          {badges.map((b) => <span class="credits__badge">{b}</span>)}
+        </div>
+        <p class="credits__cert">Gösterim Belgesi No: KMT-1450-TR</p>
+      </div>
+
+      <!-- Faz 3: son kartı -->
+      <div class="credits__end" id="creditsEnd">
+        <img class="credits__logo" src={karmotLogo.src} alt="Karmot" width="200" height="47" />
+        <p class="display display-italic credits__fin">— Son —</p>
+        <p class="mono-label credits__legal">
+          © 2026 Karmot Güç Aktarım Sistemleri · Hareket burada başlar ·
+          <a href="#hero">⟲ Başa Sar</a>
         </p>
-      ))}
+      </div>
     </div>
-    <div class="credits__end reveal">
-      <img class="credits__logo" src={karmotLogo.src} alt="Karmot" width="200" height="47" />
-      <p class="display display-italic credits__fin">— Son —</p>
-      <p class="mono-label credits__legal">
-        © 2026 Karmot Güç Aktarım Sistemleri · Hareket burada başlar ·
-        <a href="#hero">⟲ Başa Sar</a>
-      </p>
-    </div>
+
+    <button class="mono-label credits__play" id="creditsPlay" type="button">
+      Jeneriği Oynat ▸
+    </button>
   </div>
 </footer>
 
@@ -75,26 +131,148 @@ const credits = [
   .contact__btn { font-size: 1.05rem; padding: 1.05em 2.2em; }
   .contact__note { margin-top: 2.6rem; opacity: 0.55; }
 
+  /* ------ Kapanış jeneriği: gerçek sinema düzeni ------ */
   .credits {
-    background: #05080f;
-    padding-block: clamp(4rem, 9vh, 7rem) 7rem;
+    background: #020409;
     border-top: 1px solid var(--line);
   }
-  .credits__roll {
+  .credits__stage {
+    position: relative;
+    min-height: 100svh;
+    overflow: clip;
     display: grid;
-    gap: clamp(1.1rem, 2.6vh, 1.8rem);
-    justify-items: center;
-    text-align: center;
-    margin-bottom: clamp(3.5rem, 8vh, 6rem);
   }
-  .credits__row { display: grid; gap: 0.25rem; }
-  .credits__role { color: var(--text-dim); }
-  .credits__name { font-size: clamp(1.15rem, 2.6vw, 1.9rem); color: var(--steel-200); }
-  .credits__end {
+  /* film gate weave: projektör kapısındaki mikro salınım */
+  .credits__weave {
+    position: absolute;
+    inset: 0;
+    animation: gate-weave 7s ease-in-out infinite;
+  }
+  @keyframes gate-weave {
+    0%, 100% { transform: translateX(0) rotate(0.02deg); }
+    28% { transform: translateX(1.2px) rotate(-0.03deg); }
+    62% { transform: translateX(-1px) rotate(0.03deg); }
+  }
+
+  .credits__cards {
+    position: absolute;
+    inset: 0;
     display: grid;
+    place-items: center;
+  }
+  .ccard {
+    grid-area: 1 / 1;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .ccard__role {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--steel-500);
+    margin-bottom: 0.9rem;
+  }
+  .ccard__name {
+    font-size: clamp(2.6rem, 7vw, 5.5rem);
+    color: var(--steel-200);
+  }
+  .ccard__sub {
+    margin-top: 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--steel-500);
+  }
+
+  .credits__roll {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: min(92vw, 46rem);
+    text-align: center;
+    will-change: transform;
+  }
+  .credits__dept {
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--steel-500);
+    margin: 3.2rem 0 1.5rem;
+  }
+  .crow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.2rem;
+    align-items: baseline;
+    padding-block: 0.42rem;
+  }
+  .crow__r {
+    text-align: right;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--steel-500);
+  }
+  .crow__n {
+    text-align: left;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1.02rem;
+    letter-spacing: 0.04em;
+    color: var(--steel-200);
+  }
+  .credits__note {
+    margin-top: 2.6rem;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--steel-500);
+  }
+  .credits__note + .credits__note { margin-top: 0.6rem; }
+  .credits__badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 2.4rem;
+  }
+  .credits__badge {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--steel-300);
+    border: 1.5px solid rgba(198, 198, 198, 0.4);
+    padding: 0.45em 0.9em;
+  }
+  .credits__cert {
+    margin: 2.2rem 0 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(155, 155, 155, 0.55);
+  }
+
+  .credits__end {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
     justify-items: center;
     gap: 1.1rem;
     text-align: center;
+    opacity: 0;
+    visibility: hidden;
   }
   .credits__logo { filter: brightness(0) invert(1); opacity: 0.95; height: 46px; width: auto; }
   .credits__fin {
@@ -109,4 +287,31 @@ const credits = [
   }
   .credits__legal { color: var(--text-dim); }
   .credits__legal a { color: var(--blue-300); }
+
+  .credits__play {
+    position: absolute;
+    bottom: clamp(4.6rem, 9vh, 6rem);
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--blue-300);
+    border: 1px solid rgba(86, 174, 222, 0.35);
+    padding: 0.7em 1.3em;
+    background: rgba(11, 17, 34, 0.6);
+    transition: border-color 0.25s ease, color 0.25s ease;
+    z-index: 5;
+  }
+  .credits__play:hover { border-color: var(--blue-400); color: #fff; }
+
+  @media (max-width: 700px) {
+    .crow { grid-template-columns: 1fr; gap: 0.15rem; padding-block: 0.7rem; }
+    .crow__r, .crow__n { text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .credits__weave { animation: none; }
+    .credits__stage { min-height: 0; }
+    .ccard, .credits__end { opacity: 1; visibility: visible; position: static; }
+    .credits__cards { position: static; display: grid; gap: 2rem; padding-block: 3rem; }
+    .credits__roll { position: static; transform: none; margin-inline: auto; padding-block: 2rem; }
+    .credits__play { display: none; }
+  }
 </style>

@@ -18,6 +18,8 @@ let lenis: Lenis | null = null;
 
 if (!reduced) {
   lenis = new Lenis({ autoRaf: false });
+  // entegrasyon/teşhis için global erişim (Lenis dokümantasyonu da önerir)
+  (window as unknown as { lenis: Lenis }).lenis = lenis;
   lenis.on('scroll', (e: { velocity: number }) => {
     velocity = e.velocity;
     ScrollTrigger.update();
@@ -89,6 +91,20 @@ function slate(text: string, name: string) {
     .to(slateEl, { autoAlpha: 0, y: -6, duration: 0.3, delay: 1.25 })
     .call(() => (lastSlate = ''));
 }
+
+/* -------------------------------------------------- Letterbox bantları */
+/* Zincir ve jenerik sahnelerinde anamorfik bantlar iner, sol HUD gizlenir */
+const lbIn = () => {
+  gsap.to(['#lbTop', '#lbBot'], { yPercent: 0, y: 0, duration: 0.6, ease: 'power3.out', overwrite: true });
+  gsap.to('.hud', { autoAlpha: 0, duration: 0.35, overwrite: true });
+};
+const lbOut = () => {
+  gsap.to('#lbTop', { yPercent: -101, y: 0, duration: 0.6, ease: 'power3.in', overwrite: true });
+  gsap.to('#lbBot', { yPercent: 101, y: 0, duration: 0.6, ease: 'power3.in', overwrite: true });
+  gsap.to('.hud', { autoAlpha: 1, duration: 0.5, overwrite: true });
+};
+gsap.set('#lbTop', { y: 0, yPercent: -101 });
+gsap.set('#lbBot', { y: 0, yPercent: 101 });
 
 /* ------------------------------------------------------------ Preloader */
 const pre = q('#pre');
@@ -206,19 +222,6 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
     measure();
     ScrollTrigger.addEventListener('refreshInit', measure);
 
-    /* letterbox: anamorfik bantlar pin süresince (sol HUD bu sırada gizlenir) */
-    const lbIn = () => {
-      gsap.to(['#lbTop', '#lbBot'], { yPercent: 0, y: 0, duration: 0.6, ease: 'power3.out', overwrite: true });
-      gsap.to('.hud', { autoAlpha: 0, duration: 0.35, overwrite: true });
-    };
-    const lbOut = () => {
-      gsap.to('#lbTop', { yPercent: -101, y: 0, duration: 0.6, ease: 'power3.in', overwrite: true });
-      gsap.to('#lbBot', { yPercent: 101, y: 0, duration: 0.6, ease: 'power3.in', overwrite: true });
-      gsap.to('.hud', { autoAlpha: 1, duration: 0.5, overwrite: true });
-    };
-    gsap.set('#lbTop', { y: 0, yPercent: -101 });
-    gsap.set('#lbBot', { y: 0, yPercent: 101 });
-
     const chainTween = gsap.to(track, {
       x: () => -dist(),
       ease: 'none',
@@ -310,6 +313,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     ['#zincir', 'Sahne 02 · Güç Zinciri — İnt. Tahrik Hattı', 'Sahne 02 · Güç Zinciri'],
     ['#guven', 'Sahne 03 · Kanıt — Dış. Gün Işığı', 'Sahne 03 · Kanıt'],
     ['#iletisim', 'Sahne 04 · Temas — Final', 'Sahne 04 · Temas'],
+    ['#jenerik', 'Jenerik — Kapanış', 'Jenerik'],
   ];
   scenes.forEach(([sel, text, name]) => {
     ScrollTrigger.create({
@@ -371,14 +375,64 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     scrollTrigger: { trigger: '.contact__title', start: 'top 80%' },
   });
 
-  /* kapanış jeneriği: scroll'a bağlı akan yazılar */
-  gsap.from('.credits__row', {
-    y: 72,
-    autoAlpha: 0,
-    stagger: 0.14,
-    ease: 'power2.out',
-    scrollTrigger: { trigger: '.credits', start: 'top 80%', end: 'center 55%', scrub: 1 },
-  });
+  /* ---- Kapanış jeneriği: kart fazı → akan yazı → son kartı ---- */
+  const stage = q('.credits__stage');
+  const roll = q('#creditsRoll');
+  if (stage && roll) {
+    const creditsTl = gsap.timeline({
+      scrollTrigger: {
+        id: 'creditsST',
+        trigger: '.credits',
+        start: 'top top',
+        end: '+=380%',
+        scrub: 0.8,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onToggle(self) {
+          if (self.isActive) lbIn();
+          else lbOut();
+        },
+      },
+    });
+
+    /* tek tek beliren yönetmen kartları */
+    qa('.ccard').forEach((c) => {
+      creditsTl
+        .fromTo(c, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.16 })
+        .to(c, { autoAlpha: 0, duration: 0.14 }, '+=0.22');
+    });
+
+    /* projektör hızında akan jenerik + son kartı */
+    creditsTl
+      .fromTo(
+        roll,
+        { y: () => window.innerHeight },
+        { y: () => -roll.scrollHeight, ease: 'none', duration: 2.6 },
+        '>-0.04'
+      )
+      .fromTo('#creditsEnd', { autoAlpha: 0, scale: 0.97 }, { autoAlpha: 1, scale: 1, duration: 0.35 }, '>-0.08')
+      .to({}, { duration: 0.3 }) // son kartında nefes
+      .to('#creditsPlay', { autoAlpha: 0, duration: 0.15 }, 1.1);
+
+  }
+
+  /* Jeneriği Oynat: film kendini sabit hızda oynatır, scroll kesince durur.
+     Delegasyonla document'a bağlı — DOM tazelense de çalışır. */
+  if (lenis) {
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest?.('#creditsPlay');
+      if (!btn) return;
+      const st = ScrollTrigger.getById('creditsST');
+      const target = st ? st.end - 2 : document.body.scrollHeight;
+      gsap.to(btn, { autoAlpha: 0, duration: 0.3 });
+      lenis?.start();
+      lenis?.scrollTo(target, { duration: 34, easing: (t: number) => t, force: true });
+    });
+  } else {
+    const play = q('#creditsPlay');
+    if (play) play.style.display = 'none';
+  }
 
   /* mıknatıs butonlar */
   if (finePointer) {
