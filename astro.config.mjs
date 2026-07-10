@@ -2,6 +2,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://www.karmot.com.tr',
+  site: 'https://karmot.vercel.app',
   server: { port: 4321 },
 });
