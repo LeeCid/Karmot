@@ -31,10 +31,13 @@
   }
 
   .slate {
+    /* transform'suz ortalama: GSAP y/alpha tween'leri yatayı etkilemesin */
     position: fixed;
     top: 5.2rem;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: max-content;
     z-index: 950;
     display: flex;
     align-items: center;

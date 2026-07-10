@@ -185,10 +185,12 @@ const badges = ['35mm', '2.39:1', 'IE4', 'IP66', 'ATEX'];
   }
 
   .credits__roll {
+    /* ortalama transform'suz: GSAP y animasyonu yatayı asla bozamaz */
     position: absolute;
-    left: 50%;
+    left: 0;
+    right: 0;
     top: 0;
-    transform: translateX(-50%);
+    margin-inline: auto;
     width: min(92vw, 46rem);
     text-align: center;
     will-change: transform;
