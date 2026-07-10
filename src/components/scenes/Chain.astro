@@ -321,8 +321,15 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
   .panel__link { color: var(--blue-300); }
   .panel__link:hover { color: #fff; }
 
+  /* Dar pencere: paneller genişler, sinema devam eder */
+  @media (max-width: 1000px) {
+    .panel { width: 86vw; }
+    .panel--intro, .panel--outro { width: 78vw; }
+    .panel__ghost { font-size: 26vh; }
+  }
+
   /* Mobil: dikey akış */
-  @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
+  @media (max-width: 679.98px), (prefers-reduced-motion: reduce) {
     .chain__hud { display: none; }
     .chain__ruler { display: none; }
     .chain__track { display: block; width: auto; }

@@ -221,11 +221,11 @@ const spokes = [0, 120, 240].map((deg) => {
 
   /* Masaüstü pin akışı: t2 konumu tamamen GSAP'te (CSS transform GSAP'in
      yPercent'iyle çakışıp px olarak yapışıyor); foot girişte gizli */
-  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  @media (min-width: 680px) and (prefers-reduced-motion: no-preference) {
     .hero__foot { opacity: 0; visibility: hidden; }
   }
   /* Mobil / reduced: iki blok alt alta, hepsi görünür */
-  @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
+  @media (max-width: 679.98px), (prefers-reduced-motion: reduce) {
     .hero__stage > * { grid-area: auto; }
     .hero__t2 { margin-top: 0.3em; }
     .hero__corner { display: none; }

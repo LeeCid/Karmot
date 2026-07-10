@@ -223,8 +223,8 @@ if (!pre || reduced) {
 /* --------------------------------------------------------------- Sahne kur */
 const mm = gsap.matchMedia();
 
-/* Masaüstü + hareket serbest: sinema düzeni */
-mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+/* Masaüstü/tablet + hareket serbest: sinema düzeni (yarım ekran pencereler dahil) */
+mm.add('(min-width: 680px) and (prefers-reduced-motion: no-preference)', () => {
   /* Sahne 01 — pinli kinetik geçiş */
   const t2Lines = qa('.hero__t2 .kin-line');
   gsap.set(t2Lines, { y: 0, yPercent: 135 });
@@ -347,7 +347,7 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
 });
 
 /* Mobil + hareket serbest: dikey sadeleştirilmiş akış */
-mm.add('(max-width: 899.98px) and (prefers-reduced-motion: no-preference)', () => {
+mm.add('(max-width: 679.98px) and (prefers-reduced-motion: no-preference)', () => {
   qa('.panel').forEach((panel) => {
     const body = panel.querySelector('.panel__body');
     if (!body) return;
@@ -469,26 +469,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
         '>-0.04'
       )
       .fromTo('#creditsEnd', { autoAlpha: 0, scale: 0.97 }, { autoAlpha: 1, scale: 1, duration: 0.35 }, '>-0.08')
-      .to({}, { duration: 0.3 }) // son kartında nefes
-      .to('#creditsPlay', { autoAlpha: 0, duration: 0.15 }, 1.1);
-
-  }
-
-  /* Jeneriği Oynat: film kendini sabit hızda oynatır, scroll kesince durur.
-     Delegasyonla document'a bağlı — DOM tazelense de çalışır. */
-  if (lenis) {
-    document.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest?.('#creditsPlay');
-      if (!btn) return;
-      const st = ScrollTrigger.getById('creditsST');
-      const target = st ? st.end - 2 : document.body.scrollHeight;
-      gsap.to(btn, { autoAlpha: 0, duration: 0.3 });
-      lenis?.start();
-      lenis?.scrollTo(target, { duration: 34, easing: (t: number) => t, force: true });
-    });
-  } else {
-    const play = q('#creditsPlay');
-    if (play) play.style.display = 'none';
+      .to({}, { duration: 0.3 }); // son kartında nefes
   }
 
   /* mıknatıs butonlar */
