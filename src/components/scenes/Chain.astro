@@ -328,8 +328,23 @@ const spokes = Array.from({ length: 8 }, (_, i) => (i * 360) / 8);
     .panel__ghost { font-size: 26vh; }
   }
 
-  /* Mobil: dikey akış */
-  @media (max-width: 679.98px), (prefers-reduced-motion: reduce) {
+  /* Telefon: sinema aynı, ölçüler sıkılaşır */
+  @media (max-width: 680px) {
+    .panel {
+      width: 94vw;
+      padding: 7rem 1.3rem 3.2rem;
+    }
+    .panel--intro, .panel--outro { width: 90vw; }
+    .panel__ghost { font-size: 17vh; right: 1vw; bottom: -1vh; }
+    .panel__name { font-size: clamp(2.2rem, 11vw, 3.2rem); }
+    .panel__desc { font-size: 0.88rem; }
+    .chain__hudlabel { font-size: 0.58rem; gap: 0.55em; }
+    .coupling { --cs: clamp(170px, 24vh, 240px); }
+    .stars__stage { height: clamp(150px, 22vh, 210px); }
+  }
+
+  /* Hareket azaltma: pin'siz, dikey erişilebilir akış */
+  @media (prefers-reduced-motion: reduce) {
     .chain__hud { display: none; }
     .chain__ruler { display: none; }
     .chain__track { display: block; width: auto; }

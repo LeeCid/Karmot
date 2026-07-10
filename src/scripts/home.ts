@@ -5,6 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { initCursor } from './cursor';
 
 gsap.registerPlugin(ScrollTrigger);
+/* iOS adres çubuğu aç/kapa yeniden boyutlandırmasında pin'ler zıplamasın */
+ScrollTrigger.config({ ignoreMobileResize: true });
 initCursor();
 
 const q = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s);
@@ -257,7 +259,10 @@ mm.add('(min-width: 680px) and (prefers-reduced-motion: no-preference)', () => {
     )
     .to('.hero__corner', { autoAlpha: 0, duration: 0.25 }, 0)
     .to('.hero__ghost', { yPercent: 30, ease: 'none', duration: 1.35 }, 0);
+});
 
+/* Her genişlik + hareket serbest: ortak sinema dili (zincir telefonda da yatay) */
+mm.add('(prefers-reduced-motion: no-preference)', () => {
   /* Sahne 02 — yatay tahrik hattı */
   const track = q('#chainTrack');
   const zincir = q('#zincir');
@@ -308,7 +313,6 @@ mm.add('(min-width: 680px) and (prefers-reduced-motion: no-preference)', () => {
     /* panel içi paralaks */
     brandPanels.forEach((panel) => {
       const ghost = panel.querySelector('.panel__ghost');
-      const frame = panel.querySelector('.film-frame');
       if (ghost) {
         gsap.fromTo(
           ghost,
@@ -326,45 +330,10 @@ mm.add('(min-width: 680px) and (prefers-reduced-motion: no-preference)', () => {
           }
         );
       }
-      if (frame) {
-        gsap.from(frame, {
-          rotate: 2.4,
-          y: 46,
-          autoAlpha: 0,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: panel,
-            containerAnimation: chainTween,
-            start: 'left 88%',
-            end: 'left 45%',
-            scrub: true,
-          },
-        });
-      }
     });
 
   }
-});
 
-/* Mobil + hareket serbest: dikey sadeleştirilmiş akış */
-mm.add('(max-width: 679.98px) and (prefers-reduced-motion: no-preference)', () => {
-  qa('.panel').forEach((panel) => {
-    const body = panel.querySelector('.panel__body');
-    if (!body) return;
-    gsap.from(body, {
-      y: 48,
-      autoAlpha: 0,
-      duration: 0.9,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: panel, start: 'top 82%' },
-    });
-  });
-  const stopStars = initStars();
-  return () => stopStars();
-});
-
-/* Her genişlik + hareket serbest: ortak sinema dili */
-mm.add('(prefers-reduced-motion: no-preference)', () => {
   /* klaketler + sahne adları */
   const scenes: Array<[string, string, string]> = [
     ['#zincir', 'Sahne 02 · Güç Zinciri — İnt. Tahrik Hattı', 'Sahne 02 · Güç Zinciri'],
