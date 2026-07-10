@@ -1,0 +1,193 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Rpm from '../components/Rpm.astro';
+
+const values = [
+  {
+    t: 'Dürüst mühendislik',
+    d: 'Yedi markayı birden sattığımız için tek bir markayı övmek zorunda değiliz; uygulamanıza en doğru ürünü öneririz — bazen daha ucuzunu.',
+  },
+  {
+    t: 'Stok disiplini',
+    d: 'Tedarikçilik stokla yapılır. Kritik kalemleri rafta tutar, "üreticiden bekliyoruz" cümlesini kurmamaya çalışırız.',
+  },
+  {
+    t: 'Hız bir nezakettir',
+    d: 'Teklifi bekletmek müşterinin hattını bekletmektir. Aynı gün dönüş bizim için kibarlık değil, standart.',
+  },
+  {
+    t: 'Satış sonrası ortada kalmazsınız',
+    d: 'Devreye almada telefonla yanınızdayız; gerekirse üretici servis ağını sizin adınıza biz koştururuz.',
+  },
+];
+
+const plates = [
+  { v: '7', u: 'marka', k: 'Tek tedarik hattında' },
+  { v: '0.06 – 4.000', u: 'kW', k: 'Güç bandı' },
+  { v: 'IE2 – IE4', u: '', k: 'Verimlilik sınıfları' },
+  { v: '61 – 30.575', u: 'kg/F', k: 'Santrifüj kuvvet' },
+];
+---
+
+<Base
+  title="Kurumsal — Karmot Güç Aktarım Sistemleri"
+  description="Karmot: güç aktarım sistemlerinde yetkili tedarik. Mühendis kadrosu, stok disiplini ve tek muhatap ilkesiyle motor, redüktör, fren ve vibrasyon tedariki."
+>
+  <Nav />
+
+  <main>
+    <section class="head blueprint-bg">
+      <div class="container">
+        <p class="mono-label reveal">Kurumsal</p>
+        <h1 class="display head__title">
+          <span class="kin"><span class="kin-line">İşimiz güç,</span></span>
+          <span class="kin"><span class="kin-line display-italic"><em class="metal-text">sözümüz</em> teslimat.</span></span>
+        </h1>
+        <p class="head__lede text-dim reveal">
+          Karmot, güç aktarım bileşenlerinde — elektrik motoru, redüktör, fren ve vibrasyon —
+          sanayinin tedarik ortağıdır. Yedi markanın ürününü tek çatı altında toplar;
+          hesaplar, önerir, stoktan sevk eder.
+        </p>
+      </div>
+    </section>
+
+    <section class="section section--light story">
+      <div class="container story__grid">
+        <div>
+          <p class="mono-label reveal">Biz kimiz</p>
+          <h2 class="display story__t reveal">Satıcı değil, <em class="display-italic story__em">çözüm ortağı.</em></h2>
+          <div class="story__body reveal">
+            <p>
+              Sahada duran her hattın arkasında yanlış seçilmiş ya da geç gelmiş bir bileşen
+              vardır. Karmot bu iki problemi ortadan kaldırmak için kuruldu: doğru ürünü
+              mühendis aklıyla seçmek ve rafta tutup zamanında teslim etmek.
+            </p>
+            <p>
+              Gamak, WEG, WAT, Dinamik, Enarc, Pro-Ex ve Avibro — birbirini tamamlayan yedi
+              markayı tek tedarik hattında topladık. Motor, redüktör, fren ve vibrasyonu ayrı
+              ayrı kovalamak yerine tek muhatapla çalışırsınız: tek sipariş, tek irsaliye,
+              tek sorumlu.
+            </p>
+            <p class="mono-label story__note">
+              [Not] Kuruluş yılı, depo/lokasyon ve ekip bilgileri yayına girerken bu bölüme eklenecek.
+            </p>
+          </div>
+        </div>
+        <div class="story__values">
+          {values.map((v, i) => (
+            <article class="story__card reveal">
+              <span class="mono-label story__no">{String(i + 1).padStart(2, '0')} ///</span>
+              <h3 class="display story__vt">{v.t}</h3>
+              <p class="story__vd">{v.d}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <div class="container">
+        <div class="plates">
+          {plates.map((p) => (
+            <div class="plate reveal">
+              <span class="plate__v display">{p.v}{p.u && <small> {p.u}</small>}</span>
+              <span class="mono-label">{p.k}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="endcta">
+      <div class="container endcta__inner">
+        <h2 class="display endcta__t">
+          Tanıştık sayılır — <em class="display-italic metal-text">şimdi iş konuşalım.</em>
+        </h2>
+        <div class="endcta__actions">
+          <a class="btn" href="/#iletisim">Teklif Alın ///</a>
+          <a class="btn btn--ghost" href="/#katalog">Ürünlerimiz</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="container foot__bar">
+      <p class="mono-label">© 2026 Karmot Güç Aktarım Sistemleri · <a href="/">Ana Sayfa</a> · <a href="/markalar">Markalar</a></p>
+    </div>
+  </footer>
+
+  <Rpm />
+</Base>
+
+<style>
+  .head {
+    padding: 9rem 0 4rem;
+  }
+  .head__title { font-size: clamp(2.4rem, 1rem + 5vw, 5.2rem); margin-block: 0.9rem 1.2rem; }
+  .kin { display: block; overflow: clip; padding-block: 0.05em; }
+  .kin-line { display: inline-block; }
+  .head__lede { max-width: 52ch; }
+
+  .story__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    margin-bottom: clamp(2.5rem, 6vh, 4rem);
+  }
+  .story__t { font-size: var(--fs-h2); color: var(--ink); margin-block: 0.8rem 1.2rem; }
+  .story__em { color: var(--blue-500); }
+  .story__body p { color: #4c5a72; margin-bottom: 1rem; max-width: 58ch; }
+  .story__note { color: #8593ab; margin-top: 1.4rem; }
+  .story__values { display: grid; gap: 12px; align-content: start; }
+  .story__card {
+    background: #fff;
+    border: 1px solid rgba(16, 24, 47, 0.12);
+    border-left: 3px solid var(--blue-500);
+    padding: 1.2rem 1.4rem;
+  }
+  .story__no { color: var(--blue-500); }
+  .story__vt { font-size: 1.05rem; color: var(--ink); margin-block: 0.45rem 0.35rem; }
+  .story__vd { color: #4c5a72; font-size: 0.92rem; }
+
+  .plates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .plate {
+    background: #fff;
+    border: 1px solid rgba(16, 24, 47, 0.12);
+    padding: 1.3rem 1.4rem;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  .plate__v { display: block; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--navy-850); margin-bottom: 0.3rem; }
+  .plate__v small { font-size: 0.5em; color: var(--blue-500); font-variation-settings: 'wdth' 100; }
+
+  .endcta {
+    padding-block: clamp(3.5rem, 9vh, 6rem);
+    background:
+      radial-gradient(70vmin 50vmin at 80% 20%, rgba(0, 105, 169, 0.15), transparent 62%),
+      var(--navy-900);
+    border-top: 1px solid var(--line);
+  }
+  .endcta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+  }
+  .endcta__t { font-size: clamp(1.6rem, 3.4vw, 2.6rem); max-width: 22ch; }
+  .endcta__actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+  .foot { background: #05080f; border-top: 1px solid var(--line); }
+  .foot__bar { padding: 1.4rem var(--gutter) 5.5rem; }
+  .foot__bar a { color: var(--blue-300); }
+
+  @media (max-width: 860px) {
+    .story__grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import '../scripts/subpage';
+</script>

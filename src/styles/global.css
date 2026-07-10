@@ -324,6 +324,29 @@ html {
 }
 
 /* --------------------------------------------------------------------------
+   Yüzen teklif balonu (scroll ile belirir; .is-on script'ten gelir)
+   -------------------------------------------------------------------------- */
+.quote-fab {
+  position: fixed;
+  left: clamp(0.8rem, 2vw, 1.6rem);
+  bottom: clamp(0.8rem, 2vw, 1.6rem);
+  z-index: 640;
+  font-size: 0.82rem;
+  padding: 0.85em 1.5em;
+  box-shadow: 0 14px 34px rgba(0, 105, 169, 0.35);
+  transform: translateY(160%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.45s var(--ease-torque), opacity 0.35s ease, visibility 0s 0.45s;
+}
+.quote-fab.is-on {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.45s var(--ease-torque), opacity 0.35s ease;
+}
+
+/* --------------------------------------------------------------------------
    Teknik imleç (pointer: fine)
    -------------------------------------------------------------------------- */
 html.has-cursor,

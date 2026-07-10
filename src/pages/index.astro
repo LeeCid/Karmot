@@ -25,6 +25,69 @@ const pick: Record<string, string> = {
 const starFor = (id: string) =>
   starImgs[`../assets/products/stars/${id}-star-${pick[id] ?? '01'}.png`]?.default;
 
+// ürün grupları (dgmr usulü ürün-tipi vitrin)
+const groups = [
+  {
+    t: 'Elektrik Motorları',
+    d: 'IE2–IE4 verimlilik, alüminyum ve pik döküm gövde, 0.06–4.000 kW güç bandı.',
+    img: starFor('wat'),
+    brands: 'Gamak · WEG · WAT',
+    href: '/markalar',
+  },
+  {
+    t: 'Redüktörler',
+    d: 'Sonsuz vidalı, helisel, konik ve planet tipler; redüktörlü motor kombinasyonları.',
+    img: starFor('dinamik'),
+    brands: 'Dinamik',
+    href: '/markalar/dinamik',
+  },
+  {
+    t: 'Fren Sistemleri',
+    d: 'Yay ve akım baskılı elektromanyetik frenler; gövde tadilatı gerektirmeyen montaj.',
+    img: starFor('enarc'),
+    brands: 'Enarc',
+    href: '/markalar/enarc',
+  },
+  {
+    t: 'Vibrasyon Motorları',
+    d: '61 kg/F’den 30.575 kg/F’ye santrifüj kuvvet; eleme, taşıma ve sıkıştırma hatları.',
+    img: starFor('avibro'),
+    brands: 'Avibro',
+    href: '/markalar/avibro',
+  },
+  {
+    t: 'Exproof Motorlar',
+    d: 'ATEX sertifikalı, Zone 1/2 için Exd alev sızdırmaz; sürücüyle çalışmaya onaylı.',
+    img: starFor('pro-ex'),
+    brands: 'Pro-Ex',
+    href: '/markalar/pro-ex',
+  },
+];
+
+// SSS (ads'in bilgi bankası ruhu — dönüşüm odaklı beş soru)
+const faq = [
+  {
+    q: 'Teklif ne kadar sürede gelir?',
+    a: 'Netleşmiş taleplerde hedefimiz aynı mesai günü içinde fiyat dönmektir. Uygulama detayı eksikse önce kısa bir teknik görüşmeyle ihtiyacı netleştiririz.',
+  },
+  {
+    q: 'Model bilmiyorum, sadece uygulamayı biliyorum — yeterli mi?',
+    a: 'Fazlasıyla. Yükünüzü, istediğiniz hızı ve çalışma koşullarını anlatmanız yeter; tork, devir ve verim hesabını mühendis ekibimiz yapar, markadan bağımsız en doğru ürünü öneririz.',
+  },
+  {
+    q: 'Farklı markaları tek siparişte alabilir miyim?',
+    a: 'Evet. Motor, redüktör, fren ve vibrasyon ürünlerini tek siparişte, tek irsaliye ve tek faturayla gönderiyoruz — yedi markanın tamamı tek raftan çıkar.',
+  },
+  {
+    q: 'Stokta olmayan ürünlerde süreç nasıl işler?',
+    a: 'Teklifle birlikte net tedarik süresini bildiririz; termin kritikse stoktaki en yakın teknik muadili alternatif olarak sunarız. Sürpriz gecikme yaşatmamak ilkemizdir.',
+  },
+  {
+    q: 'Montaj ve devreye almada destek veriyor musunuz?',
+    a: 'Ürün sahaya indikten sonra bağlantı, parametre ve devreye alma sorularınızda telefonla teknik destek veriyoruz; gerekirse üretici servis ağını sizin için devreye alırız.',
+  },
+];
+
 const why = [
   {
     t: 'Stoktan Aynı Gün Sevk',
@@ -185,26 +248,54 @@ const sectors = [
           seçimi birlikte yapalım.
         </p>
         <div class="catalog__grid">
-          {brands.map((b) => {
-            const img = starFor(b.id);
-            return (
-              <a class="ccard reveal" href={`/markalar/${b.id}`}>
-                {img && (
-                  <span class="ccard__fig" aria-hidden="true">
-                    <Image src={img} alt="" height={170} quality={82} />
-                  </span>
-                )}
-                <p class="mono-label ccard__role">Görev {b.data.roleNo} — {b.data.role}</p>
-                <h3 class="display ccard__name">{b.data.name}</h3>
-                <p class="ccard__tag text-dim">{b.data.tagline}</p>
-                <span class="mono-label ccard__link">Ürünleri İncele ///</span>
-              </a>
-            );
-          })}
+          {groups.map((g) => (
+            <a class="ccard reveal" href={g.href}>
+              {g.img && (
+                <span class="ccard__fig" aria-hidden="true">
+                  <Image src={g.img} alt="" height={170} quality={82} />
+                </span>
+              )}
+              <p class="mono-label ccard__role">{g.brands}</p>
+              <h3 class="display ccard__name">{g.t}</h3>
+              <p class="ccard__tag text-dim">{g.d}</p>
+              <span class="mono-label ccard__link">Ürünleri İncele ///</span>
+            </a>
+          ))}
+        </div>
+        <div class="brandstrip reveal">
+          <span class="mono-label brandstrip__label">Markalara göre:</span>
+          {brands.map((b) => (
+            <a class="brandstrip__chip" href={`/markalar/${b.id}`}>{b.data.name}</a>
+          ))}
+          <a class="brandstrip__chip brandstrip__chip--all" href="/markalar">Tümü →</a>
         </div>
         <div class="catalog__cta reveal">
           <a class="btn btn--ghost" href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşürü İndirin (PDF)</a>
-          <a class="btn btn--ghost" href="/markalar">Tüm Markalar</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSS -->
+    <section class="section section--light faq" id="sss">
+      <div class="container faq__grid">
+        <div class="faq__head">
+          <p class="mono-label reveal">Sık sorulanlar</p>
+          <h2 class="display faq__title reveal">Aklınızdakiler, <em class="display-italic faq__em">kısa kısa.</em></h2>
+          <p class="faq__lede reveal">
+            Cevabını bulamadığınız her soru için bir teklif talebi kadar yakınız.
+          </p>
+          <a class="btn reveal" href="#iletisim">Soru Sorun / Teklif Alın</a>
+        </div>
+        <div class="faq__list">
+          {faq.map((f) => (
+            <details class="faq__item reveal">
+              <summary class="faq__q">
+                <span>{f.q}</span>
+                <i class="faq__plus" aria-hidden="true"></i>
+              </summary>
+              <p class="faq__a">{f.a}</p>
+            </details>
+          ))}
         </div>
       </div>
     </section>
@@ -245,8 +336,10 @@ const sectors = [
       <nav class="foot__col" aria-label="Site haritası">
         <p class="mono-label foot__h">Site</p>
         <a href="#neden">Neden Karmot</a>
+        <a href="#katalog">Ürünler</a>
         <a href="/markalar">Markalar</a>
-        <a href="#katalog">Katalog</a>
+        <a href="/hakkimizda">Kurumsal</a>
+        <a href="#sss">SSS</a>
         <a href="#iletisim">Teklif</a>
       </nav>
       <nav class="foot__col" aria-label="Markalar">
@@ -469,7 +562,85 @@ const sectors = [
   .ccard__name { font-size: 1.7rem; margin-block: 0.55rem 0.3rem; }
   .ccard__tag { font-size: 0.9rem; margin-bottom: 1rem; min-height: 2.6em; }
   .ccard__link { color: var(--blue-300); }
+  .brandstrip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 1.6rem;
+  }
+  .brandstrip__label { color: var(--text-dim); margin-right: 0.4rem; }
+  .brandstrip__chip {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.55em 1em;
+    border: 1px solid var(--line);
+    color: var(--steel-300);
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s var(--ease-torque);
+  }
+  .brandstrip__chip:hover {
+    border-color: var(--blue-400);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  .brandstrip__chip--all { color: var(--blue-300); }
   .catalog__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+
+  /* ---------- SSS ---------- */
+  .faq__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .faq__title { font-size: var(--fs-h2); color: var(--ink); margin-block: 0.8rem 1rem; }
+  .faq__em { color: var(--blue-500); }
+  .faq__lede { color: #4c5a72; max-width: 34ch; margin-bottom: 1.6rem; }
+  .faq__list { display: grid; }
+  .faq__item {
+    border-top: 1px solid rgba(16, 24, 47, 0.16);
+  }
+  .faq__item:last-child { border-bottom: 1px solid rgba(16, 24, 47, 0.16); }
+  .faq__q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 1.05rem 0.2rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 1rem;
+  }
+  .faq__q::-webkit-details-marker { display: none; }
+  .faq__plus {
+    position: relative;
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+  .faq__plus::before,
+  .faq__plus::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    background: var(--blue-500);
+    transition: transform 0.3s var(--ease-torque);
+  }
+  .faq__plus::before { width: 14px; height: 2px; }
+  .faq__plus::after { width: 2px; height: 14px; }
+  .faq__item[open] .faq__plus::after { transform: rotate(90deg); }
+  .faq__a {
+    color: #4c5a72;
+    font-size: 0.95rem;
+    max-width: 62ch;
+    padding: 0 2.4rem 1.2rem 0.2rem;
+  }
 
   /* ---------- CTA ---------- */
   .cta {

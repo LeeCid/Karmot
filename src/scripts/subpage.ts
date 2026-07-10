@@ -41,6 +41,20 @@ if (!reduced) {
     toggleClass: { targets: '#nav', className: 'is-scrolled' },
   });
 
+  /* yüzen teklif balonu: hero geçilince belirir, teklif bandında gizlenir */
+  const fab = document.getElementById('quoteFab');
+  const iletisim = document.getElementById('iletisim');
+  if (fab) {
+    ScrollTrigger.create({
+      start: () => window.innerHeight * 0.7,
+      end: () => (iletisim ? Math.max(iletisim.offsetTop - window.innerHeight * 0.5, window.innerHeight) : ScrollTrigger.maxScroll(window)),
+      onToggle(self) {
+        fab.classList.toggle('is-on', self.isActive);
+      },
+      invalidateOnRefresh: true,
+    });
+  }
+
   gsap.utils.toArray<HTMLElement>('.reveal').forEach((el) => {
     gsap.from(el, {
       y: 44,
