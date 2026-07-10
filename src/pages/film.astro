@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Preloader from '../components/Preloader.astro';
+import Hud from '../components/Hud.astro';
+import Rpm from '../components/Rpm.astro';
+import Hero from '../components/scenes/Hero.astro';
+import Chain from '../components/scenes/Chain.astro';
+import Trust from '../components/scenes/Trust.astro';
+import Contact from '../components/scenes/Contact.astro';
+---
+
+<Base
+  title="Karmot Güç Aktarım Sistemleri — Gücü Aktarıyoruz"
+  description="Elektrik motorları, redüktörler, fren sistemleri ve vibrasyon motorları: Gamak, WEG, WAT, Dinamik, Enarc, Pro-Ex ve Avibro tek tedarik hattında. Her şey durur — ta ki güç aktarılana kadar."
+>
+  <Preloader />
+  <Nav />
+  <Hud />
+
+  <main>
+    <Hero />
+    <Chain />
+    <Trust />
+    <Contact />
+  </main>
+
+  <Rpm />
+</Base>
+
+<script>
+  import '../scripts/home';
+</script>

@@ -1,33 +1,537 @@
 ---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
-import Preloader from '../components/Preloader.astro';
-import Hud from '../components/Hud.astro';
 import Rpm from '../components/Rpm.astro';
-import Hero from '../components/scenes/Hero.astro';
-import Chain from '../components/scenes/Chain.astro';
-import Trust from '../components/scenes/Trust.astro';
-import Contact from '../components/scenes/Contact.astro';
+import karmotLogo from '../assets/karmot-logo.svg';
+
+// hero kompozisyonu: motor + redüktör + vibrasyon
+import heroMotor from '../assets/products/stars/gamak-star-03.png';
+import heroReduktor from '../assets/products/stars/dinamik-star-01.png';
+import heroVibro from '../assets/products/stars/avibro-star-05.png';
+
+const brands = (await getCollection('brands')).sort((a, b) => a.data.order - b.data.order);
+
+const why = [
+  {
+    t: 'Stoktan Aynı Gün Sevk',
+    d: 'Kritik motor, redüktör ve fren kalemleri rafta bekler. Duran hat para kaybettirir; siparişinizi bekletmeyiz.',
+  },
+  {
+    t: 'Mühendis Desteğiyle Doğru Seçim',
+    d: 'Tork, devir, verim ve gövde hesabını biz yaparız. Yedi markayı da sattığımız için önerimiz markadan bağımsızdır.',
+  },
+  {
+    t: 'Tek Sipariş, Tek Muhatap',
+    d: 'Motor + redüktör + fren + vibrasyon tek irsaliyede, tek faturada. Tedarik zincirinizde tek numara yeter.',
+  },
+  {
+    t: 'Aynı Gün Teklif',
+    d: 'Talebiniz mesai içinde fiyatlanır. Netleşmiş ihtiyaçta teklif bekleme süresi saatlerle ölçülür, günlerle değil.',
+  },
+];
+
+const steps = [
+  { n: '01', t: 'İhtiyacınızı iletin', d: 'Uygulamanızı, yükünüzü ve çalışma koşullarını kısaca anlatın — model bilmenize gerek yok.' },
+  { n: '02', t: 'Hesaplayıp önerelim', d: 'Mühendis ekibimiz tork/devir hesabını yapar, stok ve fiyat avantajına göre doğru ürünü önerir.' },
+  { n: '03', t: 'Stoktan sevk edelim', d: 'Onayınızla ürün aynı gün yola çıkar; montaj ve devreye alma sorularınızda hattayız.' },
+];
+
+const plates = [
+  { v: '7', u: 'marka', k: 'Tek tedarik hattında', count: true },
+  { v: '0.06 – 4.000', u: 'kW', k: 'Güç bandı' },
+  { v: 'IE2 – IE4', u: '', k: 'Verimlilik sınıfları' },
+  { v: '61 – 30.575', u: 'kg/F', k: 'Santrifüj kuvvet' },
+];
+
+const sectors = [
+  'Vinç & Kaldırma',
+  'Konveyör & Lojistik',
+  'Gıda & Karıştırıcı',
+  'HVAC & Fan',
+  'Maden & Değirmen',
+  'İnşaat & Vibrasyon',
+  'Su & Arıtma',
+  'Rafineri & Exproof',
+];
 ---
 
 <Base
-  title="Karmot Güç Aktarım Sistemleri — Gücü Aktarıyoruz"
-  description="Elektrik motorları, redüktörler, fren sistemleri ve vibrasyon motorları: Gamak, WEG, WAT, Dinamik, Enarc, Pro-Ex ve Avibro tek tedarik hattında. Her şey durur — ta ki güç aktarılana kadar."
+  title="Karmot Güç Aktarım Sistemleri — Motor, Redüktör ve Fren Tedariki"
+  description="Elektrik motoru, redüktör, fren ve vibrasyon motorunda yetkili tedarik: Gamak, WEG, WAT, Dinamik, Enarc, Pro-Ex, Avibro. Mühendis desteğiyle doğru seçim, stoktan aynı gün sevk, aynı gün teklif."
 >
-  <Preloader />
   <Nav />
-  <Hud />
 
   <main>
-    <Hero />
-    <Chain />
-    <Trust />
-    <Contact />
+    <!-- HERO: Karmot vaadi -->
+    <section class="hero blueprint-bg" id="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <p class="mono-label reveal">Güç aktarım sistemlerinde yetkili tedarik</p>
+          <h1 class="display hero__title">
+            <span class="kin"><span class="kin-line">Doğru ürün,</span></span>
+            <span class="kin"><span class="kin-line display-italic"><em class="metal-text">stoktan,</em></span></span>
+            <span class="kin"><span class="kin-line">tek muhataptan.</span></span>
+          </h1>
+          <p class="hero__lede text-dim reveal">
+            Elektrik motoru, redüktör, fren ve vibrasyonda <strong>yedi markanın</strong> yetkili
+            tedarik hattıyız. Hesabını yaparız, doğrusunu öneririz, stoktan sevk ederiz —
+            hattınız durmasın diye.
+          </p>
+          <div class="hero__cta reveal">
+            <a class="btn" href="#iletisim">Hemen Teklif Alın</a>
+            <a class="btn btn--ghost" href="#katalog">Ürün Kataloğu</a>
+          </div>
+          <p class="mono-label hero__note reveal">Aynı gün teklif · Stoktan sevk · Mühendis desteği</p>
+        </div>
+
+        <div class="hero__stage" aria-hidden="true">
+          <span class="hero__spot"></span>
+          <Image class="hero__img hero__img--reduktor" src={heroReduktor} alt="" height={340} quality={85} loading="eager" />
+          <Image class="hero__img hero__img--motor" src={heroMotor} alt="" height={210} quality={85} loading="eager" />
+          <Image class="hero__img hero__img--vibro" src={heroVibro} alt="" height={180} quality={85} loading="eager" />
+        </div>
+      </div>
+    </section>
+
+    <!-- GÜVEN BANDI: markalar -->
+    <div class="band" aria-label="Tedarik markaları">
+      <div class="band__track" aria-hidden="true">
+        {[0, 1].map(() => (
+          <span class="band__seg display display-italic">
+            Dinamik /// Gamak /// WEG /// WAT /// Pro-Ex /// Avibro /// Enarc ///&nbsp;
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- NEDEN KARMOT -->
+    <section class="section section--light why" id="neden">
+      <div class="container">
+        <p class="mono-label reveal">Neden Karmot</p>
+        <h2 class="display why__title reveal">
+          Ürünü herkes satar.<br />
+          <em class="display-italic why__em">Çözümü biz teslim ederiz.</em>
+        </h2>
+        <div class="why__grid">
+          {why.map((w, i) => (
+            <article class="why__card reveal">
+              <span class="mono-label why__no">{String(i + 1).padStart(2, '0')} ///</span>
+              <h3 class="display why__t">{w.t}</h3>
+              <p class="why__d">{w.d}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- SÜREÇ: 3 adım -->
+    <section class="section section--light process">
+      <div class="container">
+        <p class="mono-label reveal">Nasıl çalışır</p>
+        <h2 class="display process__title reveal">Teklif üç adımda masanızda</h2>
+        <div class="process__grid">
+          {steps.map((s) => (
+            <article class="process__step reveal">
+              <span class="display process__n">{s.n}</span>
+              <div>
+                <h3 class="display process__t">{s.t}</h3>
+                <p class="process__d">{s.d}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- RAKAMLAR -->
+    <section class="section section--light stats">
+      <div class="container">
+        <div class="plates">
+          {plates.map((p) => (
+            <div class="plate reveal">
+              <span class="plate__v display">
+                {p.count ? <span class="counter" data-count={p.v}>0</span> : p.v}
+                {p.u && <small> {p.u}</small>}
+              </span>
+              <span class="mono-label">{p.k}</span>
+            </div>
+          ))}
+        </div>
+        <div class="sectors reveal">
+          <span class="mono-label sectors__label">Hizmet verdiğimiz hatlar:</span>
+          {sectors.map((s) => (
+            <span class="sectors__chip">{s}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- KATALOG: markalar en sonda, katalog-vari -->
+    <section class="section catalog blueprint-bg" id="katalog">
+      <div class="container">
+        <p class="mono-label reveal">Ürün kataloğu</p>
+        <h2 class="display catalog__title reveal">
+          Yedi marka, <em class="display-italic metal-text">tek raf.</em>
+        </h2>
+        <p class="text-dim catalog__lede reveal">
+          Hangi ürün grubuna ihtiyacınız olduğunu biliyorsanız doğrudan markaya inin;
+          emin değilseniz teklif isteyin, seçimi birlikte yapalım.
+        </p>
+        <div class="catalog__grid">
+          {brands.map((b) => (
+            <a class="ccard reveal" href={`/markalar/${b.id}`}>
+              <p class="mono-label ccard__role">Görev {b.data.roleNo} — {b.data.role}</p>
+              <h3 class="display ccard__name">{b.data.name}</h3>
+              <p class="ccard__tag text-dim">{b.data.tagline}</p>
+              <span class="mono-label ccard__link">Ürünleri İncele ///</span>
+            </a>
+          ))}
+        </div>
+        <div class="catalog__cta reveal">
+          <a class="btn btn--ghost" href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşürü İndirin (PDF)</a>
+          <a class="btn btn--ghost" href="/markalar">Tüm Markalar</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEKLİF BANDI -->
+    <section class="cta" id="iletisim">
+      <div class="container cta__inner">
+        <div>
+          <p class="mono-label reveal">Teklif isteyin</p>
+          <h2 class="display cta__title">
+            <span class="kin"><span class="kin-line">Projeniz için</span></span>
+            <span class="kin"><span class="kin-line display-italic"><em class="metal-text">doğru gücü</em> bulalım.</span></span>
+          </h2>
+          <p class="text-dim cta__lede reveal">
+            Uygulamanızı bir cümleyle anlatın yeter — tork ve devri biz hesaplar,
+            aynı gün fiyatlandırırız.
+          </p>
+        </div>
+        <div class="cta__actions reveal">
+          <a class="btn cta__btn" href="mailto:info@karmot.com.tr?subject=Teklif%20Talebi%20—%20karmot.com.tr">Teklif Alın ///</a>
+          <a class="btn btn--ghost" href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşür (PDF)</a>
+          <p class="mono-label cta__note">[Not] Telefon, WhatsApp ve adres bilgileri yayına girerken eklenecek.</p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- FOOTER: kurumsal -->
+  <footer class="foot">
+    <div class="container foot__grid">
+      <div>
+        <img class="foot__logo" src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="180" height="42" />
+        <p class="foot__desc text-dim">
+          Güç aktarım sistemlerinde yetkili tedarik: elektrik motorları, redüktörler,
+          fren sistemleri ve vibrasyon motorları tek çatı altında.
+        </p>
+      </div>
+      <nav class="foot__col" aria-label="Site haritası">
+        <p class="mono-label foot__h">Site</p>
+        <a href="#neden">Neden Karmot</a>
+        <a href="/markalar">Markalar</a>
+        <a href="#katalog">Katalog</a>
+        <a href="#iletisim">Teklif</a>
+      </nav>
+      <nav class="foot__col" aria-label="Markalar">
+        <p class="mono-label foot__h">Markalar</p>
+        {brands.slice(0, 4).map((b) => <a href={`/markalar/${b.id}`}>{b.data.name}</a>)}
+        <a href="/markalar">Tümü →</a>
+      </nav>
+      <div class="foot__col">
+        <p class="mono-label foot__h">İletişim</p>
+        <p class="foot__todo text-dim">Telefon, e-posta ve adres bilgileri yayına girerken güncellenecek.</p>
+      </div>
+    </div>
+    <div class="container foot__bar">
+      <p class="mono-label">© 2026 Karmot Güç Aktarım Sistemleri</p>
+      <p class="mono-label">Hareket burada başlar ///</p>
+    </div>
+  </footer>
 
   <Rpm />
 </Base>
 
+<style>
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 92svh;
+    display: grid;
+    align-items: center;
+    position: relative;
+    overflow: clip;
+    padding-top: 5.5rem;
+  }
+  .hero__glow {
+    position: absolute;
+    top: -18%;
+    right: -22%;
+    width: 90vmin;
+    height: 90vmin;
+    background: radial-gradient(circle, rgba(0, 105, 169, 0.2), transparent 62%);
+    pointer-events: none;
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .hero__title {
+    font-size: clamp(2.4rem, 1rem + 5.2vw, 5.4rem);
+    margin-block: 1.1rem 1.4rem;
+  }
+  .kin { display: block; overflow: clip; padding-block: 0.05em; }
+  .kin-line { display: inline-block; }
+  .hero__lede { max-width: 46ch; }
+  .hero__lede strong { color: var(--blue-300); }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.8rem; }
+  .hero__note { margin-top: 1.4rem; color: var(--text-dim); }
+
+  .hero__stage {
+    position: relative;
+    height: clamp(320px, 52vh, 520px);
+  }
+  .hero__spot {
+    position: absolute;
+    inset: -8% -14%;
+    background: radial-gradient(52% 60% at 55% 55%, rgba(86, 174, 222, 0.14), transparent 72%);
+  }
+  .hero__stage :global(img) {
+    position: absolute;
+    width: auto;
+    height: auto;
+    filter: drop-shadow(0 22px 34px rgba(2, 6, 14, 0.6));
+    animation: heroFloat 7s ease-in-out infinite;
+  }
+  .hero__img--reduktor {
+    left: 8%;
+    top: 22%;
+    max-height: 62%;
+    z-index: 2;
+  }
+  .hero__img--motor {
+    right: 4%;
+    top: 2%;
+    max-height: 40%;
+    animation-delay: -2.4s !important;
+  }
+  .hero__img--vibro {
+    right: 10%;
+    bottom: 2%;
+    max-height: 34%;
+    animation-delay: -4.8s !important;
+  }
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* ---------- GÜVEN BANDI ---------- */
+  .band {
+    border-block: 1px solid var(--line);
+    background: var(--navy-900);
+    overflow: clip;
+    padding-block: 0.7rem;
+  }
+  .band__track {
+    display: flex;
+    white-space: nowrap;
+    width: max-content;
+    animation: bandMarq 28s linear infinite;
+  }
+  .band__seg {
+    font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(159, 176, 201, 0.55);
+  }
+  @keyframes bandMarq {
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- NEDEN ---------- */
+  .why__title {
+    font-size: var(--fs-h2);
+    color: var(--ink);
+    margin-block: 0.8rem 2.4rem;
+  }
+  .why__em { color: var(--blue-500); }
+  .why__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .why__card {
+    background: #fff;
+    border: 1px solid rgba(16, 24, 47, 0.12);
+    border-top: 3px solid var(--blue-500);
+    padding: 1.6rem 1.5rem;
+    transition: transform var(--dur-fast) var(--ease-torque), box-shadow var(--dur-fast) ease;
+  }
+  .why__card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 36px rgba(16, 24, 47, 0.12);
+  }
+  .why__no { color: var(--blue-500); }
+  .why__t { font-size: 1.15rem; color: var(--ink); margin-block: 0.7rem 0.5rem; }
+  .why__d { color: #4c5a72; font-size: 0.95rem; }
+
+  /* ---------- SÜREÇ ---------- */
+  .process { padding-top: 0; }
+  .process__title { font-size: var(--fs-h2); color: var(--ink); margin-block: 0.8rem 2rem; }
+  .process__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+  }
+  .process__step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    border-top: 1px solid rgba(16, 24, 47, 0.18);
+    padding-top: 1.1rem;
+  }
+  .process__n {
+    font-size: 2.2rem;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--blue-500);
+    line-height: 1;
+  }
+  .process__t { font-size: 1.05rem; color: var(--ink); margin-bottom: 0.4rem; }
+  .process__d { color: #4c5a72; font-size: 0.93rem; max-width: 34ch; }
+
+  /* ---------- RAKAMLAR + SEKTÖRLER ---------- */
+  .stats { padding-top: 0; }
+  .plates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .plate {
+    background: #fff;
+    border: 1px solid rgba(16, 24, 47, 0.12);
+    padding: 1.4rem 1.5rem;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  .plate__v {
+    display: block;
+    font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+    color: var(--navy-850);
+    margin-bottom: 0.35rem;
+  }
+  .plate__v small { font-size: 0.5em; color: var(--blue-500); font-variation-settings: 'wdth' 100; }
+  .sectors {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 1.6rem;
+  }
+  .sectors__label { color: #4c5a72; margin-right: 0.4rem; }
+  .sectors__chip {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 0.5em 0.9em;
+    border: 1px solid rgba(16, 24, 47, 0.2);
+    color: var(--navy-850);
+    white-space: nowrap;
+  }
+
+  /* ---------- KATALOG ---------- */
+  .catalog {
+    background:
+      radial-gradient(100vmin 70vmin at 80% 10%, rgba(0, 105, 169, 0.12), transparent 60%),
+      var(--navy-950);
+  }
+  .catalog__title { font-size: var(--fs-h2); margin-block: 0.8rem 0.8rem; }
+  .catalog__lede { max-width: 56ch; margin-bottom: 2.2rem; }
+  .catalog__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+  }
+  .ccard {
+    border: 1px solid var(--line);
+    background: linear-gradient(160deg, var(--navy-900), var(--navy-950));
+    padding: 1.5rem;
+    transition: transform var(--dur-fast) var(--ease-torque), border-color var(--dur-fast) ease;
+  }
+  .ccard:hover {
+    transform: translateY(-6px) rotate(-0.4deg);
+    border-color: var(--blue-500);
+  }
+  .ccard__role { color: var(--blue-300); }
+  .ccard__name { font-size: 1.7rem; margin-block: 0.55rem 0.3rem; }
+  .ccard__tag { font-size: 0.9rem; margin-bottom: 1rem; min-height: 2.6em; }
+  .ccard__link { color: var(--blue-300); }
+  .catalog__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+
+  /* ---------- CTA ---------- */
+  .cta {
+    padding-block: var(--space-section);
+    background:
+      radial-gradient(80vmin 55vmin at 20% 85%, rgba(0, 105, 169, 0.16), transparent 62%),
+      var(--navy-900);
+    border-top: 1px solid var(--line);
+  }
+  .cta__inner {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .cta__title { font-size: clamp(2rem, 4.4vw, 3.6rem); margin-block: 0.9rem 1rem; }
+  .cta__lede { max-width: 44ch; }
+  .cta__actions { display: grid; gap: 0.9rem; justify-items: start; }
+  .cta__btn { font-size: 1.02rem; padding: 1em 2em; }
+  .cta__note { color: var(--text-dim); opacity: 0.65; }
+
+  /* ---------- FOOTER ---------- */
+  .foot {
+    background: #05080f;
+    border-top: 1px solid var(--line);
+    padding-top: clamp(2.5rem, 6vh, 4rem);
+  }
+  .foot__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.7fr 0.7fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    padding-bottom: 2.2rem;
+  }
+  .foot__logo { filter: brightness(0) invert(1); height: 38px; width: auto; margin-bottom: 0.9rem; }
+  .foot__desc { font-size: 0.92rem; max-width: 36ch; }
+  .foot__col { display: grid; gap: 0.55rem; align-content: start; }
+  .foot__h { color: var(--steel-500); margin-bottom: 0.3rem; }
+  .foot__col a { color: var(--text-dim); font-size: 0.92rem; transition: color 0.2s ease; }
+  .foot__col a:hover { color: #fff; }
+  .foot__todo { font-size: 0.85rem; max-width: 30ch; }
+  .foot__bar {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    border-top: 1px solid var(--line);
+    padding-block: 1.2rem 5.5rem;
+  }
+  .foot__bar .mono-label { color: var(--text-dim); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__stage { height: clamp(260px, 38vh, 380px); }
+    .cta__inner { grid-template-columns: 1fr; }
+    .foot__grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .foot__grid { grid-template-columns: 1fr; }
+  }
+</style>
+
 <script>
-  import '../scripts/home';
+  import '../scripts/subpage';
 </script>

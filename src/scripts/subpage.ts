@@ -12,6 +12,7 @@ let velocity = 0;
 
 if (!reduced) {
   const lenis = new Lenis({ autoRaf: false });
+  (window as unknown as { lenis: Lenis }).lenis = lenis;
   lenis.on('scroll', (e: { velocity: number }) => {
     velocity = e.velocity;
     ScrollTrigger.update();
@@ -59,6 +60,38 @@ if (!reduced) {
     ease: 'power4.out',
     stagger: 0.1,
     delay: 0.1,
+  });
+
+  /* sayaçlar */
+  gsap.utils.toArray<HTMLElement>('.counter').forEach((c) => {
+    gsap.fromTo(
+      c,
+      { innerText: 0 },
+      {
+        innerText: Number(c.dataset.count ?? 0),
+        duration: 1.6,
+        snap: { innerText: 1 },
+        ease: 'power2.out',
+        scrollTrigger: { trigger: c, start: 'top 88%' },
+      }
+    );
+  });
+
+  /* sayfa içi çapalar lenis ile yumuşak */
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]').forEach((a) => {
+    a.addEventListener('click', (ev) => {
+      const href = a.getAttribute('href') ?? '';
+      const id = href.replace('/', '');
+      if (!id.startsWith('#') || location.pathname !== '/') return;
+      const target = document.querySelector(id);
+      if (target) {
+        ev.preventDefault();
+        (window as unknown as { lenis?: { scrollTo: (t: Element, o?: object) => void } }).lenis?.scrollTo(
+          target,
+          { duration: 1.2 }
+        );
+      }
+    });
   });
 
   if (matchMedia('(pointer: fine)').matches) {
