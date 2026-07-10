@@ -1,17 +1,29 @@
 ---
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Rpm from '../components/Rpm.astro';
 import karmotLogo from '../assets/karmot-logo.svg';
 
-// hero kompozisyonu: motor + redüktör + vibrasyon
-import heroMotor from '../assets/products/stars/gamak-star-03.png';
-import heroReduktor from '../assets/products/stars/dinamik-star-01.png';
-import heroVibro from '../assets/products/stars/avibro-star-05.png';
-
 const brands = (await getCollection('brands')).sort((a, b) => a.data.order - b.data.order);
+
+// katalog kartları için temsilci ürün kesitleri
+const starImgs = import.meta.glob<{ default: ImageMetadata }>('../assets/products/stars/*.png', {
+  eager: true,
+});
+const pick: Record<string, string> = {
+  gamak: '01',
+  weg: '01',
+  wat: '02',
+  dinamik: '01',
+  enarc: '01',
+  'pro-ex': '02',
+  avibro: '05',
+};
+const starFor = (id: string) =>
+  starImgs[`../assets/products/stars/${id}-star-${pick[id] ?? '01'}.png`]?.default;
 
 const why = [
   {
@@ -67,32 +79,23 @@ const sectors = [
     <!-- HERO: Karmot vaadi -->
     <section class="hero blueprint-bg" id="hero">
       <div class="hero__glow" aria-hidden="true"></div>
-      <div class="container hero__grid">
-        <div class="hero__copy">
-          <p class="mono-label reveal">Güç aktarım sistemlerinde yetkili tedarik</p>
-          <h1 class="display hero__title">
-            <span class="kin"><span class="kin-line">Doğru ürün,</span></span>
-            <span class="kin"><span class="kin-line display-italic"><em class="metal-text">stoktan,</em></span></span>
-            <span class="kin"><span class="kin-line">tek muhataptan.</span></span>
-          </h1>
-          <p class="hero__lede text-dim reveal">
-            Elektrik motoru, redüktör, fren ve vibrasyonda <strong>yedi markanın</strong> yetkili
-            tedarik hattıyız. Hesabını yaparız, doğrusunu öneririz, stoktan sevk ederiz —
-            hattınız durmasın diye.
-          </p>
-          <div class="hero__cta reveal">
-            <a class="btn" href="#iletisim">Hemen Teklif Alın</a>
-            <a class="btn btn--ghost" href="#katalog">Ürün Kataloğu</a>
-          </div>
-          <p class="mono-label hero__note reveal">Aynı gün teklif · Stoktan sevk · Mühendis desteği</p>
+      <div class="container hero__copy">
+        <p class="mono-label reveal">Güç aktarım sistemlerinde yetkili tedarik</p>
+        <h1 class="display hero__title">
+          <span class="kin"><span class="kin-line">Doğru ürün,</span></span>
+          <span class="kin"><span class="kin-line display-italic"><em class="metal-text">stoktan,</em></span></span>
+          <span class="kin"><span class="kin-line">tek muhataptan.</span></span>
+        </h1>
+        <p class="hero__lede text-dim reveal">
+          Elektrik motoru, redüktör, fren ve vibrasyonda <strong>yedi markanın</strong> yetkili
+          tedarik hattıyız. Hesabını yaparız, doğrusunu öneririz, stoktan sevk ederiz —
+          hattınız durmasın diye.
+        </p>
+        <div class="hero__cta reveal">
+          <a class="btn" href="#iletisim">Hemen Teklif Alın</a>
+          <a class="btn btn--ghost" href="#katalog">Ürünlerimiz</a>
         </div>
-
-        <div class="hero__stage" aria-hidden="true">
-          <span class="hero__spot"></span>
-          <Image class="hero__img hero__img--reduktor" src={heroReduktor} alt="" height={340} quality={85} loading="eager" />
-          <Image class="hero__img hero__img--motor" src={heroMotor} alt="" height={210} quality={85} loading="eager" />
-          <Image class="hero__img hero__img--vibro" src={heroVibro} alt="" height={180} quality={85} loading="eager" />
-        </div>
+        <p class="mono-label hero__note reveal">Aynı gün teklif · Stoktan sevk · Mühendis desteği</p>
       </div>
     </section>
 
@@ -174,21 +177,30 @@ const sectors = [
       <div class="container">
         <p class="mono-label reveal">Ürün kataloğu</p>
         <h2 class="display catalog__title reveal">
-          Yedi marka, <em class="display-italic metal-text">tek raf.</em>
+          Hizmet verdiğimiz <em class="display-italic metal-text">ürünler.</em>
         </h2>
         <p class="text-dim catalog__lede reveal">
-          Hangi ürün grubuna ihtiyacınız olduğunu biliyorsanız doğrudan markaya inin;
-          emin değilseniz teklif isteyin, seçimi birlikte yapalım.
+          Yedi markanın motor, redüktör, fren ve vibrasyon ürünleri tek rafta.
+          İhtiyacınızı biliyorsanız markaya inin; emin değilseniz teklif isteyin,
+          seçimi birlikte yapalım.
         </p>
         <div class="catalog__grid">
-          {brands.map((b) => (
-            <a class="ccard reveal" href={`/markalar/${b.id}`}>
-              <p class="mono-label ccard__role">Görev {b.data.roleNo} — {b.data.role}</p>
-              <h3 class="display ccard__name">{b.data.name}</h3>
-              <p class="ccard__tag text-dim">{b.data.tagline}</p>
-              <span class="mono-label ccard__link">Ürünleri İncele ///</span>
-            </a>
-          ))}
+          {brands.map((b) => {
+            const img = starFor(b.id);
+            return (
+              <a class="ccard reveal" href={`/markalar/${b.id}`}>
+                {img && (
+                  <span class="ccard__fig" aria-hidden="true">
+                    <Image src={img} alt="" height={170} quality={82} />
+                  </span>
+                )}
+                <p class="mono-label ccard__role">Görev {b.data.roleNo} — {b.data.role}</p>
+                <h3 class="display ccard__name">{b.data.name}</h3>
+                <p class="ccard__tag text-dim">{b.data.tagline}</p>
+                <span class="mono-label ccard__link">Ürünleri İncele ///</span>
+              </a>
+            );
+          })}
         </div>
         <div class="catalog__cta reveal">
           <a class="btn btn--ghost" href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşürü İndirin (PDF)</a>
@@ -275,14 +287,11 @@ const sectors = [
     background: radial-gradient(circle, rgba(0, 105, 169, 0.2), transparent 62%);
     pointer-events: none;
   }
-  .hero__grid {
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: center;
+  .hero__copy {
+    max-width: 58rem;
   }
   .hero__title {
-    font-size: clamp(2.4rem, 1rem + 5.2vw, 5.4rem);
+    font-size: clamp(2.6rem, 1rem + 6vw, 6.2rem);
     margin-block: 1.1rem 1.4rem;
   }
   .kin { display: block; overflow: clip; padding-block: 0.05em; }
@@ -291,45 +300,6 @@ const sectors = [
   .hero__lede strong { color: var(--blue-300); }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.8rem; }
   .hero__note { margin-top: 1.4rem; color: var(--text-dim); }
-
-  .hero__stage {
-    position: relative;
-    height: clamp(320px, 52vh, 520px);
-  }
-  .hero__spot {
-    position: absolute;
-    inset: -8% -14%;
-    background: radial-gradient(52% 60% at 55% 55%, rgba(86, 174, 222, 0.14), transparent 72%);
-  }
-  .hero__stage :global(img) {
-    position: absolute;
-    width: auto;
-    height: auto;
-    filter: drop-shadow(0 22px 34px rgba(2, 6, 14, 0.6));
-    animation: heroFloat 7s ease-in-out infinite;
-  }
-  .hero__img--reduktor {
-    left: 8%;
-    top: 22%;
-    max-height: 62%;
-    z-index: 2;
-  }
-  .hero__img--motor {
-    right: 4%;
-    top: 2%;
-    max-height: 40%;
-    animation-delay: -2.4s !important;
-  }
-  .hero__img--vibro {
-    right: 10%;
-    bottom: 2%;
-    max-height: 34%;
-    animation-delay: -4.8s !important;
-  }
-  @keyframes heroFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
 
   /* ---------- GÜVEN BANDI ---------- */
   .band {
@@ -464,6 +434,36 @@ const sectors = [
   .ccard:hover {
     transform: translateY(-6px) rotate(-0.4deg);
     border-color: var(--blue-500);
+  }
+  /* spot ışıklı ürün vitrini */
+  .ccard__fig {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 150px;
+    margin-bottom: 1rem;
+    background: radial-gradient(60% 70% at 50% 58%, rgba(86, 174, 222, 0.13), transparent 75%);
+  }
+  .ccard__fig::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    width: 55%;
+    height: 12px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(2, 5, 12, 0.55), transparent 72%);
+    filter: blur(3px);
+  }
+  .ccard__fig :global(img) {
+    max-height: 88%;
+    width: auto;
+    height: auto;
+    max-width: 82%;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 22px rgba(2, 6, 14, 0.55));
+    transition: transform var(--dur-fast) var(--ease-torque);
+  }
+  .ccard:hover .ccard__fig :global(img) {
+    transform: translateY(-5px) scale(1.03);
   }
   .ccard__role { color: var(--blue-300); }
   .ccard__name { font-size: 1.7rem; margin-block: 0.55rem 0.3rem; }
