@@ -5,34 +5,34 @@ import Rpm from '../components/Rpm.astro';
 
 const values = [
   {
-    t: 'Dürüst mühendislik',
-    d: 'Yedi markayı birden sattığımız için tek bir markayı övmek zorunda değiliz; uygulamanıza en doğru ürünü öneririz — bazen daha ucuzunu.',
+    t: 'Dinler ve netleştiririz',
+    d: 'Kodunuz hazırsa doğrudan ilerleriz; değilse etiket veya uygulama bilgisini birlikte netleştiririz.',
   },
   {
-    t: 'Stok disiplini',
-    d: 'Tedarikçilik stokla yapılır. Kritik kalemleri rafta tutar, "üreticiden bekliyoruz" cümlesini kurmamaya çalışırız.',
+    t: 'Açık bilgiyle ilerleriz',
+    d: 'Stok, termin ve uygun alternatifleri artılarıyla birlikte sunar; kararı eksiksiz bilgiyle vermenizi sağlarız.',
   },
   {
-    t: 'Hız bir nezakettir',
-    d: 'Teklifi bekletmek müşterinin hattını bekletmektir. Aynı gün dönüş bizim için kibarlık değil, standart.',
+    t: 'Süreci sahipleniriz',
+    d: 'Tekliften sevkiyata kadar farklı kişiler arasında dolaşmadan tek bir Karmot muhatabıyla ilerlersiniz.',
   },
   {
-    t: 'Satış sonrası ortada kalmazsınız',
-    d: 'Devreye almada telefonla yanınızdayız; gerekirse üretici servis ağını sizin adınıza biz koştururuz.',
+    t: 'Ulaşılabilir kalırız',
+    d: 'Teslimattan sonra teknik veya servis ihtiyacınızı doğru kanala ulaştırır, sürecin dışında kalmayız.',
   },
 ];
 
 const plates = [
-  { v: '7', u: 'marka', k: 'Tek tedarik hattında' },
-  { v: '0.06 – 4.000', u: 'kW', k: 'Güç bandı' },
-  { v: 'IE2 – IE4', u: '', k: 'Verimlilik sınıfları' },
-  { v: '61 – 30.575', u: 'kg/F', k: 'Santrifüj kuvvet' },
+  { v: '01', u: '', k: 'Talebi netleştiririz' },
+  { v: '02', u: '', k: 'Seçenekleri karşılaştırırız' },
+  { v: '03', u: '', k: 'Siparişi takip ederiz' },
+  { v: '04', u: '', k: 'Teslimat sonrasında da ulaşılırız' },
 ];
 ---
 
 <Base
   title="Kurumsal — Karmot Güç Aktarım Sistemleri"
-  description="Karmot: güç aktarım sistemlerinde yetkili tedarik. Mühendis kadrosu, stok disiplini ve tek muhatap ilkesiyle motor, redüktör, fren ve vibrasyon tedariki."
+  description="Karmot, endüstriyel güç aktarım ihtiyaçlarında seçenekleri netleştirir; tekliften teslimata tedarik sürecini tek muhatapla yönetir."
 >
   <Nav />
 
@@ -41,13 +41,14 @@ const plates = [
       <div class="container">
         <p class="mono-label reveal">Kurumsal</p>
         <h1 class="display head__title">
-          <span class="kin"><span class="kin-line">İşimiz güç,</span></span>
-          <span class="kin"><span class="kin-line display-italic"><em class="metal-text">sözümüz</em> teslimat.</span></span>
+          <span class="kin"><span class="kin-line metal-text">Karmot.</span></span>
+          <span class="kin"><span class="kin-line">İşimiz tedarik,</span></span>
+          <span class="kin"><span class="kin-line display-italic"><em class="metal-text">sözümüz</em> takip.</span></span>
         </h1>
         <p class="head__lede text-dim reveal">
-          Karmot, güç aktarım bileşenlerinde — elektrik motoru, redüktör, fren ve vibrasyon —
-          sanayinin tedarik ortağıdır. Yedi markanın ürününü tek çatı altında toplar;
-          hesaplar, önerir, stoktan sevk eder.
+          Karmot, endüstriyel güç aktarım ihtiyaçlarında tekliften teslimata tedarik
+          sürecini yöneten iş ortağınızdır. Kataloglara bir ürün daha eklemek için değil,
+          doğru ürüne daha net ve daha kolay ulaşmanız için çalışır.
         </p>
       </div>
     </section>
@@ -56,21 +57,17 @@ const plates = [
       <div class="container story__grid">
         <div>
           <p class="mono-label reveal">Biz kimiz</p>
-          <h2 class="display story__t reveal">Satıcı değil, <em class="display-italic story__em">çözüm ortağı.</em></h2>
+          <h2 class="display story__t reveal">Kutudan fazlasını <em class="display-italic story__em">teslim ederiz.</em></h2>
           <div class="story__body reveal">
             <p>
-              Sahada duran her hattın arkasında yanlış seçilmiş ya da geç gelmiş bir bileşen
-              vardır. Karmot bu iki problemi ortadan kaldırmak için kuruldu: doğru ürünü
-              mühendis aklıyla seçmek ve rafta tutup zamanında teslim etmek.
+              Müşterimiz çoğu zaman ne aradığını zaten bilir. Karmot’un değeri kutunun
+              üzerindeki marka değil; kod teyidi, seçenek ve muadil araştırması, açık stok
+              ve termin bilgisi, sipariş ve sevkiyat takibidir.
             </p>
             <p>
-              Gamak, WEG, WAT, Dinamik, Enarc, Pro-Ex ve Avibro — birbirini tamamlayan yedi
-              markayı tek tedarik hattında topladık. Motor, redüktör, fren ve vibrasyonu ayrı
-              ayrı kovalamak yerine tek muhatapla çalışırsınız: tek sipariş, tek irsaliye,
-              tek sorumlu.
-            </p>
-            <p class="mono-label story__note">
-              [Not] Kuruluş yılı, depo/lokasyon ve ekip bilgileri yayına girerken bu bölüme eklenecek.
+              Motor, redüktör, fren ve vibrasyon ihtiyaçlarını farklı kanallarda kovalamak
+              yerine tek talepte toplarsınız. Karmot seçenekleri netleştirir, siparişi takip
+              eder ve teslimat sonrasında da ulaşılabilir kalır.
             </p>
           </div>
         </div>
@@ -103,7 +100,7 @@ const plates = [
         </h2>
         <div class="endcta__actions">
           <a class="btn" href="/#iletisim">Teklif Alın ///</a>
-          <a class="btn btn--ghost" href="/#katalog">Ürünlerimiz</a>
+          <a class="btn btn--ghost" href="/#katalog">Kataloğu İnceleyin</a>
         </div>
       </div>
     </section>
