@@ -1,0 +1,136 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import IndustrialIcon from '../../components/IndustrialIcon.astro';
+import { kategoriler, toplamAltKategori } from '../../data/urunler';
+
+const urunImgs = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/urunler/**/*.{png,jpg,jpeg}',
+  { eager: true }
+);
+const urunImg = (img: string) => (img ? urunImgs[`../../assets/urunler/${img}`]?.default : undefined);
+
+const kapak: Record<string, string> = {
+  reduktorler: 'reduktorler/helisel-disli-reduktorler.png',
+  motorlar: 'motorlar/alcak-gerilim-motorlari.png',
+  pompalar: 'pompalar/uctan-emisli-pompalar.png',
+  fanlar: 'fanlar/kanal-fanlari.png',
+  fren: 'fren/elektromanyetik-frenler.png',
+};
+---
+
+<Base
+  title="Ürünlerimiz | Karmot Güç Aktarım Sistemleri"
+  description={`Karmot ürün kataloğu: redüktörler, AC elektrik motorları, pompalar, fanlar ve elektromanyetik frenler — 5 grupta ${toplamAltKategori} alt kategori.`}
+>
+  <Nav />
+
+  <main class="list">
+    <header class="list__head">
+      <div class="container">
+        <p class="list__crumb"><a href="/">Ana Sayfa</a> / <span>Ürünlerimiz</span></p>
+        <h1 class="display list__title">Ürünlerimiz</h1>
+        <p class="list__lede">Beş ana grupta {toplamAltKategori} alt kategori. Grubu seçin, tipe kadar inin.</p>
+      </div>
+    </header>
+
+    <div class="container list__grid">
+      {kategoriler.map((grup) => {
+        const img = urunImg(kapak[grup.slug] ?? '');
+        return (
+          <a class="lcard" href={`/urunler/${grup.slug}`}>
+            <span class="lcard__fig" aria-hidden="true">
+              {img
+                ? <Image src={img} alt="" height={190} quality={82} />
+                : <IndustrialIcon name={grup.icon} />}
+            </span>
+            <span class="lcard__body">
+              <strong class="display lcard__name">{grup.name}</strong>
+              <span class="lcard__meta">{grup.blurb} · {grup.items.length} alt kategori</span>
+              <span class="lcard__items">
+                {grup.items.slice(0, 4).map((i) => i.name).join(' · ')}{grup.items.length > 4 ? ' …' : ''}
+              </span>
+              <span class="lcard__link">Alt kategorileri gör →</span>
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  </main>
+
+  <footer class="foot dark-surface">
+    <div class="container foot__bar">
+      <p>© 2026 Karmot Güç Aktarım Sistemleri · <a href="/">Ana Sayfa</a></p>
+    </div>
+  </footer>
+</Base>
+
+<style>
+  .list { margin-top: 64px; }
+  .list__head {
+    background: linear-gradient(140deg, var(--navy-850), var(--navy-950) 75%);
+    color: #fff;
+    padding: clamp(2.2rem, 5vw, 3.4rem) 0;
+  }
+  .list__crumb { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 0.7rem; }
+  .list__crumb a { color: var(--blue-300); }
+  .list__crumb span { color: #fff; }
+  .list__title { font-size: clamp(1.9rem, 4vw, 3rem); }
+  .list__lede { color: var(--text-dim); margin-top: 0.5rem; }
+
+  .list__grid {
+    display: grid;
+    gap: 14px;
+    padding-block: clamp(2rem, 5vw, 3.2rem) clamp(3rem, 7vw, 5rem);
+  }
+  .lcard {
+    display: grid;
+    grid-template-columns: minmax(200px, 300px) minmax(0, 1fr);
+    gap: clamp(1.2rem, 3vw, 2rem);
+    background: #fff;
+    border: 1px solid rgba(27, 42, 74, 0.1);
+    border-radius: var(--r-md);
+    padding: 1.2rem;
+    transition: transform 0.28s var(--ease-torque), box-shadow 0.28s ease, border-color 0.2s ease;
+  }
+  .lcard:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 105, 169, 0.35);
+    box-shadow: 0 18px 38px rgba(27, 42, 74, 0.12);
+  }
+  .lcard__fig {
+    display: grid;
+    place-items: center;
+    min-height: 170px;
+    background: linear-gradient(180deg, #ffffff, #f2f4f6);
+    border: 1px solid rgba(27, 42, 74, 0.07);
+    border-radius: var(--r-sm);
+    padding: 0.9rem;
+    color: var(--blue-500);
+  }
+  .lcard__fig :global(img) { max-height: 170px; width: auto; max-width: 100%; object-fit: contain; }
+  .lcard__fig :global(svg) { width: 84px; height: 84px; stroke-width: 1.6; }
+  .lcard__body { display: grid; gap: 0.4rem; align-content: center; }
+  .lcard__name { color: var(--ink); font-size: 1.25rem; }
+  .lcard__meta { color: var(--ink-dim); font-size: 0.88rem; }
+  .lcard__items { color: var(--ink-dim); font-size: 0.82rem; opacity: 0.85; }
+  .lcard__link { color: var(--blue-500); font-weight: 700; font-size: 0.88rem; margin-top: 0.4rem; }
+
+  .foot__bar {
+    border-top: 1px solid var(--line);
+    padding-block: 1.3rem 5.5rem;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+  .foot__bar a { color: var(--blue-300); }
+
+  @media (max-width: 720px) {
+    .lcard { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+
+<script>
+  import '../../scripts/subpage';
+</script>

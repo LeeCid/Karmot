@@ -40,7 +40,7 @@ const ogImage = new URL('/og-v2.png', Astro.site ?? Astro.url).href;
     <meta name="twitter:image" content={ogImage} />
     <title>{title}</title>
   </head>
-  <body class="grain">
+  <body>
     <slot />
     <a class="btn quote-fab" id="quoteFab" href="/#iletisim">Talebinizi İletin ///</a>
   </body>

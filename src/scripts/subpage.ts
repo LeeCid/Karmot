@@ -2,10 +2,8 @@
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { initCursor } from './cursor';
 
 gsap.registerPlugin(ScrollTrigger);
-initCursor();
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let velocity = 0;
@@ -74,6 +72,31 @@ if (!reduced) {
     ease: 'power4.out',
     stagger: 0.1,
     delay: 0.1,
+  });
+
+  /* hero slider: müşteri sloganları döner (5 sn), noktalarla seçilir */
+  document.querySelectorAll<HTMLElement>('[data-slider]').forEach((slider) => {
+    const slides = Array.from(slider.querySelectorAll<HTMLElement>('.slide'));
+    const dots = Array.from(slider.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    if (slides.length < 2) return;
+    let idx = 0;
+    let timer: number | undefined;
+    const show = (n: number) => {
+      idx = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    };
+    const start = () => {
+      timer = window.setInterval(() => show(idx + 1), 5000);
+    };
+    dots.forEach((d, i) =>
+      d.addEventListener('click', () => {
+        if (timer) clearInterval(timer);
+        show(i);
+        start();
+      })
+    );
+    start();
   });
 
   /* sayaçlar */

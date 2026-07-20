@@ -1,45 +1,46 @@
 ---
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
-import Rpm from '../components/Rpm.astro';
 import IndustrialIcon from '../components/IndustrialIcon.astro';
 import karmotLogo from '../assets/karmot-logo.svg';
-
-const brands = (await getCollection('brands')).sort((a, b) => a.data.order - b.data.order);
-
 import { kategoriler, toplamAltKategori } from '../data/urunler';
 
 const urunImgs = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/urunler/**/*.{png,jpg,jpeg}',
   { eager: true }
 );
-const urunImg = (img: string) => urunImgs[`../assets/urunler/${img}`]?.default;
+const urunImg = (img: string) => (img ? urunImgs[`../assets/urunler/${img}`]?.default : undefined);
+
+/* Hero slider — mal sahibinin gönderdiği sloganlar, harfiyen */
+const slides = [
+  {
+    t: 'Güç Aktarımında Yüksek Verimli Çözümler',
+    d: 'Redüktör, elektrik motoru, pompa, fan ve elektromanyetik frende doğru ürüne en kısa yoldan ulaşın.',
+    img: 'reduktorler/helisel-disli-reduktorler.png',
+  },
+  {
+    t: 'Verim Odaklı Endüstriyel Çözümler',
+    d: 'İhtiyacınıza göre seçenekleri karşılaştırır; stok, fiyat ve termini tek teklifte netleştiririz.',
+    img: 'motorlar/alcak-gerilim-motorlari.png',
+  },
+  {
+    t: 'Güçlü Markalar, Güvenilir Çözümler',
+    d: 'Beş ürün grubunda güvenilir tedarik: tek talep, tek muhatap, uçtan uca takip.',
+    img: 'pompalar/uctan-emisli-pompalar.png',
+  },
+  {
+    t: 'Verim Odaklı Çözümler',
+    d: 'Enerji verimliliği yüksek seriler ve uygulamanıza uygun seçimle işletme maliyetinizi düşürün.',
+    img: 'fanlar/kanal-fanlari.png',
+  },
+];
 
 const promises = [
-  {
-    icon: 'contact',
-    t: 'Tek muhatap',
-    d: 'Talep, teklif ve sipariş aynı Karmot akışında ilerler.',
-  },
-  {
-    icon: 'options',
-    t: 'Açık seçenekler',
-    d: 'Stok, termin ve uygun alternatifler net biçimde önünüzdedir.',
-  },
-  {
-    icon: 'tracking',
-    t: 'Süreç takibi',
-    d: 'Onaydan teslimata kadar işi Karmot takip eder.',
-  },
-] as const;
-
-const flow = [
-  { n: '01', icon: 'request', t: 'Talep', d: 'Kod, etiket veya ihtiyaç' },
-  { n: '02', icon: 'compare', t: 'Seçenek', d: 'Stok · fiyat · termin karşılaştırması' },
-  { n: '03', icon: 'delivery', t: 'Teslimat', d: 'Sevkiyat ve tek noktadan takip' },
+  { icon: 'contact', t: 'Tek muhatap', d: 'Talep, teklif ve sipariş aynı Karmot akışında ilerler.' },
+  { icon: 'options', t: 'Açık seçenekler', d: 'Stok, termin ve uygun alternatifler net biçimde önünüzdedir.' },
+  { icon: 'tracking', t: 'Süreç takibi', d: 'Onaydan teslimata kadar işi Karmot takip eder.' },
 ] as const;
 
 const why = [
@@ -62,21 +63,9 @@ const why = [
 ];
 
 const steps = [
-  {
-    n: '01',
-    t: 'Talebi paylaşın',
-    d: 'Ürün kodunu, etiket fotoğrafını veya ihtiyacınızı gönderin.',
-  },
-  {
-    n: '02',
-    t: 'Net teklif alın',
-    d: 'Uygun seçenekleri stok, fiyat ve termin bilgisiyle birlikte sunalım.',
-  },
-  {
-    n: '03',
-    t: 'Karmot takip etsin',
-    d: 'Onaydan sevkiyata kadar süreci biz izleyelim; siz işinize devam edin.',
-  },
+  { n: '01', t: 'Talebi paylaşın', d: 'Ürün kodunu, etiket fotoğrafını veya ihtiyacınızı gönderin.' },
+  { n: '02', t: 'Net teklif alın', d: 'Uygun seçenekleri stok, fiyat ve termin bilgisiyle birlikte sunalım.' },
+  { n: '03', t: 'Karmot takip etsin', d: 'Onaydan sevkiyata kadar süreci biz izleyelim; siz işinize devam edin.' },
 ];
 
 const faq = [
@@ -94,7 +83,7 @@ const faq = [
   },
   {
     q: 'Farklı ürün gruplarını tek siparişte toplayabilir miyim?',
-    a: 'Karmot’un tedarik kapsamındaki motor, redüktör, fren ve vibrasyon ihtiyaçlarını tek sipariş akışında birleştirebilirsiniz.',
+    a: 'Redüktör, motor, pompa, fan ve fren ihtiyaçlarını tek talepte birleştirebilirsiniz: tek teklif, tek sipariş, tek muhatap.',
   },
   {
     q: 'Teslimattan sonra kime ulaşırım?',
@@ -102,72 +91,70 @@ const faq = [
   },
 ];
 
+/* Ürün grubu kartları için kapak görselleri */
+const kapak: Record<string, string> = {
+  reduktorler: 'reduktorler/helisel-disli-reduktorler.png',
+  motorlar: 'motorlar/alcak-gerilim-motorlari.png',
+  pompalar: 'pompalar/uctan-emisli-pompalar.png',
+  fanlar: 'fanlar/kanal-fanlari.png',
+  fren: 'fren/elektromanyetik-frenler.png',
+};
 ---
 
 <Base
   title="Karmot | Endüstriyel Güç Aktarım Sistemleri Tedarikçisi"
-  description="Karmot; elektrik motoru, redüktör, fren ve vibrasyon ihtiyaçlarında açık stok ve termin bilgisi, uygun alternatifler ve tek muhatapla tedarik sürecini kolaylaştırır."
+  description="Karmot; redüktör, AC elektrik motoru, pompa, fan ve elektromanyetik fren tedarikinde açık stok ve termin bilgisi, uygun alternatifler ve tek muhatapla süreci kolaylaştırır."
 >
   <Nav />
 
   <main>
-    <section class="hero blueprint-bg dark-surface" id="hero">
-      <div class="hero__glow" aria-hidden="true"></div>
-      <div class="container hero__grid">
-        <div class="hero__copy">
-          <p class="mono-label reveal">Karmot / Endüstriyel tedarik ortağınız</p>
-          <h1 class="display hero__title">
-            <span class="kin"><span class="kin-line metal-text">Karmot.</span></span>
-            <span class="kin"><span class="kin-line">Tedarik bizde,</span></span>
-            <span class="kin"><span class="kin-line display-italic">üretim sizde.</span></span>
-          </h1>
-          <p class="hero__lede text-dim reveal">
-            Ürünü zaten biliyor olabilirsiniz. Karmot; doğru kodu teyit eder, stok ve termin
-            seçeneklerini karşılaştırır, tekliften teslimata kadar süreci tek elden yürütür.
-          </p>
-          <div class="hero__cta reveal">
-            <a class="btn" href="#iletisim">Talebinizi İletin</a>
-            <a class="btn btn--ghost" href="#neden">Neden Karmot?</a>
-          </div>
-          <p class="mono-label hero__note reveal">Net bilgi · Uygun seçenek · Tek muhatap</p>
-        </div>
-
-        <aside class="hero__panel reveal" aria-label="Karmot çalışma akışı">
-          <div class="hero__panel-top">
-            <span class="mono-label">Karmot operasyon akışı</span>
-            <span class="hero__status">03 adım / Tek muhatap</span>
-          </div>
-          <ol class="hero__flow">
-            {flow.map((item) => (
-              <li>
-                <span class="hero__flow-icon" aria-hidden="true">
-                  <IndustrialIcon name={item.icon} />
-                </span>
-                <span class="mono-label hero__flow-no">{item.n}</span>
-                <div>
-                  <strong>{item.t}</strong>
-                  <small>{item.d}</small>
+    <!-- HERO SLIDER: müşteri sloganları -->
+    <section class="slider" id="hero" data-slider aria-label="Karmot tanıtım">
+      <div class="container slider__frame">
+        {slides.map((s, i) => {
+          const img = urunImg(s.img);
+          return (
+            <div class:list={['slide', i === 0 && 'is-active']}>
+              <div class="slide__copy">
+                <p class="mono-label">Karmot Güç Aktarım Sistemleri</p>
+                {i === 0
+                  ? <h1 class="display slide__title">{s.t}</h1>
+                  : <p class="display slide__title" role="heading" aria-level="2">{s.t}</p>}
+                <p class="slide__lede">{s.d}</p>
+                <div class="slide__cta">
+                  <a class="btn" href="#iletisim">Teklif İsteyin</a>
+                  <a class="btn btn--ghost slide__ghostbtn" href="/urunler">Ürünlerimiz</a>
                 </div>
-              </li>
-            ))}
-          </ol>
-        </aside>
+              </div>
+              <div class="slide__fig" aria-hidden="true">
+                {img && <Image src={img} alt="" height={330} quality={84} loading={i === 0 ? 'eager' : 'lazy'} />}
+              </div>
+            </div>
+          );
+        })}
+        <div class="slider__dots" role="tablist" aria-label="Slayt seçimi">
+          {slides.map((_, i) => (
+            <button
+              class:list={['slider__dot', i === 0 && 'is-active']}
+              data-dot={i}
+              type="button"
+              aria-label={`Slayt ${i + 1}`}
+            ></button>
+          ))}
+        </div>
       </div>
     </section>
 
+    <!-- KARMOT STANDARDI -->
     <section class="promise-strip" id="standart" aria-label="Karmot tedarik yaklaşımı">
       <div class="container">
-        <div class="promise-strip__head">
-          <p class="mono-label reveal">Karmot standardı</p>
-          <h2 class="display promise-strip__title reveal">Netlik, sahiplenme, takip.</h2>
-        </div>
         <div class="promise-strip__grid">
           {promises.map((promise, i) => (
             <article class="promise-strip__item reveal">
               <span class="promise-strip__icon" aria-hidden="true">
                 <IndustrialIcon name={promise.icon} />
               </span>
-              <span class="mono-label promise-strip__no">0{i + 1} ///</span>
+              <span class="mono-label promise-strip__no">0{i + 1}</span>
               <div>
                 <h3 class="display">{promise.t}</h3>
                 <p>{promise.d}</p>
@@ -178,14 +165,49 @@ const faq = [
       </div>
     </section>
 
-    <section class="section section--light why" id="neden">
+    <!-- ÜRÜN GRUPLARIMIZ -->
+    <section class="section groups" id="katalog">
+      <div class="container">
+        <div class="groups__head">
+          <div>
+            <p class="mono-label reveal">Ürün Gruplarımız</p>
+            <h2 class="display groups__title reveal">Beş grupta {toplamAltKategori} alt kategori</h2>
+          </div>
+          <p class="groups__lede reveal">
+            Redüktörden elektromanyetik frene, aradığınız ürün grubunu seçin;
+            alt kategorilere ve teknik detaylara ilerleyin.
+          </p>
+        </div>
+        <div class="groups__grid">
+          {kategoriler.map((grup) => {
+            const img = urunImg(kapak[grup.slug] ?? '');
+            return (
+              <a class="gcard reveal" href={`/urunler/${grup.slug}`}>
+                <span class="gcard__fig" aria-hidden="true">
+                  {img
+                    ? <Image src={img} alt="" height={180} quality={82} />
+                    : <IndustrialIcon name={grup.icon} />}
+                </span>
+                <span class="gcard__body">
+                  <strong class="display gcard__name">{grup.name}</strong>
+                  <span class="gcard__meta">{grup.items.length} alt kategori</span>
+                  <span class="gcard__link">İncele →</span>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <!-- NEDEN KARMOT -->
+    <section class="section why" id="neden">
       <div class="container">
         <div class="why__intro">
           <div>
             <p class="mono-label reveal">Karmot neyi farklı yapar?</p>
             <h2 class="display why__title reveal">
-              Ürünü değil,<br />
-              <em class="display-italic why__em">tedarik sürecini</em> çözeriz.
+              Ürünü değil, <em class="why__em">tedarik sürecini</em> çözeriz.
             </h2>
           </div>
           <p class="why__lede reveal">
@@ -194,11 +216,10 @@ const faq = [
             kadar süreci takip etmektir.
           </p>
         </div>
-
         <div class="why__grid">
           {why.map((item, i) => (
             <article class="why__card reveal">
-              <span class="mono-label why__no">{String(i + 1).padStart(2, '0')} ///</span>
+              <span class="mono-label why__no">{String(i + 1).padStart(2, '0')}</span>
               <h3 class="display why__t">{item.t}</h3>
               <p class="why__d">{item.d}</p>
             </article>
@@ -207,10 +228,11 @@ const faq = [
       </div>
     </section>
 
-    <section class="section section--light process" id="surec">
+    <!-- SÜREÇ -->
+    <section class="section process" id="surec">
       <div class="container">
         <p class="mono-label reveal">Nasıl çalışırız?</p>
-        <h2 class="display process__title reveal">Talebinizden teslimata, <em class="display-italic">tek akış.</em></h2>
+        <h2 class="display process__title reveal">Talebinizden teslimata, <em>tek akış.</em></h2>
         <div class="process__grid">
           {steps.map((step) => (
             <article class="process__step reveal">
@@ -225,13 +247,12 @@ const faq = [
       </div>
     </section>
 
-    <section class="section section--light faq" id="sss">
+    <!-- SSS -->
+    <section class="section faq" id="sss">
       <div class="container faq__grid">
         <div class="faq__head">
           <p class="mono-label reveal">Satın almadan önce</p>
-          <h2 class="display faq__title reveal">
-            Sık sorulanlar,<br /><em class="display-italic faq__em">net cevaplar.</em>
-          </h2>
+          <h2 class="display faq__title reveal">Sık sorulanlar, <em class="faq__em">net cevaplar.</em></h2>
           <p class="faq__lede reveal">
             Aradığınız cevap burada yoksa ürün kodunu veya etiket fotoğrafını gönderin;
             Karmot sizin için netleştirsin.
@@ -252,98 +273,19 @@ const faq = [
       </div>
     </section>
 
-    <section class="section catalog blueprint-bg dark-surface" id="katalog">
-      <div class="container">
-        <div class="catalog__head">
-          <div>
-            <p class="mono-label reveal">Ürün kataloğu</p>
-            <h2 class="display catalog__title reveal">
-              Ne aradığınızı biliyorsanız,<br /><em class="display-italic metal-text">buradan ilerleyin.</em>
-            </h2>
-          </div>
-          <p class="text-dim catalog__lede reveal">
-            Beş ana grupta {toplamAltKategori} alt kategori: redüktör, AC elektrik motoru,
-            pompa, fan ve elektromanyetik fren. Grupları açın, tipe kadar inin.
-          </p>
-        </div>
-
-        <div class="catalog__list" aria-label="Ürün grupları">
-          {kategoriler.map((grup, i) => (
-            <details class="catalog__group reveal" name="karmot-catalog" open={i === 0 ? true : undefined}>
-              <summary class="catalog__summary">
-                <span class="catalog__icon" aria-hidden="true">
-                  <IndustrialIcon name={grup.icon} />
-                </span>
-                <span class="mono-label catalog__no">{String(i + 1).padStart(2, '0')}</span>
-                <span class="catalog__summary-copy">
-                  <strong class="display">{grup.name}</strong>
-                  <small>{grup.blurb} · {grup.items.length} tip</small>
-                </span>
-                <span class="catalog__toggle" aria-hidden="true">
-                  <span>İncele</span><i></i>
-                </span>
-              </summary>
-              <div class="catalog__panel">
-                <div class="catalog__panel-head">
-                  <p class="mono-label">{grup.items.length} alt kategori</p>
-                  <p>Seri ve model seçimi için ürün kodunuzu veya uygulamanızı iletin.</p>
-                </div>
-                <div class:list={['catalog__products', grup.items.length === 1 && 'catalog__products--solo']}>
-                  {grup.items.map((item) => {
-                    const img = item.img ? urunImg(item.img) : undefined;
-                    return (
-                      <div class="catalog__product">
-                        <span class:list={['catalog__product-fig', !img && 'catalog__product-fig--icon']}>
-                          {img
-                            ? <Image src={img} alt={item.name} height={170} quality={82} />
-                            : <IndustrialIcon name={grup.icon} />}
-                        </span>
-                        <span class="catalog__product-copy">
-                          <strong>{item.name}</strong>
-                          <span class="catalog__product-desc">{item.desc}</span>
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-                {grup.features && (
-                  <ul class="catalog__features">
-                    {grup.features.map((f) => <li>{f}</li>)}
-                  </ul>
-                )}
-                <p class="catalog__panel-cta">
-                  <a class="btn" href="#iletisim">Bu gruptan teklif isteyin</a>
-                </p>
-              </div>
-            </details>
-          ))}
-        </div>
-
-        <div class="brandstrip reveal">
-          <span class="mono-label brandstrip__label">Tedarik ağımız:</span>
-          {brands.map((brand) => (
-            <a class="brandstrip__chip" href={`/markalar/${brand.id}`}>{brand.data.name}</a>
-          ))}
-          <a class="brandstrip__chip brandstrip__chip--all" href="/markalar">Tümünü Gör →</a>
-        </div>
-      </div>
-    </section>
-
+    <!-- TEKLİF -->
     <section class="cta dark-surface" id="iletisim">
       <div class="container cta__inner">
         <div>
           <p class="mono-label reveal">Bir talebiniz mi var?</p>
-          <h2 class="display cta__title">
-            <span class="kin"><span class="kin-line">Teklifi</span></span>
-            <span class="kin"><span class="kin-line display-italic"><em class="metal-text">Karmot</em> hazırlasın.</span></span>
-          </h2>
+          <h2 class="display cta__title">Teklifi Karmot hazırlasın.</h2>
           <p class="text-dim cta__lede reveal">
             Ürün kodunu, etiket fotoğrafını veya ihtiyacınızı gönderin. Stok, fiyat ve termin
             bilgisini birlikte netleştirelim.
           </p>
         </div>
         <div class="cta__actions reveal">
-          <a class="btn cta__btn" href="mailto:info@karmot.com.tr?subject=Teklif%20Talebi%20—%20karmot.com.tr">E-posta ile Talep Aç ///</a>
+          <a class="btn cta__btn" href="mailto:info@karmot.com.tr?subject=Teklif%20Talebi%20—%20karmot.com.tr">E-posta ile Talep Aç</a>
           <a class="btn btn--ghost" href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşürü İnceleyin</a>
           <a class="cta__mail" href="mailto:info@karmot.com.tr">info@karmot.com.tr</a>
         </div>
@@ -362,254 +304,217 @@ const faq = [
       </div>
       <nav class="foot__col" aria-label="Site haritası">
         <p class="mono-label foot__h">Karmot</p>
+        <a href="/hakkimizda">Kurumsal</a>
         <a href="#neden">Neden Karmot?</a>
         <a href="#surec">Nasıl Çalışırız?</a>
-        <a href="/hakkimizda">Kurumsal</a>
         <a href="#sss">Sık Sorulanlar</a>
       </nav>
-      <nav class="foot__col" aria-label="Katalog">
-        <p class="mono-label foot__h">Katalog</p>
-        <a href="#katalog">Ürün Grupları</a>
-        <a href="/markalar">Markalar</a>
-        <a href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşür (PDF)</a>
+      <nav class="foot__col" aria-label="Ürünler">
+        <p class="mono-label foot__h">Ürünler</p>
+        {kategoriler.map((g) => <a href={`/urunler/${g.slug}`}>{g.name}</a>)}
       </nav>
       <div class="foot__col">
         <p class="mono-label foot__h">İletişim</p>
         <a href="mailto:info@karmot.com.tr">info@karmot.com.tr</a>
         <a href="#iletisim">Teklif Talebi</a>
+        <a href="/karmot-brosur.pdf" target="_blank" rel="noopener">Broşür (PDF)</a>
       </div>
     </div>
     <div class="container foot__bar">
-      <p class="mono-label">© 2026 Karmot Güç Aktarım Sistemleri</p>
-      <p class="mono-label">Tedarik bizde ///</p>
+      <p>© 2026 Karmot Güç Aktarım Sistemleri</p>
     </div>
   </footer>
-
-  <Rpm />
 </Base>
 
 <style>
-  .hero {
-    min-height: 94svh;
-    display: grid;
-    align-items: center;
-    position: relative;
-    overflow: clip;
-    padding-block: 8rem 4rem;
+  /* ---------- HERO SLIDER ---------- */
+  .slider {
+    margin-top: 64px; /* sabit beyaz nav yüksekliği */
+    background:
+      radial-gradient(90vmin 70vmin at 85% 15%, rgba(0, 105, 169, 0.35), transparent 62%),
+      linear-gradient(140deg, var(--navy-850), var(--navy-950) 70%);
+    color: var(--text);
   }
-  .hero__glow {
+  .slider__frame {
+    position: relative;
+    min-height: clamp(430px, 62vh, 560px);
+  }
+  .slide {
     position: absolute;
-    inset: -22% -18% auto auto;
-    width: 85vmin;
-    aspect-ratio: 1;
-    background: radial-gradient(circle, rgba(0, 105, 169, 0.22), transparent 64%);
-    pointer-events: none;
-  }
-  .hero__grid {
+    inset: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.65fr);
-    gap: clamp(2.5rem, 7vw, 7rem);
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    gap: clamp(2rem, 6vw, 5rem);
     align-items: center;
+    padding-block: 3rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.7s ease, visibility 0s 0.7s;
   }
-  .hero__copy { min-width: 0; }
-  .hero__title {
-    max-width: 14ch;
-    font-size: clamp(2.75rem, 1rem + 3.7vw, 5.2rem);
-    margin-block: 1rem 1.5rem;
+  .slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.7s ease;
   }
-  .kin { display: block; overflow: clip; padding-block: 0.05em; }
-  .kin-line { display: inline-block; }
-  .hero__lede { max-width: 58ch; }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.8rem; }
-  .hero__note { margin-top: 1.4rem; color: var(--text-dim); }
-
-  .hero__panel {
-    position: relative;
-    width: 100%;
-    max-width: 440px;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    justify-self: end;
-    color: var(--ink);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: #f4f6f8;
-    padding: 0;
-    overflow: hidden;
-    box-shadow: 0 28px 70px rgba(2, 7, 18, 0.34);
-    border-radius: var(--r-md);
-  }
-  .hero__panel-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.2rem;
+  .slide__title {
     color: #fff;
-    background: var(--navy-850);
-    border-bottom: 3px solid var(--blue-500);
+    font-size: clamp(1.9rem, 1rem + 2.9vw, 3.4rem);
+    margin-block: 0.9rem 1rem;
+    max-width: 18ch;
   }
-  .hero__panel-top .mono-label { color: #dce5ed; }
-  .hero__status {
-    display: inline-flex;
-    align-items: center;
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #8fc9e8;
-    white-space: nowrap;
+  .slide__lede {
+    color: var(--text-dim);
+    max-width: 46ch;
+    margin-bottom: 1.6rem;
   }
-  .hero__flow {
-    position: relative;
+  .slide__cta { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+  .slide__ghostbtn {
+    color: #fff;
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.38);
+  }
+  .slide__ghostbtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1.5px var(--blue-400);
+  }
+  .slide__fig {
+    justify-self: end;
+    width: min(100%, 420px);
+    background: #fff;
+    border-radius: var(--r-lg);
+    padding: 1.6rem;
+    box-shadow: 0 30px 70px rgba(2, 7, 18, 0.35);
+  }
+  .slide__fig :global(img) {
+    width: 100%;
+    height: clamp(200px, 30vh, 300px);
+    object-fit: contain;
+  }
+  .slider__dots {
+    position: absolute;
+    left: 0;
+    bottom: 1.4rem;
+    display: flex;
+    gap: 10px;
+    z-index: 3;
+  }
+  .slider__dot {
+    width: 34px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(159, 176, 201, 0.35);
+    transition: background 0.3s ease;
+  }
+  .slider__dot.is-active { background: var(--blue-400); }
+
+  /* ---------- KARMOT STANDARDI ---------- */
+  .promise-strip {
+    background: #fff;
+    border-bottom: 1px solid rgba(27, 42, 74, 0.08);
+    padding-block: clamp(1.8rem, 4vw, 2.6rem);
+  }
+  .promise-strip__grid {
     display: grid;
-    list-style: none;
-    padding: 0.45rem 1.2rem 0.8rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 3vw, 2.5rem);
   }
-  .hero__flow li {
+  .promise-strip__item {
     display: grid;
-    grid-template-columns: 3.2rem 2rem minmax(0, 1fr);
+    grid-template-columns: 3.2rem auto 1fr;
     gap: 0.85rem;
     align-items: center;
-    min-height: 84px;
-    padding-block: 1rem;
-    border-top: 1px solid rgba(16, 24, 47, 0.13);
   }
-  .hero__flow li:first-child { border-top: 0; }
-  .hero__flow-icon {
+  .promise-strip__icon {
     display: grid;
     place-items: center;
     width: 3.2rem;
     height: 3.2rem;
     color: var(--blue-500);
-    background: #e3ebf1;
-    border: 1px solid #bdcbd7;
-  }
-  .hero__flow-icon :global(svg) { width: 2.1rem; height: 2.1rem; }
-  .hero__flow-no {
-    color: var(--blue-500);
-    text-align: center;
-  }
-  .hero__flow li > div {
-    display: grid;
-    gap: 0.25rem;
-    min-width: 0;
-  }
-  .hero__flow strong {
-    font-family: var(--font-display);
-    font-variation-settings: 'wdth' 120;
-    font-size: 1.05rem;
-    text-transform: uppercase;
-    line-height: 1.1;
-    color: var(--ink);
-  }
-  .hero__flow small { color: #536174; line-height: 1.35; }
-
-  .promise-strip {
-    position: relative;
-    padding-block: clamp(3.8rem, 8vw, 6rem);
-    color: var(--ink);
-    background: #dfe5eb;
-    border: 0;
-    box-shadow:
-      inset 0 4px 0 var(--blue-500),
-      inset 0 -1px 0 rgba(16, 24, 47, 0.14);
-    overflow: hidden;
-  }
-  .promise-strip::after {
-    content: 'KARMOT / STANDARD';
-    position: absolute;
-    right: -0.04em;
-    bottom: -0.3em;
-    font-family: var(--font-display);
-    font-size: clamp(5rem, 14vw, 12rem);
-    font-weight: 800;
-    line-height: 1;
-    color: rgba(23, 37, 70, 0.035);
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .promise-strip__head {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 0.7fr 1.3fr;
-    gap: 2rem;
-    align-items: end;
-    margin-bottom: 2rem;
-  }
-  .promise-strip .mono-label { color: var(--blue-500); }
-  .promise-strip__title {
-    max-width: 18ch;
-    color: var(--ink);
-    font-size: var(--fs-h2);
-  }
-  .promise-strip__grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .promise-strip__item {
-    display: grid;
-    grid-template-columns: 3.4rem auto 1fr;
-    gap: 0.85rem;
-    align-items: start;
-    min-width: 0;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(16, 24, 47, 0.12);
-    box-shadow: 0 12px 28px rgba(16, 24, 47, 0.06);
-  }
-  .promise-strip__icon {
-    display: grid;
-    place-items: center;
-    width: 3.4rem;
-    height: 3.4rem;
-    color: var(--blue-500);
-    background: #edf2f6;
-    border: 1px solid #c6d1dc;
+    background: rgba(0, 105, 169, 0.08);
+    border-radius: var(--r-sm);
   }
   .promise-strip__icon :global(svg) { width: 2rem; height: 2rem; }
-  .promise-strip__no { padding-top: 0.35rem; }
-  .promise-strip__item h3 { color: var(--ink); font-size: 1rem; margin-block: 0.25rem 0.35rem; }
-  .promise-strip__item p { color: #536174; font-size: 0.84rem; line-height: 1.5; }
+  .promise-strip__no { color: rgba(27, 42, 74, 0.35); }
+  .promise-strip__item h3 { font-size: 0.98rem; color: var(--ink); margin-bottom: 0.2rem; }
+  .promise-strip__item p { color: var(--ink-dim); font-size: 0.84rem; line-height: 1.45; }
 
+  /* ---------- ÜRÜN GRUPLARI ---------- */
+  .groups { background: var(--paper); }
+  .groups__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: clamp(1.5rem, 5vw, 5rem);
+    align-items: end;
+    margin-bottom: 2.2rem;
+  }
+  .groups__title { font-size: var(--fs-h2); color: var(--ink); margin-top: 0.7rem; }
+  .groups__lede { color: var(--ink-dim); max-width: 44ch; }
+  .groups__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+  }
+  .gcard {
+    display: grid;
+    background: #fff;
+    border: 1px solid rgba(27, 42, 74, 0.1);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    transition: transform 0.28s var(--ease-torque), box-shadow 0.28s ease, border-color 0.2s ease;
+  }
+  .gcard:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 105, 169, 0.35);
+    box-shadow: 0 20px 40px rgba(27, 42, 74, 0.12);
+  }
+  .gcard__fig {
+    display: grid;
+    place-items: center;
+    height: 170px;
+    padding: 1rem;
+    background: linear-gradient(180deg, #ffffff, #f2f4f6);
+    border-bottom: 1px solid rgba(27, 42, 74, 0.07);
+    color: var(--blue-500);
+  }
+  .gcard__fig :global(img) { max-height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+  .gcard__fig :global(svg) { width: 84px; height: 84px; stroke-width: 1.6; }
+  .gcard__body { display: grid; gap: 0.3rem; padding: 1.1rem 1.2rem 1.3rem; }
+  .gcard__name { color: var(--ink); font-size: 1.08rem; line-height: 1.25; }
+  .gcard__meta { color: var(--ink-dim); font-size: 0.82rem; }
+  .gcard__link { color: var(--blue-500); font-weight: 700; font-size: 0.86rem; margin-top: 0.4rem; }
+
+  /* ---------- NEDEN ---------- */
+  .why { background: #fff; border-block: 1px solid rgba(27, 42, 74, 0.07); }
   .why__intro {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     gap: clamp(2rem, 7vw, 6rem);
     align-items: end;
-    margin-bottom: 2.6rem;
+    margin-bottom: 2.4rem;
   }
   .why__title { font-size: var(--fs-h2); color: var(--ink); margin-top: 0.8rem; }
-  .why__em { color: var(--blue-500); }
-  .why__lede { color: #4c5a72; max-width: 48ch; }
+  .why__em { color: var(--blue-500); font-style: normal; }
+  .why__lede { color: var(--ink-dim); max-width: 48ch; }
   .why__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
   }
   .why__card {
-    background: #fff;
+    background: var(--paper);
     border: 1px solid rgba(27, 42, 74, 0.1);
-    border-top: 3px solid var(--blue-500);
     border-radius: var(--r-md);
-    padding: 1.6rem 1.5rem;
+    padding: 1.5rem 1.4rem;
     transition: transform var(--dur-fast) var(--ease-torque), box-shadow var(--dur-fast) ease;
   }
-  .why__card:hover { transform: translateY(-5px); box-shadow: 0 18px 36px rgba(16, 24, 47, 0.11); }
+  .why__card:hover { transform: translateY(-5px); box-shadow: 0 16px 32px rgba(27, 42, 74, 0.1); }
   .why__no { color: var(--blue-500); }
-  .why__t { font-size: 1.1rem; color: var(--ink); margin-block: 0.75rem 0.55rem; }
-  .why__d { color: #4c5a72; font-size: 0.92rem; }
+  .why__t { font-size: 1.05rem; color: var(--ink); margin-block: 0.7rem 0.5rem; }
+  .why__d { color: var(--ink-dim); font-size: 0.92rem; }
 
-  .process {
-    background: var(--paper-2);
-    border-block: 1px solid rgba(16, 24, 47, 0.1);
-  }
-  .process__title { font-size: var(--fs-h2); color: var(--ink); margin-block: 0.8rem 2.3rem; }
-  .process__title em { color: var(--blue-500); }
+  /* ---------- SÜREÇ ---------- */
+  .process { background: var(--paper-2); }
+  .process__title { font-size: var(--fs-h2); color: var(--ink); margin-block: 0.8rem 2.2rem; }
+  .process__title em { color: var(--blue-500); font-style: normal; }
   .process__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -620,27 +525,27 @@ const faq = [
     grid-template-columns: auto 1fr;
     gap: 1.1rem;
     align-items: start;
-    border-top: 1px solid rgba(16, 24, 47, 0.22);
+    border-top: 2px solid rgba(27, 42, 74, 0.16);
     padding-top: 1.2rem;
   }
-  .process__n { font-size: 2.2rem; color: transparent; -webkit-text-stroke: 1.5px var(--blue-500); }
-  .process__t { font-size: 1.08rem; color: var(--ink); margin-bottom: 0.45rem; }
-  .process__d { color: #4c5a72; font-size: 0.93rem; max-width: 34ch; }
+  .process__n { font-size: 2.1rem; color: transparent; -webkit-text-stroke: 1.5px var(--blue-500); }
+  .process__t { font-size: 1.05rem; color: var(--ink); margin-bottom: 0.4rem; }
+  .process__d { color: var(--ink-dim); font-size: 0.93rem; max-width: 34ch; }
 
+  /* ---------- SSS ---------- */
+  .faq { background: #fff; border-top: 1px solid rgba(27, 42, 74, 0.07); }
   .faq__grid {
     display: grid;
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
     gap: clamp(2rem, 6vw, 5rem);
     align-items: start;
   }
-  .faq__head,
-  .faq__list { min-width: 0; }
   .faq__title { font-size: var(--fs-h2); color: var(--ink); margin-block: 0.8rem 1rem; }
-  .faq__em { color: var(--blue-500); }
-  .faq__lede { color: #4c5a72; max-width: 38ch; margin-bottom: 1.6rem; }
+  .faq__em { color: var(--blue-500); font-style: normal; }
+  .faq__lede { color: var(--ink-dim); max-width: 38ch; margin-bottom: 1.6rem; }
   .faq__list { display: grid; }
-  .faq__item { border-top: 1px solid rgba(16, 24, 47, 0.16); }
-  .faq__item:last-child { border-bottom: 1px solid rgba(16, 24, 47, 0.16); }
+  .faq__item { border-top: 1px solid rgba(27, 42, 74, 0.14); }
+  .faq__item:last-child { border-bottom: 1px solid rgba(27, 42, 74, 0.14); }
   .faq__q {
     display: flex;
     justify-content: space-between;
@@ -668,226 +573,14 @@ const faq = [
   .faq__plus::before { width: 14px; height: 2px; }
   .faq__plus::after { width: 2px; height: 14px; }
   .faq__item[open] .faq__plus::after { transform: rotate(90deg); }
-  .faq__a { color: #4c5a72; font-size: 0.95rem; max-width: 62ch; padding: 0 2.4rem 1.25rem 0.2rem; }
+  .faq__a { color: var(--ink-dim); font-size: 0.95rem; max-width: 62ch; padding: 0 2.4rem 1.25rem 0.2rem; }
 
-  .catalog {
-    background:
-      radial-gradient(100vmin 70vmin at 85% 12%, rgba(0, 105, 169, 0.12), transparent 60%),
-      var(--navy-950);
-  }
-  .catalog__head {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: clamp(2rem, 7vw, 6rem);
-    align-items: end;
-    margin-bottom: 2.4rem;
-  }
-  .catalog__title { font-size: var(--fs-h2); margin-top: 0.8rem; }
-  .catalog__lede { max-width: 46ch; }
-  .catalog__list {
-    overflow: hidden;
-    border: 1px solid rgba(159, 176, 201, 0.2);
-    background: rgba(16, 24, 47, 0.72);
-    border-radius: var(--r-md);
-  }
-  .catalog__group {
-    min-width: 0;
-    border-bottom: 1px solid rgba(159, 176, 201, 0.16);
-  }
-  .catalog__group:last-child { border-bottom: 0; }
-  .catalog__group[open] { box-shadow: inset 4px 0 0 var(--blue-400); }
-  .catalog__summary {
-    display: grid;
-    grid-template-columns: 4rem 2.5rem minmax(0, 1fr) auto;
-    gap: 1rem;
-    align-items: center;
-    min-height: 92px;
-    padding: 0.9rem 1.2rem;
-    cursor: pointer;
-    list-style: none;
-    transition: background 0.2s ease;
-  }
-  .catalog__summary::-webkit-details-marker { display: none; }
-  .catalog__summary:hover { background: rgba(30, 136, 199, 0.09); }
-  .catalog__summary:focus-visible { outline-offset: -4px; }
-  .catalog__group[open] .catalog__summary { background: #131e39; }
-  .catalog__icon {
-    display: grid;
-    place-items: center;
-    width: 3.6rem;
-    height: 3.6rem;
-    color: var(--blue-300);
-    background: rgba(86, 174, 222, 0.07);
-    border: 1px solid rgba(86, 174, 222, 0.24);
-  }
-  .catalog__icon :global(svg) { width: 2.65rem; height: 2.65rem; }
-  .catalog__no { color: var(--blue-300); }
-  .catalog__summary-copy {
-    display: grid;
-    gap: 0.3rem;
-    min-width: 0;
-  }
-  .catalog__summary-copy strong {
-    font-size: clamp(1.15rem, 2vw, 1.6rem);
-    color: #fff;
-    overflow-wrap: anywhere;
-  }
-  .catalog__summary-copy small { color: var(--text-dim); }
-  .catalog__toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-    color: var(--blue-300);
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .catalog__toggle i {
-    position: relative;
-    width: 1.1rem;
-    height: 1.1rem;
-    transition: transform 0.25s var(--ease-torque);
-  }
-  .catalog__toggle i::before,
-  .catalog__toggle i::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    background: currentColor;
-  }
-  .catalog__toggle i::before { width: 1rem; height: 2px; }
-  .catalog__toggle i::after { width: 2px; height: 1rem; transition: transform 0.25s var(--ease-torque); }
-  .catalog__group[open] .catalog__toggle i { transform: rotate(180deg); }
-  .catalog__group[open] .catalog__toggle i::after { transform: rotate(90deg); }
-  .catalog__panel {
-    min-width: 0;
-    padding: clamp(1.2rem, 3vw, 2rem);
-    color: var(--ink);
-    background: #e9eef3;
-    border-top: 1px solid rgba(159, 176, 201, 0.26);
-  }
-  .catalog__panel-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.6rem 1.5rem;
-    margin-bottom: 1.2rem;
-  }
-  .catalog__panel-head .mono-label { color: var(--blue-500); }
-  .catalog__panel-head > p:last-child { color: #536174; font-size: 0.88rem; }
-  .catalog__products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 280px));
-    gap: 12px;
-  }
-  .catalog__products--solo { grid-template-columns: minmax(0, 320px); }
-  .catalog__product {
-    display: grid;
-    align-content: start;
-    min-width: 0;
-    min-height: 255px;
-    padding: 1rem;
-    background: #fff;
-    border: 1px solid rgba(27, 42, 74, 0.1);
-    border-radius: var(--r-md);
-    transition: transform 0.3s var(--ease-torque), box-shadow 0.3s ease, border-color 0.2s ease;
-  }
-  .catalog__product:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0, 105, 169, 0.35);
-    box-shadow: 0 16px 30px rgba(16, 24, 47, 0.1);
-  }
-  .catalog__product-fig {
-    display: grid;
-    place-items: center;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background: radial-gradient(circle at 50% 62%, rgba(0, 105, 169, 0.12), transparent 62%);
-  }
-  .catalog__product-fig :global(img) {
-    width: 100%;
-    height: 150px;
-    object-fit: contain;
-    filter: drop-shadow(0 12px 18px rgba(16, 24, 47, 0.18));
-  }
-  .catalog__product-fig--icon {
-    color: var(--blue-500);
-    opacity: 0.85;
-  }
-  .catalog__product-fig--icon :global(svg) {
-    width: 96px;
-    height: 96px;
-    stroke-width: 1.6;
-  }
-  .catalog__product-copy {
-    display: grid;
-    gap: 0.5rem;
-    padding-top: 0.8rem;
-    border-top: 1px solid rgba(16, 24, 47, 0.1);
-  }
-  .catalog__product-copy strong { color: var(--ink); font-size: 1rem; line-height: 1.25; }
-  .catalog__product-desc {
-    color: #536174;
-    font-size: 0.82rem;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .catalog__features {
-    list-style: none;
-    padding: 1.1rem 0 0;
-    margin: 1.2rem 0 0;
-    border-top: 1px dashed rgba(16, 24, 47, 0.18);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 0.45rem 1.6rem;
-  }
-  .catalog__features li {
-    position: relative;
-    padding-left: 1.1rem;
-    color: #536174;
-    font-size: 0.84rem;
-  }
-  .catalog__features li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.5em;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--blue-500);
-  }
-  .catalog__panel-cta { margin-top: 1.4rem; }
-  .brandstrip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 1.8rem; }
-  .brandstrip__label { color: var(--text-dim); margin-right: 0.4rem; }
-  .brandstrip__chip {
-    font-family: var(--font-body);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.55em 1.05em;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    color: var(--steel-300);
-    transition: border-color 0.2s ease, color 0.2s ease;
-  }
-  .brandstrip__chip:hover { border-color: var(--blue-400); color: #fff; }
-  .brandstrip__chip--all { color: var(--blue-300); }
-
+  /* ---------- CTA ---------- */
   .cta {
-    padding-block: var(--space-section);
+    padding-block: clamp(3.5rem, 8vw, 6rem);
     background:
       radial-gradient(80vmin 55vmin at 20% 85%, rgba(0, 105, 169, 0.2), transparent 62%),
       var(--navy-900);
-    border-top: 1px solid var(--line);
   }
   .cta__inner {
     display: grid;
@@ -895,16 +588,17 @@ const faq = [
     gap: clamp(2rem, 6vw, 5rem);
     align-items: center;
   }
-  .cta__title { font-size: clamp(2rem, 4.4vw, 3.8rem); margin-block: 0.9rem 1rem; }
+  .cta__title { font-size: clamp(1.8rem, 3.8vw, 3rem); margin-block: 0.9rem 1rem; color: #fff; }
   .cta__lede { max-width: 48ch; }
   .cta__actions { display: grid; gap: 0.9rem; justify-items: start; }
-  .cta__btn { font-size: 1rem; padding: 1em 1.8em; }
-  .cta__mail { color: var(--blue-300); font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.08em; }
+  .cta__btn { font-size: 1rem; padding: 0.95em 1.7em; }
+  .cta__mail { color: var(--blue-300); font-weight: 600; font-size: 0.92rem; }
 
-  .foot { background: #05080f; border-top: 1px solid var(--line); padding-top: clamp(2.5rem, 6vh, 4rem); }
+  /* ---------- FOOTER ---------- */
+  .foot { background: #0b1122; padding-top: clamp(2.5rem, 6vh, 4rem); }
   .foot__grid {
     display: grid;
-    grid-template-columns: 1.5fr 0.8fr 0.8fr 1fr;
+    grid-template-columns: 1.5fr 0.8fr 0.9fr 1fr;
     gap: clamp(1.5rem, 4vw, 3rem);
     padding-bottom: 2.2rem;
   }
@@ -915,67 +609,25 @@ const faq = [
   .foot__col a { color: var(--text-dim); font-size: 0.92rem; transition: color 0.2s ease; }
   .foot__col a:hover { color: #fff; }
   .foot__bar {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.6rem;
     border-top: 1px solid var(--line);
     padding-block: 1.2rem 5.5rem;
-  }
-  .foot__bar .mono-label { color: var(--text-dim); }
-
-  @media (max-width: 980px) {
-    .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(250px, 0.55fr); gap: 2.5rem; }
-    .why__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    color: var(--text-dim);
+    font-size: 0.85rem;
   }
 
-  @media (min-width: 901px) {
-    .hero__title .kin-line { white-space: nowrap; }
-  }
-
+  /* ---------- RESPONSIVE ---------- */
   @media (max-width: 900px) {
-    .hero { min-height: auto; }
-    .hero__grid,
-    .why__intro,
-    .faq__grid,
-    .catalog__head,
-    .cta__inner { grid-template-columns: minmax(0, 1fr); }
-    .hero__panel { max-width: none; justify-self: stretch; }
-    .promise-strip__head { grid-template-columns: minmax(0, 1fr); gap: 0.65rem; }
+    .slide { grid-template-columns: minmax(0, 1fr); padding-block: 2.4rem 3.6rem; align-content: start; }
+    .slide__fig { display: none; }
+    .slider__frame { min-height: clamp(380px, 56vh, 480px); }
+    .groups__head, .why__intro, .faq__grid, .cta__inner { grid-template-columns: minmax(0, 1fr); }
+    .promise-strip__grid { grid-template-columns: minmax(0, 1fr); }
+    .why__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .process__grid { grid-template-columns: minmax(0, 1fr); }
     .foot__grid { grid-template-columns: 1fr 1fr; }
   }
-
-  @media (max-width: 720px) {
-    .promise-strip__grid { grid-template-columns: minmax(0, 1fr); }
-  }
-
   @media (max-width: 600px) {
-    .hero { padding-block: 7rem 3.2rem; }
-    .hero__title { font-size: clamp(2.6rem, 13vw, 4rem); }
-    .hero__panel-top { align-items: flex-start; }
-    .hero__status { max-width: 13ch; text-align: right; white-space: normal; }
-    .hero__flow { padding-inline: 0.85rem; }
-    .hero__flow li { grid-template-columns: 3rem minmax(0, 1fr); gap: 0.8rem; }
-    .hero__flow-icon { grid-row: 1 / span 2; width: 3rem; height: 3rem; }
-    .hero__flow-no { display: none; }
     .why__grid { grid-template-columns: minmax(0, 1fr); }
-    .catalog__summary {
-      grid-template-columns: 3.1rem minmax(0, 1fr) 1.5rem;
-      gap: 0.8rem;
-      min-height: 78px;
-      padding: 0.8rem;
-    }
-    .catalog__icon { width: 3rem; height: 3rem; }
-    .catalog__icon :global(svg) { width: 2.25rem; height: 2.25rem; }
-    .catalog__no { display: none; }
-    .catalog__toggle { grid-column: 3; grid-row: 1; }
-    .catalog__toggle > span { display: none; }
-    .catalog__panel { padding: 1rem; }
-    .catalog__panel-head { display: grid; }
-    .catalog__products,
-    .catalog__products--solo { grid-template-columns: minmax(0, 1fr); }
-    .catalog__product { min-height: 235px; }
     .foot__grid { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

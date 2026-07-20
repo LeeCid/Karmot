@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
-import Rpm from '../components/Rpm.astro';
 
 const values = [
   {
@@ -111,13 +110,12 @@ const plates = [
       <p class="mono-label">© 2026 Karmot Güç Aktarım Sistemleri · <a href="/">Ana Sayfa</a> · <a href="/markalar">Markalar</a></p>
     </div>
   </footer>
-
-  <Rpm />
 </Base>
 
 <style>
   .head {
-    padding: 9rem 0 4rem;
+    margin-top: 64px;
+    padding: clamp(2.4rem, 6vw, 4rem) 0 clamp(2.2rem, 5vw, 3.4rem);
   }
   .head__title { font-size: clamp(2.4rem, 1rem + 5vw, 5.2rem); margin-block: 0.9rem 1.2rem; }
   .kin { display: block; overflow: clip; padding-block: 0.05em; }

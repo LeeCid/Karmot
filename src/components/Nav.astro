@@ -2,22 +2,23 @@
 import karmotLogo from '../assets/karmot-logo.svg';
 
 interface Props {
-  variant?: 'dark' | 'light';
+  variant?: 'light' | 'dark';
 }
-const { variant = 'dark' } = Astro.props;
+const { variant = 'light' } = Astro.props;
 ---
 
-<nav class:list={['nav', { 'nav--light': variant === 'light' }]} id="nav">
+<nav class:list={['nav', variant === 'dark' && 'nav--dark']} id="nav">
   <a class="nav__brand" href="/" aria-label="Karmot ana sayfa">
     <img src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="156" height="37" />
   </a>
   <div class="nav__links">
-    <a class="mono-label nav__link" href="/#neden">Karmot</a>
-    <a class="mono-label nav__link" href="/#surec">Nasıl Çalışırız</a>
-    <a class="mono-label nav__link" href="/hakkimizda">Kurumsal</a>
-    <a class="mono-label nav__link" href="/#katalog">Katalog</a>
+    <a class="nav__link" href="/">Ana Sayfa</a>
+    <a class="nav__link" href="/hakkimizda">Kurumsal</a>
+    <a class="nav__link" href="/urunler">Ürünlerimiz</a>
+    <a class="nav__link" href="/#sss">S.S.S</a>
+    <a class="nav__link" href="/#iletisim">İletişim</a>
   </div>
-  <a class="btn nav__cta" href="/#iletisim">Talep İlet</a>
+  <a class="btn nav__cta" href="/#iletisim">Teklif Al</a>
 </nav>
 
 <style>
@@ -28,47 +29,50 @@ const { variant = 'dark' } = Astro.props;
     display: flex;
     align-items: center;
     gap: 2rem;
-    padding: 0.85rem var(--gutter);
-    transition: background 0.4s ease, box-shadow 0.4s ease;
+    padding: 0.8rem var(--gutter);
+    background: #ffffff;
+    box-shadow: 0 1px 0 rgba(27, 42, 74, 0.08);
+    transition: box-shadow 0.3s ease;
   }
   .nav.is-scrolled {
+    box-shadow: 0 6px 24px rgba(27, 42, 74, 0.1);
+  }
+  .nav__brand img {
+    height: 36px;
+    width: auto;
+  }
+  .nav__links {
+    display: flex;
+    gap: 1.7rem;
+    margin-left: auto;
+  }
+  .nav__link {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--ink-dim);
+    transition: color 0.2s ease;
+  }
+  .nav__link:hover { color: var(--blue-500); }
+  .nav__cta {
+    padding: 0.6em 1.5em;
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
+  /* Arşiv/koyu sayfalar */
+  .nav--dark {
     background: color-mix(in srgb, var(--navy-950) 82%, transparent);
     backdrop-filter: blur(12px);
     box-shadow: 0 1px 0 var(--line);
   }
-  .nav__brand img {
-    height: 34px;
-    width: auto;
-    filter: brightness(0) invert(1);
-  }
-  .nav__links {
-    display: flex;
-    gap: 1.8rem;
-    margin-left: auto;
-  }
-  .nav__link {
-    color: var(--text-dim);
-    transition: color 0.25s ease;
-  }
-  .nav__link:hover { color: #fff; }
+  .nav--dark .nav__brand img { filter: brightness(0) invert(1); }
+  .nav--dark .nav__link { color: var(--text-dim); }
+  .nav--dark .nav__link:hover { color: #fff; }
 
-  /* Açık sayfalar: logo orijinal renkli, linkler mürekkep */
-  .nav--light .nav__brand img { filter: none; }
-  .nav--light .nav__link { color: var(--ink-dim); }
-  .nav--light .nav__link:hover { color: var(--navy-850); }
-  .nav--light.is-scrolled {
-    background: color-mix(in srgb, #ffffff 86%, transparent);
-    box-shadow: 0 1px 0 rgba(16, 24, 47, 0.1);
-  }
-  .nav__cta {
-    padding: 0.65em 1.4em;
-    font-size: 0.8rem;
-    white-space: nowrap;
-  }
   @media (max-width: 980px) {
     .nav { gap: 1.1rem; }
-    .nav__links { gap: 0.85rem; }
-    .nav__link { font-size: 0.62rem; }
+    .nav__links { gap: 1rem; }
+    .nav__link { font-size: 0.8rem; }
   }
   @media (max-width: 760px) {
     .nav__links { display: none; }
