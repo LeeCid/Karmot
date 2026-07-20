@@ -1,5 +1,6 @@
 ---
 type IndustrialIconName = 'motor' | 'gearbox' | 'brake' | 'vibration' | 'exproof' |
+  'pump' | 'fan' |
   'request' | 'compare' | 'delivery' | 'contact' | 'options' | 'tracking';
 
 interface Props {
@@ -64,6 +65,24 @@ const { name, title, class: className } = Astro.props;
       <path d="M5 33h8M4 30v6M13 24v18c0 3 2 5 5 5h25c3 0 5-2 5-5V24c0-3-2-5-5-5H18c-3 0-5 2-5 5ZM22 19v-7h16v7M19 26v15M25 23v21M31 23v21M37 23v21M43 26v15M10 48h39" />
       <path d="M48 36l10 4v7c0 7-4 11-10 14-6-3-10-7-10-14v-2" />
       <path d="M48 42c-3 4-3 8 0 11 3-3 4-6 1-9 0 2-1 2-1-2Z" />
+    </g>
+  )}
+
+  {name === 'pump' && (
+    <g>
+      <circle cx="27" cy="33" r="15" />
+      <circle cx="27" cy="33" r="5" />
+      <path d="M27 18v-6h-8M27 18h8c6 0 11 5 11 11v4M42 33h11v8H42zM27 48v6h12M12 33H6v13h9" />
+      <path d="M27 28c3 0 5 2 5 5M14 54h32" />
+    </g>
+  )}
+
+  {name === 'fan' && (
+    <g>
+      <circle cx="32" cy="30" r="19" />
+      <circle cx="32" cy="30" r="4" />
+      <path d="M32 26c0-6 3-10 8-11 2 4 1 9-4 12M36 32c6 0 10 3 11 8-4 2-9 1-12-4M28 34c0 6-3 10-8 11-2-4-1-9 4-12M28 28c-6 0-10-3-11-8 4-2 9-1 12 4" />
+      <path d="M18 46 12 54h40l-6-8M24 54v-6M40 54v-6" />
     </g>
   )}
 

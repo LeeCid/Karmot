@@ -1,8 +1,13 @@
 ---
 import karmotLogo from '../assets/karmot-logo.svg';
+
+interface Props {
+  variant?: 'dark' | 'light';
+}
+const { variant = 'dark' } = Astro.props;
 ---
 
-<nav class="nav" id="nav">
+<nav class:list={['nav', { 'nav--light': variant === 'light' }]} id="nav">
   <a class="nav__brand" href="/" aria-label="Karmot ana sayfa">
     <img src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="156" height="37" />
   </a>
@@ -46,6 +51,15 @@ import karmotLogo from '../assets/karmot-logo.svg';
     transition: color 0.25s ease;
   }
   .nav__link:hover { color: #fff; }
+
+  /* Açık sayfalar: logo orijinal renkli, linkler mürekkep */
+  .nav--light .nav__brand img { filter: none; }
+  .nav--light .nav__link { color: var(--ink-dim); }
+  .nav--light .nav__link:hover { color: var(--navy-850); }
+  .nav--light.is-scrolled {
+    background: color-mix(in srgb, #ffffff 86%, transparent);
+    box-shadow: 0 1px 0 rgba(16, 24, 47, 0.1);
+  }
   .nav__cta {
     padding: 0.65em 1.4em;
     font-size: 0.8rem;

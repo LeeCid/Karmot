@@ -42,6 +42,12 @@ const specs = [
 ---
 
 <Base title="Karmot — Style Tile (Faz 0)">
+  <style is:global>
+    /* arşiv sayfası: koyu tema varsayımıyla tasarlandı */
+    body { background: var(--navy-950); color: var(--text); }
+    .text-dim { color: var(--text-dim); }
+    .mono-label { color: var(--blue-300); }
+  </style>
   <header class="bar">
     <img class="bar__logo" src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="178" height="42" />
     <p class="mono-label">Style Tile — Faz 0 · v0.1</p>

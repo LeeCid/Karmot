@@ -10,11 +10,13 @@ import karmotLogo from '../assets/karmot-logo.svg';
 
 const brands = (await getCollection('brands')).sort((a, b) => a.data.order - b.data.order);
 
-const productImgs = import.meta.glob<{ default: ImageMetadata }>('../assets/products/stars/*.png', {
-  eager: true,
-});
-const productFor = (id: string, no: string) =>
-  productImgs[`../assets/products/stars/${id}-star-${no}.png`]?.default;
+import { kategoriler, toplamAltKategori } from '../data/urunler';
+
+const urunImgs = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/urunler/**/*.{png,jpg,jpeg}',
+  { eager: true }
+);
+const urunImg = (img: string) => urunImgs[`../assets/urunler/${img}`]?.default;
 
 const promises = [
   {
@@ -100,42 +102,6 @@ const faq = [
   },
 ];
 
-const groups = [
-  {
-    icon: 'motor',
-    t: 'Elektrik Motorları',
-    brands: 'Gamak · WEG · WAT',
-    products: [
-      { id: 'gamak', name: 'Gamak', alt: 'Gamak üç fazlı asenkron elektrik motoru', img: productFor('gamak', '03') },
-      { id: 'weg', name: 'WEG', alt: 'WEG flanşlı asenkron elektrik motoru', img: productFor('weg', '02') },
-      { id: 'wat', name: 'WAT', alt: 'WAT üç fazlı asenkron elektrik motoru', img: productFor('wat', '03') },
-    ],
-  },
-  {
-    icon: 'gearbox',
-    t: 'Redüktörler',
-    brands: 'Dinamik',
-    products: [{ id: 'dinamik', name: 'Dinamik', alt: 'Dinamik redüktörlü motor', img: productFor('dinamik', '01') }],
-  },
-  {
-    icon: 'brake',
-    t: 'Fren Sistemleri',
-    brands: 'Enarc',
-    products: [{ id: 'enarc', name: 'Enarc', alt: 'Enarc elektromanyetik fren', img: productFor('enarc', '03') }],
-  },
-  {
-    icon: 'vibration',
-    t: 'Vibrasyon Motorları',
-    brands: 'Avibro',
-    products: [{ id: 'avibro', name: 'Avibro', alt: 'Avibro endüstriyel vibrasyon motoru', img: productFor('avibro', '05') }],
-  },
-  {
-    icon: 'exproof',
-    t: 'Exproof Motorlar',
-    brands: 'Pro-Ex',
-    products: [{ id: 'pro-ex', name: 'Pro-Ex', alt: 'Pro-Ex ATEX alev sızdırmaz motor', img: productFor('pro-ex', '01') }],
-  },
-] as const;
 ---
 
 <Base
@@ -145,7 +111,7 @@ const groups = [
   <Nav />
 
   <main>
-    <section class="hero blueprint-bg" id="hero">
+    <section class="hero blueprint-bg dark-surface" id="hero">
       <div class="hero__glow" aria-hidden="true"></div>
       <div class="container hero__grid">
         <div class="hero__copy">
@@ -286,7 +252,7 @@ const groups = [
       </div>
     </section>
 
-    <section class="section catalog blueprint-bg" id="katalog">
+    <section class="section catalog blueprint-bg dark-surface" id="katalog">
       <div class="container">
         <div class="catalog__head">
           <div>
@@ -296,22 +262,22 @@ const groups = [
             </h2>
           </div>
           <p class="text-dim catalog__lede reveal">
-            Karmot’un tedarik ettiği ürün grupları ve markalar. Teknik detay, seri ve model
-            bilgileri ilgili katalog sayfalarında.
+            Beş ana grupta {toplamAltKategori} alt kategori: redüktör, AC elektrik motoru,
+            pompa, fan ve elektromanyetik fren. Grupları açın, tipe kadar inin.
           </p>
         </div>
 
         <div class="catalog__list" aria-label="Ürün grupları">
-          {groups.map((group, i) => (
-            <details class="catalog__group reveal" name="karmot-catalog">
+          {kategoriler.map((grup, i) => (
+            <details class="catalog__group reveal" name="karmot-catalog" open={i === 0 ? true : undefined}>
               <summary class="catalog__summary">
                 <span class="catalog__icon" aria-hidden="true">
-                  <IndustrialIcon name={group.icon} />
+                  <IndustrialIcon name={grup.icon} />
                 </span>
                 <span class="mono-label catalog__no">{String(i + 1).padStart(2, '0')}</span>
                 <span class="catalog__summary-copy">
-                  <strong class="display">{group.t}</strong>
-                  <small>{group.brands}</small>
+                  <strong class="display">{grup.name}</strong>
+                  <small>{grup.blurb} · {grup.items.length} tip</small>
                 </span>
                 <span class="catalog__toggle" aria-hidden="true">
                   <span>İncele</span><i></i>
@@ -319,22 +285,35 @@ const groups = [
               </summary>
               <div class="catalog__panel">
                 <div class="catalog__panel-head">
-                  <p class="mono-label">Gerçek ürün görselleri</p>
-                  <p>Markayı seçin; teknik detaylara ve ürün ailesine ilerleyin.</p>
+                  <p class="mono-label">{grup.items.length} alt kategori</p>
+                  <p>Seri ve model seçimi için ürün kodunuzu veya uygulamanızı iletin.</p>
                 </div>
-                <div class:list={['catalog__products', group.products.length === 1 && 'catalog__products--solo']}>
-                  {group.products.map((product) => (
-                    <a class="catalog__product" href={`/markalar/${product.id}`}>
-                      <span class="catalog__product-fig">
-                        {product.img && <Image src={product.img} alt={product.alt} height={180} quality={84} />}
-                      </span>
-                      <span class="catalog__product-copy">
-                        <strong class="display">{product.name}</strong>
-                        <span class="mono-label">Ürünlerini İncele ↗</span>
-                      </span>
-                    </a>
-                  ))}
+                <div class:list={['catalog__products', grup.items.length === 1 && 'catalog__products--solo']}>
+                  {grup.items.map((item) => {
+                    const img = item.img ? urunImg(item.img) : undefined;
+                    return (
+                      <div class="catalog__product">
+                        <span class:list={['catalog__product-fig', !img && 'catalog__product-fig--icon']}>
+                          {img
+                            ? <Image src={img} alt={item.name} height={170} quality={82} />
+                            : <IndustrialIcon name={grup.icon} />}
+                        </span>
+                        <span class="catalog__product-copy">
+                          <strong>{item.name}</strong>
+                          <span class="catalog__product-desc">{item.desc}</span>
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
+                {grup.features && (
+                  <ul class="catalog__features">
+                    {grup.features.map((f) => <li>{f}</li>)}
+                  </ul>
+                )}
+                <p class="catalog__panel-cta">
+                  <a class="btn" href="#iletisim">Bu gruptan teklif isteyin</a>
+                </p>
               </div>
             </details>
           ))}
@@ -350,7 +329,7 @@ const groups = [
       </div>
     </section>
 
-    <section class="cta" id="iletisim">
+    <section class="cta dark-surface" id="iletisim">
       <div class="container cta__inner">
         <div>
           <p class="mono-label reveal">Bir talebiniz mi var?</p>
@@ -372,7 +351,7 @@ const groups = [
     </section>
   </main>
 
-  <footer class="foot">
+  <footer class="foot dark-surface">
     <div class="container foot__grid">
       <div>
         <img class="foot__logo" src={karmotLogo.src} alt="Karmot Güç Aktarım Sistemleri" width="180" height="42" />
@@ -458,7 +437,7 @@ const groups = [
     padding: 0;
     overflow: hidden;
     box-shadow: 0 28px 70px rgba(2, 7, 18, 0.34);
-    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+    border-radius: var(--r-md);
   }
   .hero__panel-top {
     display: flex;
@@ -614,8 +593,9 @@ const groups = [
   }
   .why__card {
     background: #fff;
-    border: 1px solid rgba(16, 24, 47, 0.12);
+    border: 1px solid rgba(27, 42, 74, 0.1);
     border-top: 3px solid var(--blue-500);
+    border-radius: var(--r-md);
     padding: 1.6rem 1.5rem;
     transition: transform var(--dur-fast) var(--ease-torque), box-shadow var(--dur-fast) ease;
   }
@@ -708,6 +688,7 @@ const groups = [
     overflow: hidden;
     border: 1px solid rgba(159, 176, 201, 0.2);
     background: rgba(16, 24, 47, 0.72);
+    border-radius: var(--r-md);
   }
   .catalog__group {
     min-width: 0;
@@ -806,12 +787,13 @@ const groups = [
   .catalog__products--solo { grid-template-columns: minmax(0, 320px); }
   .catalog__product {
     display: grid;
-    align-content: space-between;
+    align-content: start;
     min-width: 0;
     min-height: 255px;
     padding: 1rem;
     background: #fff;
-    border: 1px solid rgba(16, 24, 47, 0.12);
+    border: 1px solid rgba(27, 42, 74, 0.1);
+    border-radius: var(--r-md);
     transition: transform 0.3s var(--ease-torque), box-shadow 0.3s ease, border-color 0.2s ease;
   }
   .catalog__product:hover {
@@ -832,24 +814,68 @@ const groups = [
     object-fit: contain;
     filter: drop-shadow(0 12px 18px rgba(16, 24, 47, 0.18));
   }
+  .catalog__product-fig--icon {
+    color: var(--blue-500);
+    opacity: 0.85;
+  }
+  .catalog__product-fig--icon :global(svg) {
+    width: 96px;
+    height: 96px;
+    stroke-width: 1.6;
+  }
   .catalog__product-copy {
     display: grid;
     gap: 0.5rem;
     padding-top: 0.8rem;
     border-top: 1px solid rgba(16, 24, 47, 0.1);
   }
-  .catalog__product-copy strong { color: var(--ink); font-size: 1.05rem; }
-  .catalog__product-copy .mono-label { color: var(--blue-500); font-size: 0.65rem; }
+  .catalog__product-copy strong { color: var(--ink); font-size: 1rem; line-height: 1.25; }
+  .catalog__product-desc {
+    color: #536174;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .catalog__features {
+    list-style: none;
+    padding: 1.1rem 0 0;
+    margin: 1.2rem 0 0;
+    border-top: 1px dashed rgba(16, 24, 47, 0.18);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.45rem 1.6rem;
+  }
+  .catalog__features li {
+    position: relative;
+    padding-left: 1.1rem;
+    color: #536174;
+    font-size: 0.84rem;
+  }
+  .catalog__features li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue-500);
+  }
+  .catalog__panel-cta { margin-top: 1.4rem; }
   .brandstrip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 1.8rem; }
   .brandstrip__label { color: var(--text-dim); margin-right: 0.4rem; }
   .brandstrip__chip {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 0.55em 0.95em;
+    padding: 0.55em 1.05em;
     border: 1px solid var(--line);
+    border-radius: 999px;
     color: var(--steel-300);
     transition: border-color 0.2s ease, color 0.2s ease;
   }
